@@ -13,7 +13,7 @@ namespace Terrexpansion.Content.Items.Weapons.Swords
 
         public override void SafeSetDefaults()
         {
-            item.useStyle = 5;
+            item.useStyle = ItemUseStyleID.Shoot;
             item.noUseGraphic = true;
             item.UseSound = SoundID.Item1;
             item.autoReuse = true;

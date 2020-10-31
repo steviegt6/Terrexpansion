@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terrexpansion.Content.Items.Consumables.Upgrades;
 
@@ -39,6 +40,28 @@ namespace Terrexpansion.Common
                     npc.height = 80;
                     break;
             }*/
+        }
+
+        public override bool CheckDead(NPC npc)
+        {
+            if (npc.townNPC && npc.type != NPCID.OldMan && npc.type != NPCID.SkeletonMerchant && npc.type != NPCID.Angler && npc.type != 663 && !NPCID.Sets.IsTownPet[npc.type])
+            {
+                NetworkText networkText = NetworkText.FromKey(Language.GetText("LegacyMisc.36").Key, npc.GetFullNetName());
+
+                for (int i = 0; i < 255; i++)
+                {
+                    Player player = Main.player[i];
+
+                    if (player != null && player.active && player.difficulty == 2)
+                    {
+                        return base.CheckDead(npc);;
+                    }
+                }
+
+                npc.DropTombstoneTownNPC(networkText);
+            }
+
+            return base.CheckDead(npc);
         }
     }
 }
