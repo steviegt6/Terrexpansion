@@ -126,11 +126,11 @@ namespace Terrexpansion.Common
             {
                 if (drawInfo.drawPlayer.fullRotation < MathHelper.ToRadians(90) && drawInfo.drawPlayer.fullRotation > MathHelper.ToRadians(-90) && !lerpingToRotation)
                 {
-                    if (drawInfo.drawPlayer.direction == 1 && Main.MouseWorld.X > drawInfo.drawPlayer.position.X)
+                    if (drawInfo.drawPlayer.direction == 1)
                     {
                         drawInfo.drawPlayer.headRotation = Utils.Clamp((Main.MouseWorld - player.Center).ToRotation(), -0.5f, 0.5f);
                     }
-                    else if (drawInfo.drawPlayer.direction == -1 && Main.MouseWorld.X < drawInfo.drawPlayer.position.X)
+                    else if (drawInfo.drawPlayer.direction == -1)
                     {
                         drawInfo.drawPlayer.headRotation = Utils.Clamp((player.Center - Main.MouseWorld).ToRotation(), -0.5f, 0.5f);
                     }
@@ -164,8 +164,17 @@ namespace Terrexpansion.Common
                 {
                     lerpingToRotation = true;
                     timeAirborne++;
-                    player.fullRotation = MathHelper.Lerp(player.velocity.ToRotation() + (float)Math.PI / 2f, player.fullRotation, 0.0001f);
-                    wasAirborn = timeAirborne > 10;
+
+                    if (timeAirborne > 10)
+                    {
+                        player.fullRotation = player.velocity.ToRotation() + (float)Math.PI / 2f;
+
+                        wasAirborn = true;
+                    }
+                    else
+                    {
+                        wasAirborn = false;
+                    }
                 }
                 else
                 {

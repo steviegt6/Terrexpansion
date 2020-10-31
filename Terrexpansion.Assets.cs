@@ -48,7 +48,7 @@ namespace Terrexpansion
             VanillaClassicManaTexture = TextureAssets.Mana;
             EndlessQuiver = TextureAssets.Item[ItemID.EndlessQuiver];
             LifeFruit = TextureAssets.Item[ItemID.LifeFruit];
-            EaterofSouls = TextureAssets.Npc[NPCID.EaterofSouls];
+            //EaterofSouls = TextureAssets.Npc[NPCID.EaterofSouls];
         }
 
         public static void SwapAssets()
@@ -58,7 +58,7 @@ namespace Terrexpansion
             TextureAssets.Mana = Main.Assets.Request<Texture2D>("Images\\UI\\PlayerResourceSets\\FancyClassic\\Star_Fill");
             TextureAssets.Item[ItemID.EndlessQuiver] = ModContent.GetTexture("Terrexpansion/Assets/Items/EndlessQuiver");
             TextureAssets.Item[ItemID.LifeFruit] = ModContent.GetTexture("Terrexpansion/Assets/Items/LifeFruit");
-            TextureAssets.Npc[NPCID.EaterofSouls] = ModContent.GetTexture("Terrexpansion/Assets/NPCs/EaterofSouls");
+            //TextureAssets.Npc[NPCID.EaterofSouls] = ModContent.GetTexture("Terrexpansion/Assets/NPCs/EaterofSouls");
         }
 
         public static void LoadVanillaAssets()
@@ -68,7 +68,7 @@ namespace Terrexpansion
             TextureAssets.Mana = VanillaClassicManaTexture;
             TextureAssets.Item[ItemID.EndlessQuiver] = EndlessQuiver;
             TextureAssets.Item[ItemID.LifeFruit] = LifeFruit;
-            TextureAssets.Npc[NPCID.EaterofSouls] = EaterofSouls;
+            //TextureAssets.Npc[NPCID.EaterofSouls] = EaterofSouls;
         }
     }
 }

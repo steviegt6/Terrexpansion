@@ -30,7 +30,7 @@ namespace Terrexpansion.Common
 
         public override void SetDefaults(NPC npc)
         {
-            Main.npcFrameCount[NPCID.EaterofSouls] = 4;
+            /*Main.npcFrameCount[NPCID.EaterofSouls] = 4;
 
             switch (npc.type)
             {
@@ -38,7 +38,7 @@ namespace Terrexpansion.Common
                     npc.width = 46;
                     npc.height = 80;
                     break;
-            }
+            }*/
         }
     }
 }

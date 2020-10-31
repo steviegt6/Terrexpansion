@@ -116,7 +116,6 @@ namespace Terrexpansion
 
             CanAutosize = false;
             Unloading = false;
-            SplashText = null;
         }
 
         public override void PostAddRecipes() => CanAutosize = true;

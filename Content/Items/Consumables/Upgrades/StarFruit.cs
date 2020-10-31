@@ -9,6 +9,8 @@ namespace Terrexpansion.Content.Items.Consumables.Upgrades
 {
     public class StarFruit : BaseItem
     {
+        public override bool AutosizeItem => false;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Arcane Fruit");
