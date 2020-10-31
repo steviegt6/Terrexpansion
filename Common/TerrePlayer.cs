@@ -126,11 +126,11 @@ namespace Terrexpansion.Common
             {
                 if (drawInfo.drawPlayer.fullRotation < MathHelper.ToRadians(90) && drawInfo.drawPlayer.fullRotation > MathHelper.ToRadians(-90) && !lerpingToRotation)
                 {
-                    if (drawInfo.drawPlayer.direction == 1)
+                    if (drawInfo.drawPlayer.direction == 1 && Main.MouseWorld.X > drawInfo.drawPlayer.position.X)
                     {
                         drawInfo.drawPlayer.headRotation = Utils.Clamp((Main.MouseWorld - player.Center).ToRotation(), -0.5f, 0.5f);
                     }
-                    else if (drawInfo.drawPlayer.direction == -1)
+                    else if (drawInfo.drawPlayer.direction == -1 && Main.MouseWorld.X < drawInfo.drawPlayer.position.X)
                     {
                         drawInfo.drawPlayer.headRotation = Utils.Clamp((player.Center - Main.MouseWorld).ToRotation(), -0.5f, 0.5f);
                     }
@@ -140,7 +140,6 @@ namespace Terrexpansion.Common
 
         public override void PostUpdate()
         {
-            // Basically round down rotation because cringeeeee!!!!!!
             if (player.fullRotation % MathHelper.ToRadians(-360f) < 1 && player.fullRotation % MathHelper.ToRadians(-360f) > -1)
             {
                 player.fullRotation = 0;
@@ -150,16 +149,13 @@ namespace Terrexpansion.Common
 
             if (player.mount.Type == -1)
             {
-                // Change rotation origin so player rotates properly
                 player.fullRotationOrigin = new Vector2(player.width / 2, player.height / 2);
 
-                // For mounts in some other code
                 if (player.fullRotation != 0)
                 {
                     currentlyRotated = true;
                 }
 
-                // Logic for rotation, will "document" later
                 if (player.velocity.X != 0 && player.velocity.Y != 0)
                 {
                     lerpingToRotation = true;
