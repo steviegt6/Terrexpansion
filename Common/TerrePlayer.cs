@@ -124,7 +124,7 @@ namespace Terrexpansion.Common
         {
             if (!Main.gameMenu)
             {
-                if (drawInfo.drawPlayer.fullRotation < MathHelper.ToRadians(90) && drawInfo.drawPlayer.fullRotation > MathHelper.ToRadians(-90) && !lerpingToRotation)
+                if (drawInfo.drawPlayer.fullRotation < MathHelper.ToRadians(90) && drawInfo.drawPlayer.fullRotation > MathHelper.ToRadians(-90))
                 {
                     if (drawInfo.drawPlayer.direction == 1 && Main.MouseWorld.X > drawInfo.drawPlayer.position.X)
                     {
@@ -140,11 +140,10 @@ namespace Terrexpansion.Common
 
         public override void PostUpdate()
         {
-            if (player.fullRotation % MathHelper.ToRadians(-360f) < 1 && player.fullRotation % MathHelper.ToRadians(-360f) > -1)
+            if (player.fullRotation % MathHelper.ToRadians(-360f) < 1 && player.fullRotation % MathHelper.ToRadians(-360f) > -1 && !lerpingToRotation)
             {
                 player.fullRotation = 0;
                 wasAirborn = false;
-                lerpingToRotation = false;
             }
 
             if (player.mount.Type == -1)
@@ -158,27 +157,29 @@ namespace Terrexpansion.Common
 
                 if (player.velocity.X != 0 && player.velocity.Y != 0)
                 {
-                    lerpingToRotation = true;
                     timeAirborne++;
 
-                    if (timeAirborne > 60)
+                    if (timeAirborne > 30)
                     {
-                        player.fullRotation = player.velocity.ToRotation() + (float)Math.PI / 2f;
-
+                        lerpingToRotation = true;
+                        player.fullRotation = player.fullRotation.AngleLerp(player.velocity.ToRotation() + (float)Math.PI / 2f, 0.1f);
                         wasAirborn = true;
                     }
                     else
                     {
+                        lerpingToRotation = false;
                         wasAirborn = false;
                     }
                 }
                 else
                 {
+                    lerpingToRotation = false;
+
                     if (player.direction == -1)
                     {
                         if (wasAirborn)
                         {
-                            player.fullRotation = MathHelper.Lerp(player.fullRotation, 0f, 0.1f);
+                            player.fullRotation = MathHelper.Lerp(player.fullRotation, 0f, -0.1f);
                         }
                         else
                         {
