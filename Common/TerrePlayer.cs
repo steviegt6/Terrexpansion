@@ -159,7 +159,7 @@ namespace Terrexpansion.Common
                 {
                     timeAirborne++;
 
-                    if (timeAirborne > 30)
+                    if (timeAirborne > 60)
                     {
                         lerpingToRotation = true;
                         player.fullRotation = player.fullRotation.AngleLerp(player.velocity.ToRotation() + (float)Math.PI / 2f, 0.1f);
