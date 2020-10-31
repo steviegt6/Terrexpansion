@@ -207,5 +207,6 @@ DeathText.FTW={0} wasn't worthy!
 DeathText.Possessed={0} was possessed by {1}
 DeathText.KOd={0} was KO'd by {1}
 DeathText.Zombified={0} was zombified
+DeathText.EmpressBitch={0} was shown the light
 
 DeathTextGeneric.Defleshed={0} was defleshed

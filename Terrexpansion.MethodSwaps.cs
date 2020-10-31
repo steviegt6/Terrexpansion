@@ -839,7 +839,7 @@ namespace Terrexpansion
             NetworkText npcName = NetworkText.Empty;
             NetworkText pvpPlayerName = NetworkText.Empty;
             NetworkText pvpPlayerItemName = NetworkText.Empty;
-            Projectile killerProj;
+            Projectile killerProj = Main.projectile[0];
             NPC killerNPC = Main.npc[0];
             Player pvpPlayer = Main.player[0];
 
@@ -874,7 +874,12 @@ namespace Terrexpansion
 
             if (Main.rand.NextBool(26))
             {
-                empty = NetworkText.FromKey(Language.RandomFromCategory("Mods.Terrexpansion.DeathTextGeneric").Key, deadPlayerName);
+                switch (Main.rand.Next(1))
+                {
+                    case 1:
+                        empty = NetworkText.FromKey("Mods.Terrexpansion.DeathTextGeneric.Defleshed", deadPlayerName);
+                        break;
+                }
             }
 
             if (slainByPlayer)
@@ -892,9 +897,6 @@ namespace Terrexpansion
             }
             else if (slainByNPC)
             {
-                Main.NewText(npc);
-                Main.NewText(Main.npc[npc].type);
-
                 result = NetworkText.FromKey("DeathSource.NPC", empty, npcName);
 
                 if (Main.rand.NextBool(2) && killerNPC.type == NPCID.Plantera || killerNPC.type == NPCID.Dandelion)
@@ -911,10 +913,20 @@ namespace Terrexpansion
                 {
                     result = NetworkText.FromKey("Mods.Terrexpansion.DeathText.Zombified", deadPlayerName);
                 }
+
+                if (killerNPC.type == NPCID.HallowBoss && Main.dayTime)
+                {
+                    result = NetworkText.FromKey("Mods.Terrexpansion.DeathText.EmpressBitch", deadPlayerName);
+                }
             }
             else if (slainByProjectile)
             {
                 result = NetworkText.FromKey("DeathSource.Projectile", empty, projectileName);
+
+                if (Main.dayTime && killerProj.type == ProjectileID.HallowBossSplitShotCore || killerProj.type == ProjectileID.HallowBossRainbowStreak || killerProj.type == ProjectileID.HallowBossLastingRainbow || killerProj.type == ProjectileID.HallowBossDeathAurora || killerProj.type == ProjectileID.FairyQueenSunDance || killerProj.type == ProjectileID.FairyQueenLance)
+                {
+                    result = NetworkText.FromKey("Mods.Terrexpansion.DeathText.EmpressBitch", deadPlayerName);
+                }
             }
             else
             {
