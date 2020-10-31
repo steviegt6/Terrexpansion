@@ -214,8 +214,10 @@ namespace Terrexpansion.Common.UI.States
 
 		private void UICreativePowersMenu_OnUpdate(UIElement affectedElement) {
 			if (_hovered)
-				Main.LocalPlayer.mouseInterface = true;
-		}
+            {
+                Main.LocalPlayer.mouseInterface = true;
+            }
+        }
 
 		private void strip_OnMouseOut(UIMouseEvent evt, UIElement listeningElement) {
 			_hovered = false;
@@ -249,9 +251,11 @@ namespace Terrexpansion.Common.UI.States
 
 		private void ToggleCategory<TEnum>(MenuTree<TEnum> tree, int option, TEnum defaultOption) where TEnum : struct, IConvertible {
 			if (tree.CurrentOption == option)
-				option = defaultOption.ToInt32(null);
+            {
+                option = defaultOption.ToInt32(null);
+            }
 
-			tree.CurrentOption = option;
+            tree.CurrentOption = option;
 			foreach (GroupOptionButton<int> value in tree.Buttons.Values) {
 				value.SetCurrentOption(option);
 			}
@@ -324,12 +328,18 @@ namespace Terrexpansion.Common.UI.States
 			switch (groupOptionButton.OptionValue) {
 				case 2:
 					if (!CreativePowerManager.Instance.GetPower<CreativePowers.ModifyRainPower>().GetIsUnlocked())
-						return;
-					break;
+                    {
+                        return;
+                    }
+
+                    break;
 				case 1:
 					if (!CreativePowerManager.Instance.GetPower<CreativePowers.ModifyWindDirectionAndStrength>().GetIsUnlocked())
-						return;
-					break;
+                    {
+                        return;
+                    }
+
+                    break;
 			}
 
 			ToggleWeatherCategory(groupOptionButton.OptionValue);
@@ -360,9 +370,11 @@ namespace Terrexpansion.Common.UI.States
 			UIElement value = null;
 			MenuTree<OpenMainSubCategory> mainCategory = _mainCategory;
 			if (mainCategory.Sliders.TryGetValue(mainCategory.CurrentOption, out value))
-				_container.Append(value);
+            {
+                _container.Append(value);
+            }
 
-			if (mainCategory.CurrentOption == 1) {
+            if (mainCategory.CurrentOption == 1) {
 				_infiniteItemsWindow.SetPageTypeToShow(UICreativeInfiniteItemsDisplay.InfiniteItemsDisplayPage.InfiniteItemsPickup);
 				_container.Append(_infiniteItemsWindow);
 			}
@@ -376,22 +388,28 @@ namespace Terrexpansion.Common.UI.States
 				_container.Append(_timePowersStrip);
 				MenuTree<TimeSubcategory> timeCategory = _timeCategory;
 				if (timeCategory.Sliders.TryGetValue(timeCategory.CurrentOption, out value))
-					_container.Append(value);
-			}
+                {
+                    _container.Append(value);
+                }
+            }
 
 			if (mainCategory.CurrentOption == 4) {
 				_container.Append(_weatherPowersStrip);
 				MenuTree<WeatherSubcategory> weatherCategory = _weatherCategory;
 				if (weatherCategory.Sliders.TryGetValue(weatherCategory.CurrentOption, out value))
-					_container.Append(value);
-			}
+                {
+                    _container.Append(value);
+                }
+            }
 
 			if (mainCategory.CurrentOption == 6) {
 				_container.Append(_personalPowersStrip);
 				MenuTree<PersonalSubcategory> personalCategory = _personalCategory;
 				if (personalCategory.Sliders.TryGetValue(personalCategory.CurrentOption, out value))
-					_container.Append(value);
-			}
+                {
+                    _container.Append(value);
+                }
+            }
 		}
 
 		public override void Draw(SpriteBatch spriteBatch) {
@@ -409,21 +427,31 @@ namespace Terrexpansion.Common.UI.States
 			UILinkPoint[] array2 = null;
 			UILinkPoint[] array3 = null;
 			if (orderedPointsByCategoryName.Count > 0)
-				array = _helper.CreateUILinkStripVertical(ref currentID, orderedPointsByCategoryName);
+            {
+                array = _helper.CreateUILinkStripVertical(ref currentID, orderedPointsByCategoryName);
+            }
 
-			if (orderedPointsByCategoryName2.Count > 0)
-				array2 = _helper.CreateUILinkStripVertical(ref currentID, orderedPointsByCategoryName2);
+            if (orderedPointsByCategoryName2.Count > 0)
+            {
+                array2 = _helper.CreateUILinkStripVertical(ref currentID, orderedPointsByCategoryName2);
+            }
 
-			if (orderedPointsByCategoryName3.Count > 0)
-				array3 = _helper.CreateUILinkStripVertical(ref currentID, orderedPointsByCategoryName3);
+            if (orderedPointsByCategoryName3.Count > 0)
+            {
+                array3 = _helper.CreateUILinkStripVertical(ref currentID, orderedPointsByCategoryName3);
+            }
 
-			if (array != null && array2 != null)
-				_helper.LinkVerticalStrips(array, array2, (array.Length - array2.Length) / 2);
+            if (array != null && array2 != null)
+            {
+                _helper.LinkVerticalStrips(array, array2, (array.Length - array2.Length) / 2);
+            }
 
-			if (array2 != null && array3 != null)
-				_helper.LinkVerticalStrips(array2, array3, (array.Length - array2.Length) / 2);
+            if (array2 != null && array3 != null)
+            {
+                _helper.LinkVerticalStrips(array2, array3, (array.Length - array2.Length) / 2);
+            }
 
-			UILinkPoint uILinkPoint;
+            UILinkPoint uILinkPoint;
 			UILinkPoint uILinkPoint2 = null;
 			UILinkPoint uILinkPoint3 = null;
 			for (int i = 0; i < snapPoints.Count; i++) {
@@ -464,12 +492,16 @@ namespace Terrexpansion.Common.UI.States
 			}
 
 			if (uILinkPoint3 != null && array5 != null)
-				_helper.PairUpDown(uILinkPoint3, array5[0, 0]);
+            {
+                _helper.PairUpDown(uILinkPoint3, array5[0, 0]);
+            }
 
-			if (uILinkPoint != null && IsShowingSpawnItemsMenu)
-				_helper.LinkVerticalStripRightSideToSingle(array, uILinkPoint);
+            if (uILinkPoint != null && IsShowingSpawnItemsMenu)
+            {
+                _helper.LinkVerticalStripRightSideToSingle(array, uILinkPoint);
+            }
 
-			if (uILinkPoint2 != null) {
+            if (uILinkPoint2 != null) {
 				_helper.PairUpDown(uILinkPoint, uILinkPoint2);
 				uILinkPoint2.Left = array[0].ID;
 			}
@@ -477,8 +509,10 @@ namespace Terrexpansion.Common.UI.States
 			if (Main.CreativeMenu.GamepadMoveToSearchButtonHack) {
 				Main.CreativeMenu.GamepadMoveToSearchButtonHack = false;
 				if (uILinkPoint3 != null)
-					UILinkPointNavigator.ChangePoint(uILinkPoint3.ID);
-			}
+                {
+                    UILinkPointNavigator.ChangePoint(uILinkPoint3.ID);
+                }
+            }
 		}
     }
 }

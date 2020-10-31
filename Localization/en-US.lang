@@ -201,3 +201,11 @@ NotServerHostError=You aren't the server host!
 
 CheatPowers.PowersMenuOpen=Open Cheat Menu
 CheatPowers.PowersCloseMenu=Close Cheat menu
+
+DeathText.FlowerPower={0} witnessed flower power!
+DeathText.FTW={0} wasn't worthy!
+DeathText.Possed={0} was possessed by {1}
+DeathText.KOd={0} was KO'd by {1}
+DeathText.Zombified={0} was zombified
+
+DeathTextGeneric.Defleshed={0} was defleshed

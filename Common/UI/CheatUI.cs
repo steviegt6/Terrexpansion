@@ -46,9 +46,11 @@ namespace Terrexpansion.Common.UI
 		public bool Blocked {
 			get {
 				if (Main.LocalPlayer.talkNPC == -1)
-					return Main.LocalPlayer.chest != -1;
+                {
+                    return Main.LocalPlayer.chest != -1;
+                }
 
-				return true;
+                return true;
 			}
 		}
 
@@ -69,14 +71,18 @@ namespace Terrexpansion.Common.UI
 
 		public void Update(GameTime gameTime) {
 			if (Enabled && Main.playerInventory)
-				_powersUI.Update(gameTime);
-		}
+            {
+                _powersUI.Update(gameTime);
+            }
+        }
 
 		public void Draw(SpriteBatch spriteBatch) {
 			if (!_initialized)
-				Initialize();
+            {
+                Initialize();
+            }
 
-			if (Main.LocalPlayer.difficulty != 3) {
+            if (Main.LocalPlayer.difficulty != 3) {
 				Enabled = false;
 			}
 			else if (!Blocked) {
@@ -85,32 +91,42 @@ namespace Terrexpansion.Common.UI
 				new Vector2(40f, 267f);
 				_ = value + new Vector2(50f, 50f);
 				if (Main.screenHeight < 650 && Enabled)
-					location.X += 52f * Main.inventoryScale;
+                {
+                    location.X += 52f * Main.inventoryScale;
+                }
 
-				DrawToggleButton(spriteBatch, location);
+                DrawToggleButton(spriteBatch, location);
 				if (Enabled)
-					_powersUI.Draw(spriteBatch, Main.gameTimeCache);
-			}
+                {
+                    _powersUI.Draw(spriteBatch, Main.gameTimeCache);
+                }
+            }
 		}
 
 		public UIElement ProvideItemSlotElement(int itemSlotContext) {
 			if (itemSlotContext != 0)
-				return null;
+            {
+                return null;
+            }
 
-			return new UIItemSlot(_itemSlotsForUI, itemSlotContext, 30);
+            return new UIItemSlot(_itemSlotsForUI, itemSlotContext, 30);
 		}
 
 		public Item GetItemByIndex(int itemSlotContext) {
 			if (itemSlotContext != 0)
-				return null;
+            {
+                return null;
+            }
 
-			return _itemSlotsForUI[itemSlotContext];
+            return _itemSlotsForUI[itemSlotContext];
 		}
 
 		public void SetItembyIndex(Item item, int itemSlotContext) {
 			if (itemSlotContext == 0)
-				_itemSlotsForUI[itemSlotContext] = item;
-		}
+            {
+                _itemSlotsForUI[itemSlotContext] = item;
+            }
+        }
 
 		private void DrawToggleButton(SpriteBatch spritebatch, Vector2 location) {
 			Vector2 vector = _buttonTexture.Size();
@@ -122,14 +138,20 @@ namespace Terrexpansion.Common.UI
 				Main.LocalPlayer.creativeInterface = true;
 				Main.LocalPlayer.mouseInterface = true;
 				if (Enabled)
-					Main.instance.MouseText(Language.GetTextValue("CreativePowers.PowersMenuOpen"), 0, 0);
-				else
-					Main.instance.MouseText(Language.GetTextValue("CreativePowers.PowersMenuClosed"), 0, 0);
+                {
+                    Main.instance.MouseText(Language.GetTextValue("CreativePowers.PowersMenuOpen"), 0, 0);
+                }
+                else
+                {
+                    Main.instance.MouseText(Language.GetTextValue("CreativePowers.PowersMenuClosed"), 0, 0);
+                }
 
-				spritebatch.Draw(_buttonBorderTexture.Value, location, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                spritebatch.Draw(_buttonBorderTexture.Value, location, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 				if (Main.mouseLeft && Main.mouseLeftRelease)
-					ToggleMenu();
-			}
+                {
+                    ToggleMenu();
+                }
+            }
 		}
 
 		public void SwapItem(ref Item item) {
@@ -139,8 +161,10 @@ namespace Terrexpansion.Common.UI
 		public void CloseMenu() {
 			Enabled = false;
 			if (_itemSlotsForUI[0].stack > 0)
-				_itemSlotsForUI[0] = Main.LocalPlayer.GetItem(Main.myPlayer, _itemSlotsForUI[0], GetItemSettings.InventoryUIToInventorySettings);
-		}
+            {
+                _itemSlotsForUI[0] = Main.LocalPlayer.GetItem(Main.myPlayer, _itemSlotsForUI[0], GetItemSettings.InventoryUIToInventorySettings);
+            }
+        }
 
 		public void ToggleMenu() {
 			Enabled = !Enabled;
@@ -159,26 +183,36 @@ namespace Terrexpansion.Common.UI
 
 		public bool IsShowingSpawnItemsMenu() {
 			if (Enabled && _uiState != null)
-				return _uiState.IsShowingSpawnItemsMenu;
+            {
+                return _uiState.IsShowingSpawnItemsMenu;
+            }
 
-			return false;
+            return false;
 		}
 
 		public bool ShouldDrawSacrificeArea() {
 			if (!_itemSlotsForUI[0].IsAir)
-				return true;
+            {
+                return true;
+            }
 
-			Item mouseItem = Main.mouseItem;
+            Item mouseItem = Main.mouseItem;
 			if (mouseItem.IsAir)
-				return false;
+            {
+                return false;
+            }
 
-			if (!CreativeItemSacrificesCatalog.Instance.TryGetSacrificeCountCapToUnlockInfiniteItems(mouseItem.type, out int amountNeeded))
-				return false;
+            if (!CreativeItemSacrificesCatalog.Instance.TryGetSacrificeCountCapToUnlockInfiniteItems(mouseItem.type, out int amountNeeded))
+            {
+                return false;
+            }
 
-			if (Main.LocalPlayerCreativeTracker.ItemSacrifices.GetSacrificeCount(mouseItem.type) < amountNeeded)
-				return true;
+            if (Main.LocalPlayerCreativeTracker.ItemSacrifices.GetSacrificeCount(mouseItem.type) < amountNeeded)
+            {
+                return true;
+            }
 
-			return false;
+            return false;
 		}
 
 		public bool GetSacrificeNumbers(out int itemIdChecked, out int amountWeHave, out int amountNeededTotal) {
@@ -187,12 +221,16 @@ namespace Terrexpansion.Common.UI
 			itemIdChecked = 0;
 			Item item = _itemSlotsForUI[0];
 			if (!item.IsAir)
-				itemIdChecked = item.type;
+            {
+                itemIdChecked = item.type;
+            }
 
-			if (!CreativeItemSacrificesCatalog.Instance.TryGetSacrificeCountCapToUnlockInfiniteItems(item.type, out amountNeededTotal))
-				return false;
+            if (!CreativeItemSacrificesCatalog.Instance.TryGetSacrificeCountCapToUnlockInfiniteItems(item.type, out amountNeededTotal))
+            {
+                return false;
+            }
 
-			Main.LocalPlayerCreativeTracker.ItemSacrifices.SacrificesCountByItemIdCache.TryGetValue(item.type, out amountWeHave);
+            Main.LocalPlayerCreativeTracker.ItemSacrifices.SacrificesCountByItemIdCache.TryGetValue(item.type, out amountWeHave);
 			return true;
 		}
 
@@ -201,15 +239,19 @@ namespace Terrexpansion.Common.UI
 			amountWeSacrificed = 0;
 			Item item = _itemSlotsForUI[0];
 			if (!CreativeItemSacrificesCatalog.Instance.TryGetSacrificeCountCapToUnlockInfiniteItems(item.type, out amountNeeded))
-				return ItemSacrificeResult.CannotSacrifice;
+            {
+                return ItemSacrificeResult.CannotSacrifice;
+            }
 
-			int value = 0;
+            int value = 0;
 			Main.LocalPlayerCreativeTracker.ItemSacrifices.SacrificesCountByItemIdCache.TryGetValue(item.type, out value);
 			int num = Utils.Clamp(amountNeeded - value, 0, amountNeeded);
 			if (num == 0)
-				return ItemSacrificeResult.CannotSacrifice;
+            {
+                return ItemSacrificeResult.CannotSacrifice;
+            }
 
-			int num2 = Math.Min(num, item.stack);
+            int num2 = Math.Min(num, item.stack);
 			if (!Main.ServerSideCharacter) {
 				Main.LocalPlayerCreativeTracker.ItemSacrifices.RegisterItemSacrifice(item.type, num2);
 			}
@@ -221,9 +263,11 @@ namespace Terrexpansion.Common.UI
 			bool num3 = num2 == num;
 			item.stack -= num2;
 			if (item.stack <= 0)
-				item.TurnToAir();
+            {
+                item.TurnToAir();
+            }
 
-			amountWeSacrificed = num2;
+            amountWeSacrificed = num2;
 			RefreshAvailableInfiniteItemsList();
 			if (item.stack > 0) {
 				item.position.X = Main.player[Main.myPlayer].Center.X - (float)(item.width / 2);
@@ -232,9 +276,11 @@ namespace Terrexpansion.Common.UI
 			}
 
 			if (!num3)
-				return ItemSacrificeResult.SacrificedButNotDone;
+            {
+                return ItemSacrificeResult.SacrificedButNotDone;
+            }
 
-			return ItemSacrificeResult.SacrificedAndDone;
+            return ItemSacrificeResult.SacrificedAndDone;
 		}
 
 		private void RefreshAvailableInfiniteItemsList() {

@@ -93,11 +93,15 @@ namespace Terrexpansion.Content.Items.Weapons.Swords
             {
                 NPC nPC = Main.npc[i];
                 if (nPC.CanBeChasedBy(this) && nPC.Hitbox.Intersects(value))
+                {
                     validTargets.Add(nPC);
+                }
             }
 
             if (validTargets.Count == 0)
+            {
                 return false;
+            }
 
             return true;
         }

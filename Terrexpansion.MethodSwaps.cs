@@ -37,6 +37,7 @@ namespace Terrexpansion
 
             On.Terraria.Main.PreDrawMenu += Main_PreDrawMenu;
             On_Main_DrawInterface_35_YouDied += Terrexpansion_On_Main_DrawInterface_35_YouDied;
+            On.Terraria.Lang.CreateDeathMessage += Lang_CreateDeathMessage;
         }
 
         public static void UnloadMethodSwaps()
@@ -830,6 +831,156 @@ namespace Terrexpansion
 
                 Main.spriteBatch.DrawString(FontAssets.DeathText.Value, textValue2, new Vector2(Main.screenWidth / 2 - FontAssets.MouseText.Value.MeasureString(textValue2).X * num2 / 2f, Main.screenHeight / 2 + drawOffset), Main.player[Main.myPlayer].GetDeathAlpha(Color.Transparent), 0f, default, num2, SpriteEffects.None, 0f);
             }
+        }
+
+        private static NetworkText Lang_CreateDeathMessage(On.Terraria.Lang.orig_CreateDeathMessage orig, string deadPlayerName, int plr, int npc, int proj, int other, int projType, int plrItemType)
+        {
+            NetworkText projectileName = NetworkText.Empty;
+            NetworkText npcName = NetworkText.Empty;
+            NetworkText pvpPlayerName = NetworkText.Empty;
+            NetworkText pvpPlayerItemName = NetworkText.Empty;
+            Projectile killerProj;
+            NPC killerNPC = Main.npc[0];
+            Player pvpPlayer = Main.player[0];
+
+            if (proj >= 0)
+            {
+                killerProj = Main.projectile[proj];
+                projectileName = NetworkText.FromKey(Lang.GetProjectileName(projType).Key);
+            }
+
+            if (npc >= 0)
+            {
+                killerNPC = Main.npc[npc];
+                npcName = killerNPC.GetGivenOrTypeNetName();
+            }
+
+            if (plr >= 0 && plr < 255)
+            {
+                pvpPlayer = Main.player[plr];
+                pvpPlayerName = NetworkText.FromLiteral(pvpPlayer.name);
+            }
+
+            if (plrItemType >= 0)
+            {
+                pvpPlayerItemName = NetworkText.FromKey(Lang.GetItemName(plrItemType).Key);
+            }
+
+            bool slainByProjectile = projectileName != NetworkText.Empty;
+            bool slainByPlayer = plr >= 0 && plr < 255;
+            bool slainByNPC = npcName != NetworkText.Empty;
+            NetworkText result = NetworkText.Empty;
+            NetworkText empty = NetworkText.FromKey(Language.RandomFromCategory("DeathTextGeneric").Key, deadPlayerName, Main.worldName);
+
+            if (Main.rand.NextBool(26))
+            {
+                empty = NetworkText.FromKey(Language.RandomFromCategory("Mods.Terrexpansion.DeathTextGeneric").Key, deadPlayerName);
+            }
+
+            if (slainByPlayer)
+            {
+                result = NetworkText.FromKey("DeathSource.Player", empty, pvpPlayerName, slainByProjectile ? projectileName : pvpPlayerItemName);
+
+                if (pvpPlayer.HeldItem.type == ItemID.KOCannon)
+                {
+                    result = NetworkText.FromKey("Mods.Terrexpansion.DeathText.KOd", deadPlayerName, pvpPlayerName);
+                }
+            }
+            else if (Main.getGoodWorld && Main.rand.NextBool(30))
+            {
+                result = NetworkText.FromKey("Mods.Terrexpansion.DeathText.FTW", deadPlayerName);
+            }
+            else if (slainByNPC)
+            {
+                Main.NewText(npc);
+                Main.NewText(Main.npc[npc].type);
+
+                result = NetworkText.FromKey("DeathSource.NPC", empty, npcName);
+
+                if (Main.rand.NextBool(2) && killerNPC.type == NPCID.Plantera || killerNPC.type == NPCID.Dandelion)
+                {
+                    result = NetworkText.FromKey("Mods.Terrexpansion.DeathText.FlowerPower", deadPlayerName);
+                }
+
+                if (killerNPC.type == NPCID.Ghost || killerNPC.type == NPCID.Wraith)
+                {
+                    result = NetworkText.FromKey("Mods.Terrexpansion.DeathText.Possessed", deadPlayerName, npcName);
+                }
+
+                if (Main.rand.NextBool(3) && NPCID.Sets.Zombies[killerNPC.type])
+                {
+                    result = NetworkText.FromKey("Mods.Terrexpansion.DeathText.Zombified", deadPlayerName);
+                }
+            }
+            else if (slainByProjectile)
+            {
+                result = NetworkText.FromKey("DeathSource.Projectile", empty, projectileName);
+            }
+            else
+            {
+                switch (other)
+                {
+                    case 0:
+                        result = NetworkText.FromKey("DeathText.Fell_" + (Main.rand.Next(2) + 1), deadPlayerName);
+                        break;
+                    case 1:
+                        result = NetworkText.FromKey("DeathText.Drowned_" + (Main.rand.Next(4) + 1), deadPlayerName);
+                        break;
+                    case 2:
+                        result = NetworkText.FromKey("DeathText.Lava_" + (Main.rand.Next(4) + 1), deadPlayerName);
+                        break;
+                    case 3:
+                        result = NetworkText.FromKey("DeathText.Default", empty);
+                        break;
+                    case 4:
+                        result = NetworkText.FromKey("DeathText.Slain", deadPlayerName);
+                        break;
+                    case 5:
+                        result = NetworkText.FromKey("DeathText.Petrified_" + (Main.rand.Next(4) + 1), deadPlayerName);
+                        break;
+                    case 6:
+                        result = NetworkText.FromKey("DeathText.Stabbed", deadPlayerName);
+                        break;
+                    case 7:
+                        result = NetworkText.FromKey("DeathText.Suffocated", deadPlayerName);
+                        break;
+                    case 8:
+                        result = NetworkText.FromKey("DeathText.Burned", deadPlayerName);
+                        break;
+                    case 9:
+                        result = NetworkText.FromKey("DeathText.Poisoned", deadPlayerName);
+                        break;
+                    case 10:
+                        result = NetworkText.FromKey("DeathText.Electrocuted", deadPlayerName);
+                        break;
+                    case 11:
+                        result = NetworkText.FromKey("DeathText.TriedToEscape", deadPlayerName);
+                        break;
+                    case 12:
+                        result = NetworkText.FromKey("DeathText.WasLicked", deadPlayerName);
+                        break;
+                    case 13:
+                        result = NetworkText.FromKey("DeathText.Teleport_1", deadPlayerName);
+                        break;
+                    case 14:
+                        result = NetworkText.FromKey("DeathText.Teleport_2_Male", deadPlayerName);
+                        break;
+                    case 15:
+                        result = NetworkText.FromKey("DeathText.Teleport_2_Female", deadPlayerName);
+                        break;
+                    case 16:
+                        result = NetworkText.FromKey("DeathText.Inferno", deadPlayerName);
+                        break;
+                    case 254:
+                        result = NetworkText.Empty;
+                        break;
+                    case 255:
+                        result = NetworkText.FromKey("DeathText.Slain", deadPlayerName);
+                        break;
+                }
+            }
+
+            return result;
         }
     }
 }
