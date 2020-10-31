@@ -161,7 +161,7 @@ namespace Terrexpansion.Common
                     lerpingToRotation = true;
                     timeAirborne++;
 
-                    if (timeAirborne > 10)
+                    if (timeAirborne > 60)
                     {
                         player.fullRotation = player.velocity.ToRotation() + (float)Math.PI / 2f;
 
