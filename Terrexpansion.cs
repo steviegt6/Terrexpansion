@@ -10,7 +10,7 @@ using Terraria.Graphics.Effects;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terrexpansion.Common;
-using Terrexpansion.Common.Skies;
+using Terrexpansion.Content.Skies;
 
 namespace Terrexpansion
 {

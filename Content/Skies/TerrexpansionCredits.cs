@@ -7,7 +7,7 @@ using Terraria.GameContent.Skies.CreditsRoll;
 using Terraria.Graphics.Effects;
 using Terrexpansion.Common.UI;
 
-namespace Terrexpansion.Common.Skies
+namespace Terrexpansion.Content.Skies
 {
     public class TerrexpansionCredits : CustomSky
     {

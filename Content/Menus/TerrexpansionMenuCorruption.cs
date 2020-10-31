@@ -6,7 +6,7 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 
-namespace Terrexpansion.Common.Menus
+namespace Terrexpansion.Content.Menus
 {
     public class TerrexpansionMenuCorruption : ModMenu
     {
