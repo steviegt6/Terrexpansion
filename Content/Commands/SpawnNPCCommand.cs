@@ -8,11 +8,11 @@ namespace Terrexpansion.Content.Commands
 {
     public class SpawnNPCCommand : ModCommand
     {
-        public override string Command => "spawnnpc";
+        public override string Command => "npc";
 
         public override CommandType Type => CommandType.Chat;
 
-        public override string Usage => "/spawnnpc <ID> (<ID> can be NPCID.___, ___ without the NPCID., or an integer.";
+        public override string Usage => "/npc <ID> (<ID> can be NPCID.___, ___ without the NPCID., or an integer.";
 
         public override string Description => "Allows you to forcefully spawn an NPC. Only usable with testing mode enabled.";
 

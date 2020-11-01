@@ -56,17 +56,6 @@ namespace Terrexpansion
             uiWorldSelect.Deactivate();
             uiWorldSelect.OnInitialize();
 
-            for (int i = 0; i < 174; i++)
-            {
-                SplashText.Add(Language.GetTextValue("Mods.Terrexpansion.SplashText." + i));
-            }
-
-            SplashText[0] = $"Home to {SplashText.Count} splash texts!";
-            SplashText[1] = $"Splash Text Entry #{Main.rand.Next(1, SplashText.Count)}";
-            SplashText[2] = $"{Environment.UserName.ToUpper()} IS YOU";
-            SplashText[3] = new string($"{Environment.UserName}!".ToCharArray().Reverse().ToArray());
-            SplashText[4] = $"Always watching, {Environment.UserName}, Always watching...";
-
             SkyManager.Instance["Terrexpansion:Credits"] = new TerrexpansionCredits();
 
             _origVersion = Main.versionNumber;
@@ -122,7 +111,21 @@ namespace Terrexpansion
 
         public override void AddRecipes() => RecipeHelper.AddRecipes(this);
 
-        public override void PostAddRecipes() => CanAutosize = true;
+        public override void PostAddRecipes()
+        {
+            for (int i = 0; i < 174; i++)
+            {
+                SplashText.Add(Language.GetTextValue("Mods.Terrexpansion.SplashText." + i));
+            }
+
+            SplashText[0] = $"Home to {SplashText.Count} splash texts!";
+            SplashText[1] = $"Splash Text Entry #{Main.rand.Next(1, SplashText.Count)}";
+            SplashText[2] = $"{Environment.UserName.ToUpper()} IS YOU";
+            SplashText[3] = new string($"{Environment.UserName}!".ToCharArray().Reverse().ToArray());
+            SplashText[4] = $"Always watching, {Environment.UserName}, Always watching...";
+
+            CanAutosize = true;
+        }
 
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {

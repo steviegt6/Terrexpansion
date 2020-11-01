@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.UI;
+using Terrexpansion.Common.Configs.ClientSide;
 
 namespace Terrexpansion.Common
 {
@@ -19,7 +20,7 @@ namespace Terrexpansion.Common
             {
                 layers.Insert(hotbarIndex, new LegacyGameInterfaceLayer("Terrexpansion: Minion Count", delegate
                 {
-                    if (!Main.playerInventory && !Main.player[Main.myPlayer].ghost)
+                    if (!Main.playerInventory && !Main.LocalPlayer.ghost && (Main.LocalPlayer.HeldItem.DamageType == DamageClass.Summon || ModContent.GetInstance<TerreConfigClientSide>().forceMinionCounter))
                     {
                         string minionText = $"{Main.LocalPlayer.numMinions}/{Main.LocalPlayer.maxMinions} minions";
 

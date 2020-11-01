@@ -8,7 +8,7 @@ namespace Terrexpansion.Content.Commands
 {
     public class SpawnItemCommand : ModCommand
     {
-        public override string Command => "spawnitem";
+        public override string Command => "item";
 
         public override CommandType Type => CommandType.Chat;
 
@@ -20,7 +20,7 @@ namespace Terrexpansion.Content.Commands
         {
             if (ModContent.GetInstance<TerreConfigServerSide>().testingMode)
             {
-                int amount = int.Parse(args[1]);
+                int amount = int.Parse(args[1]) >= 1 ? int.Parse(args[1]) : 1;
 
                 if (amount <= 0)
                 {

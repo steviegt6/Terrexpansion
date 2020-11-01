@@ -14,14 +14,14 @@ namespace Terrexpansion.Common.Utilities
         /// <param name="message"></param>
         /// <param name="changeMessageText"></param>
         /// <returns></returns>
-        public static bool IsServerHost(this Player player, ref string message, bool changeMessageText = true)
+        public static bool IsServerHost(this Player player, ref string message)
         {
             if (IsServerHost(player))
             {
                 return true;
             }
 
-            message = changeMessageText ? Language.GetTextValue("Mods.Terrexpansion.NotServerHostError") : message;
+            message = Language.GetTextValue("Mods.Terrexpansion.NotServerHostError");
             return false;
         }
 
