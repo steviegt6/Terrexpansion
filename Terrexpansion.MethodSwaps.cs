@@ -859,10 +859,14 @@ namespace Terrexpansion
 
             if (Main.rand.NextBool(26))
             {
-                switch (Main.rand.Next(1))
+                switch (Main.rand.Next(2))
                 {
-                    case 1:
+                    case 0:
                         empty = NetworkText.FromKey("Mods.Terrexpansion.DeathTextGeneric.Defleshed", deadPlayerName);
+                        break;
+
+                    case 1:
+                        empty = NetworkText.FromKey("Mods.Terrexpansion.DeathTextGeneric.TornApart", deadPlayerName);
                         break;
                 }
             }
