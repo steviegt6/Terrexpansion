@@ -189,6 +189,8 @@ DeathSplash.9=https://www.youtube.com/watch?v=dQw4w9WgXcQ
 DeathSplash.10="No no no, that death was to save time!"
 DeathSplash.11=git gud
 DeathSplash.12=lol you lost
+DeathSplash.13=Oh dear, you are dead.
+DeathSplash.14=My professional opinion? Haha, you're dead!
 
 CoinSplash.0=dropped {0}
 CoinSplash.1=that'll be {0}

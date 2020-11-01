@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -31,15 +32,23 @@ namespace Terrexpansion.Common
 
         public override void SetDefaults(NPC npc)
         {
-            /*Main.npcFrameCount[NPCID.EaterofSouls] = 4;
+            //Main.npcFrameCount[NPCID.EaterofSouls] = 4;
 
             switch (npc.type)
             {
                 case NPCID.EaterofSouls:
-                    npc.width = 46;
-                    npc.height = 80;
+                    //npc.width = 46;
+                    //npc.height = 80;
                     break;
-            }*/
+
+                case NPCID.Medusa:
+                    if (!Main.hardMode)
+                    {
+                        npc.damage /= 2;
+                        npc.life /= 2;
+                    }
+                    break;
+            }
         }
 
         public override bool CheckDead(NPC npc)
@@ -62,6 +71,14 @@ namespace Terrexpansion.Common
             }
 
             return base.CheckDead(npc);
+        }
+
+        public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)
+        {
+            if (spawnInfo.marble && !Main.hardMode)
+            {
+                pool.Add(NPCID.Medusa, 0.1f);
+            }
         }
     }
 }

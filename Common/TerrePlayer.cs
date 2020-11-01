@@ -116,7 +116,7 @@ namespace Terrexpansion.Common
         public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
         {
             player.fullRotation = 0;
-            Terrexpansion.DeathSplashText = Language.GetTextValue("Mods.Terrexpansion.DeathSplash." + Main.rand.Next(9));
+            Terrexpansion.DeathSplashText = Language.GetTextValue("Mods.Terrexpansion.DeathSplash." + Main.rand.Next(15));
             Terrexpansion.CoinSplashText = Language.GetText("Mods.Terrexpansion.CoinSplash." + Main.rand.Next(6));
         }
 
