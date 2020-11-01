@@ -192,6 +192,8 @@ DeathSplash.12=lol you lost
 DeathSplash.13=Oh dear, you are dead.
 DeathSplash.14=My professional opinion? Haha, you're dead!
 DeathSplash.15={0} after not surviving
+DeathSplash.16=You were slain. I can't believe you're this bad.
+DeathSplash.17=Ouch, that's gotta hurt...
 
 CoinSplash.0=dropped {0}
 CoinSplash.1=that'll be {0}
