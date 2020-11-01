@@ -1,8 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Linq;
-using System.Reflection;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;

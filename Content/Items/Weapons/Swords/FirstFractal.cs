@@ -79,7 +79,7 @@ namespace Terrexpansion.Content.Items.Weapons.Swords
             }
 
             Vector2 flippedOffsetVector = -offsetVector;
-            Projectile.NewProjectile(targetPos + flippedOffsetVector, velocity, type, damage, knockBack, player.whoAmI, ai0, Utils.GetLerpValue(player.itemAnimationMax, 0f, player.itemAnimation, true));;
+            Projectile.NewProjectile(targetPos + flippedOffsetVector, velocity, type, damage, knockBack, player.whoAmI, ai0, Utils.GetLerpValue(player.itemAnimationMax, 0f, player.itemAnimation, true)); ;
 
             return false;
         }

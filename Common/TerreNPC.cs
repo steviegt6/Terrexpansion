@@ -63,7 +63,7 @@ namespace Terrexpansion.Common
 
                     if (player != null && player.active && player.difficulty == 2)
                     {
-                        return base.CheckDead(npc);;
+                        return base.CheckDead(npc); ;
                     }
                 }
 

@@ -935,57 +935,75 @@ namespace Terrexpansion
                     case 0:
                         result = NetworkText.FromKey("DeathText.Fell_" + (Main.rand.Next(2) + 1), deadPlayerName);
                         break;
+
                     case 1:
                         result = NetworkText.FromKey("DeathText.Drowned_" + (Main.rand.Next(4) + 1), deadPlayerName);
                         break;
+
                     case 2:
                         result = NetworkText.FromKey("DeathText.Lava_" + (Main.rand.Next(4) + 1), deadPlayerName);
                         break;
+
                     case 3:
                         result = NetworkText.FromKey("DeathText.Default", empty);
                         break;
+
                     case 4:
                         result = NetworkText.FromKey("DeathText.Slain", deadPlayerName);
                         break;
+
                     case 5:
                         result = NetworkText.FromKey("DeathText.Petrified_" + (Main.rand.Next(4) + 1), deadPlayerName);
                         break;
+
                     case 6:
                         result = NetworkText.FromKey("DeathText.Stabbed", deadPlayerName);
                         break;
+
                     case 7:
                         result = NetworkText.FromKey("DeathText.Suffocated", deadPlayerName);
                         break;
+
                     case 8:
                         result = NetworkText.FromKey("DeathText.Burned", deadPlayerName);
                         break;
+
                     case 9:
                         result = NetworkText.FromKey("DeathText.Poisoned", deadPlayerName);
                         break;
+
                     case 10:
                         result = NetworkText.FromKey("DeathText.Electrocuted", deadPlayerName);
                         break;
+
                     case 11:
                         result = NetworkText.FromKey("DeathText.TriedToEscape", deadPlayerName);
                         break;
+
                     case 12:
                         result = NetworkText.FromKey("DeathText.WasLicked", deadPlayerName);
                         break;
+
                     case 13:
                         result = NetworkText.FromKey("DeathText.Teleport_1", deadPlayerName);
                         break;
+
                     case 14:
                         result = NetworkText.FromKey("DeathText.Teleport_2_Male", deadPlayerName);
                         break;
+
                     case 15:
                         result = NetworkText.FromKey("DeathText.Teleport_2_Female", deadPlayerName);
                         break;
+
                     case 16:
                         result = NetworkText.FromKey("DeathText.Inferno", deadPlayerName);
                         break;
+
                     case 254:
                         result = NetworkText.Empty;
                         break;
+
                     case 255:
                         result = NetworkText.FromKey("DeathText.Slain", deadPlayerName);
                         break;
