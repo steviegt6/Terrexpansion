@@ -66,10 +66,6 @@ namespace Terrexpansion.Content.Items.Materials
             CreateRecipe(5)
                 .AddIngredient(ItemID.FallenStar)
                 .Register();
-
-            Mod.CreateRecipe(ItemID.FallenStar)
-                .AddIngredient(ModContent.ItemType<StarFragment>(), 5)
-                .Register();
         }
     }
 }

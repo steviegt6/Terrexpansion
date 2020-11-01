@@ -30,15 +30,6 @@ namespace Terrexpansion.Content.Projectiles.Helpers
 
             projectile.ai[0] += Main.dayRate;
 
-            /*if (projectile.localAI[0] == 0f && Main.netMode != NetmodeID.Server)
-            {
-                projectile.localAI[0] = 1f;
-                if (Main.LocalPlayer.position.Y < Main.worldSurface * 16.0)
-                {
-                    // Star.cs code we likely don't need.
-                }
-            }*/
-
             if (projectile.owner != Main.myPlayer || projectile.ai[0] < 180f)
             {
                 return;

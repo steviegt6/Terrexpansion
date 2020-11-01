@@ -21,7 +21,7 @@ namespace Terrexpansion.Content.Projectiles
         /// <summary>
         /// The projectile's <c>Texture2D</c> (wrapped in an <c>Asset</c>).
         /// </summary>
-        public Asset<Texture2D> projectileTexture => TextureAssets.Projectile[Type];
+        public Asset<Texture2D> ProjectileTexture => TextureAssets.Projectile[Type];
 
         /// <summary>
         /// Overridable version of <c>SetDefaults()</c>. Called at the beginning of <c>SetDefaults()</c>, before Autosize logic.
@@ -34,11 +34,11 @@ namespace Terrexpansion.Content.Projectiles
 
             if (AutosizeProjectile && Terrexpansion.CanAutosize)
             {
-                Vector2 projectileSize = projectileTexture.Size();
+                Vector2 projectileSize = ProjectileTexture.Size();
 
                 if (Main.projFrames[Type] > 1)
                 {
-                    projectileSize = new Vector2(projectileTexture.Width() / Main.projFrames[Type], projectileTexture.Height());
+                    projectileSize = new Vector2(ProjectileTexture.Width() / Main.projFrames[Type], ProjectileTexture.Height());
                 }
 
                 projectile.Size = projectileSize;

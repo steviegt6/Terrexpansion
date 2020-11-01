@@ -10,7 +10,7 @@ namespace Terrexpansion.Common
 {
     public class TerreNPC : GlobalNPC
     {
-        //todo change medusa head drop change to 10%
+        //todo change medusa head drop chance to 10% in hardmode
 
         public override void GetChat(NPC npc, ref string chat)
         {
@@ -22,6 +22,7 @@ namespace Terrexpansion.Common
                     if (Main.rand.NextBool(75) && !player.GetModPlayer<TerrePlayer>().extendedLungs && !player.HasItem(ModContent.ItemType<LungExtensionCard>()))
                     {
                         Item.NewItem(player.position, ModContent.ItemType<LungExtensionCard>(), noGrabDelay: true);
+
                         chat = "Shh! Don't tell anyone I handed you this card.";
                     }
                     break;
@@ -32,15 +33,8 @@ namespace Terrexpansion.Common
 
         public override void SetDefaults(NPC npc)
         {
-            //Main.npcFrameCount[NPCID.EaterofSouls] = 4;
-
             switch (npc.type)
             {
-                case NPCID.EaterofSouls:
-                    //npc.width = 46;
-                    //npc.height = 80;
-                    break;
-
                 case NPCID.Medusa:
                     if (!Main.hardMode)
                     {

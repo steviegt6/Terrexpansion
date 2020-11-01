@@ -28,7 +28,7 @@ namespace Terrexpansion.Content.Items
         /// <summary>
         /// The item's <c>Texture2D</c> (wrapped in an <c>Asset</c>).
         /// </summary>
-        public Asset<Texture2D> itemTexture => TextureAssets.Item[Type];
+        public Asset<Texture2D> ItemTexture => TextureAssets.Item[Type];
 
         /// <summary>
         /// Overridable version of <c>SetDefaults()</c>. Called at the beginning of <c>SetDefaults()</c>, before Autosize and Axe Power recalculation logic.
@@ -41,11 +41,11 @@ namespace Terrexpansion.Content.Items
 
             if (AutosizeItem && Terrexpansion.CanAutosize)
             {
-                Vector2 itemSize = itemTexture.Size();
+                Vector2 itemSize = ItemTexture.Size();
 
                 if (Main.itemAnimationsRegistered.Contains(Type))
                 {
-                    itemSize = new Vector2(itemTexture.Width(), itemTexture.Height() / ((DrawAnimationVertical)Main.itemAnimations[Type]).FrameCount);
+                    itemSize = new Vector2(ItemTexture.Width(), ItemTexture.Height() / ((DrawAnimationVertical)Main.itemAnimations[Type]).FrameCount);
                 }
 
                 item.Size = itemSize;

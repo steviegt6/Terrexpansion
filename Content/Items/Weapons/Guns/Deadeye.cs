@@ -18,6 +18,7 @@ namespace Terrexpansion.Content.Items.Weapons.Guns
 
         public override void SafeSetDefaults()
         {
+            item.useAmmo = AmmoID.Bullet;
             item.autoReuse = false;
             item.useStyle = ItemUseStyleID.Shoot;
             item.useAnimation = item.useTime = 10;
@@ -31,6 +32,7 @@ namespace Terrexpansion.Content.Items.Weapons.Guns
             item.scale = 0.9f;
             item.rare = ItemRarityID.Green;
             item.DamageType = DamageClass.Ranged;
+            item.noUseGraphic = false;
         }
 
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)

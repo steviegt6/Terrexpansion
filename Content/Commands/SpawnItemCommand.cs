@@ -18,7 +18,7 @@ namespace Terrexpansion.Content.Commands
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
-            if (ModContent.GetInstance<ServerSideConfig>().testingMode)
+            if (ModContent.GetInstance<TerreConfigServerSide>().testingMode)
             {
                 int amount = int.Parse(args[1]);
 

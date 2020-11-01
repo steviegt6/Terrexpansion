@@ -4,7 +4,7 @@ using Terraria.ModLoader.Config;
 namespace Terrexpansion.Common.Configs.ServerSide
 {
     [Label("General Server-Side")]
-    public class ServerSideConfig : ModConfig
+    public class TerreConfigServerSide : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
 

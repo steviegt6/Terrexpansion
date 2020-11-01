@@ -13,48 +13,48 @@ namespace Terrexpansion.Content.Skies
     {
         private int _endTime;
         private int _currentTime;
-        private TerrexpansionCreditsRollComposer _composer = new TerrexpansionCreditsRollComposer();
-        private List<ICreditsRollSegment> _segmentsInGame = new List<ICreditsRollSegment>();
-        private List<ICreditsRollSegment> _segmentsInMainMenu = new List<ICreditsRollSegment>();
+        private readonly TerrexpansionCreditsRollComposer _composer = new TerrexpansionCreditsRollComposer();
+        private readonly List<ICreditsRollSegment> _segmentsInGame = new List<ICreditsRollSegment>();
+        private readonly List<ICreditsRollSegment> _segmentsInMainMenu = new List<ICreditsRollSegment>();
         private bool _isActive;
         private bool _wantsToBeSeen;
         private float _opacity;
 
         public int AmountOfTimeNeededForFullPlay => _endTime;
 
-        public TerrexpansionCredits()
-        {
-            EnsureSegmentsAreMade();
-        }
+        public TerrexpansionCredits() => EnsureSegmentsAreMade();
 
         public override void Update(GameTime gameTime)
         {
             _currentTime++;
             float num = 0.008333334f;
+
             if (Main.gameMenu)
             {
                 num = 71f / (339f * (float)Math.PI);
             }
 
             _opacity = MathHelper.Clamp(_opacity + num * _wantsToBeSeen.ToDirectionInt(), 0f, 1f);
+
             if (_opacity == 0f && !_wantsToBeSeen)
             {
                 _isActive = false;
                 return;
             }
 
-            bool flag = true;
+            bool keepCreditsActive = true;
+
             if (!Main.CanPlayCreditsRoll())
             {
-                flag = false;
+                keepCreditsActive = false;
             }
 
             if (_currentTime >= _endTime)
             {
-                flag = false;
+                keepCreditsActive = false;
             }
 
-            if (!flag)
+            if (!keepCreditsActive)
             {
                 SkyManager.Instance.Deactivate("Terrexpansion:Credits");
             }

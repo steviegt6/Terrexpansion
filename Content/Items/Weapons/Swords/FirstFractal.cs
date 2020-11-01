@@ -32,12 +32,10 @@ namespace Terrexpansion.Content.Items.Weapons.Swords
             item.glowMask = GlowMaskID.FirstFractal;
         }
 
-        // Taken from Player.cs
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             Vector2 targetPos = Main.MouseWorld;
-            List<NPC> validNPCs;
-            bool sparkleGuitarTarget = GetSparkleGuitarTarget(player, out validNPCs);
+            bool sparkleGuitarTarget = GetSparkleGuitarTarget(player, out List<NPC> validNPCs);
 
             if (sparkleGuitarTarget)
             {
@@ -89,6 +87,7 @@ namespace Terrexpansion.Content.Items.Weapons.Swords
         {
             validTargets = new List<NPC>();
             Rectangle value = Utils.CenteredRectangle(player.Center, new Vector2(1000f, 800f));
+
             for (int i = 0; i < 200; i++)
             {
                 NPC nPC = Main.npc[i];

@@ -5,9 +5,9 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Terrexpansion
+namespace Terrexpansion.Assets
 {
-    partial class Terrexpansion
+    public static class AssetHelper
     {
         public static Asset<Texture2D> VanillaClassicHeartTexture;
         public static Asset<Texture2D> VanillaClassicHeart2Texture;
@@ -17,11 +17,14 @@ namespace Terrexpansion
         public static Asset<Texture2D> EndlessQuiver;
         public static Asset<Texture2D> LungExtendedBubble;
         public static Asset<Texture2D> LifeFruit;
-        public static Asset<Texture2D> EaterofSouls;
 
         public static void LoadAssets()
         {
-            SaveVanillaAssets();
+            VanillaClassicHeartTexture = TextureAssets.Heart;
+            VanillaClassicHeart2Texture = TextureAssets.Heart2;
+            VanillaClassicManaTexture = TextureAssets.Mana;
+            EndlessQuiver = TextureAssets.Item[ItemID.EndlessQuiver];
+            LifeFruit = TextureAssets.Item[ItemID.LifeFruit];
 
             ClassicMana2Texture = ModContent.GetTexture("Terrexpansion/Assets/Star_StarFruit_Fancy");
             BarManaTexture = ModContent.GetTexture("Terrexpansion/Assets/Star_StarFruit_Bar");
@@ -38,16 +41,6 @@ namespace Terrexpansion
             EndlessQuiver = null;
         }
 
-        public static void SaveVanillaAssets()
-        {
-            VanillaClassicHeartTexture = TextureAssets.Heart;
-            VanillaClassicHeart2Texture = TextureAssets.Heart2;
-            VanillaClassicManaTexture = TextureAssets.Mana;
-            EndlessQuiver = TextureAssets.Item[ItemID.EndlessQuiver];
-            LifeFruit = TextureAssets.Item[ItemID.LifeFruit];
-            //EaterofSouls = TextureAssets.Npc[NPCID.EaterofSouls];
-        }
-
         public static void SwapAssets()
         {
             TextureAssets.Heart = Main.Assets.Request<Texture2D>("Images\\UI\\PlayerResourceSets\\FancyClassic\\Heart_Fill");
@@ -55,7 +48,6 @@ namespace Terrexpansion
             TextureAssets.Mana = Main.Assets.Request<Texture2D>("Images\\UI\\PlayerResourceSets\\FancyClassic\\Star_Fill");
             TextureAssets.Item[ItemID.EndlessQuiver] = ModContent.GetTexture("Terrexpansion/Assets/Items/EndlessQuiver");
             TextureAssets.Item[ItemID.LifeFruit] = ModContent.GetTexture("Terrexpansion/Assets/Items/LifeFruit");
-            //TextureAssets.Npc[NPCID.EaterofSouls] = ModContent.GetTexture("Terrexpansion/Assets/NPCs/EaterofSouls");
         }
 
         public static void LoadVanillaAssets()
@@ -65,7 +57,6 @@ namespace Terrexpansion
             TextureAssets.Mana = VanillaClassicManaTexture;
             TextureAssets.Item[ItemID.EndlessQuiver] = EndlessQuiver;
             TextureAssets.Item[ItemID.LifeFruit] = LifeFruit;
-            //TextureAssets.Npc[NPCID.EaterofSouls] = EaterofSouls;
         }
     }
 }

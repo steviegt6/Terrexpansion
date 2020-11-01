@@ -23,13 +23,6 @@ namespace Terrexpansion.Common.UI
             Vector2 value = Vector2.UnitY * -1f * num2;
             int num3 = 210;
             Vector2 vector = value + Vector2.UnitX * 200f;
-            Vector2 vector2 = vector;
-
-            if (!inGame)
-            {
-                vector2 = (vector = Vector2.UnitY * 80f);
-            }
-
             int num4 = num3 * 3;
             int num5 = num3 * 3;
             int num6 = num4 - num5;

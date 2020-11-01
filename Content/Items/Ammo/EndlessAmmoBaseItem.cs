@@ -35,8 +35,8 @@ namespace Terrexpansion.Content.Items.Ammo
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemType, ItemCount)
-                .AddTile(CraftingStation)
+                .AddIngredient(ItemType, ItemCount) // Here we add ItemType as an ingredient with ItemCount as the amount required for out recipe automatically.
+                .AddTile(CraftingStation) // Ditto.
                 .Register();
         }
     }

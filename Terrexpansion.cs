@@ -9,20 +9,19 @@ using Terraria.GameContent.UI.States;
 using Terraria.Graphics.Effects;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terrexpansion.Assets;
 using Terrexpansion.Common;
 using Terrexpansion.Content.Skies;
 
 namespace Terrexpansion
 {
-    /// <summary>
-    /// Our main <c>Mod</c> class. It extends <c>Mod</c> and is essentially the core. To lessen the size of our main class, I've made this a partial class that's been split up into multiple parts (see: <c>Terrexpansion.X.cs</c>).
-    /// </summary>
     public partial class Terrexpansion : Mod
     {
         private static bool _hasInitiailizedPlayerMenu = false;
         private static bool _hasInitializedWorldMenu = false;
 
         public static bool Unloading = false;
+        public static bool SetupContent = false;
         public static bool CanAutosize = false;
         public static List<string> SplashText = new List<string>();
         public static string DeathSplashText;
@@ -42,7 +41,7 @@ namespace Terrexpansion
 
         public override void Load()
         {
-            LoadAssets();
+            AssetHelper.LoadAssets();
             LoadMethodSwaps();
 
             UICharacterSelect uiCharacterSelect = (UICharacterSelect)TerrariaAssembly.GetType("Terraria.Main").GetField("_characterSelectMenu", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
@@ -83,9 +82,10 @@ namespace Terrexpansion
 
         public override void PostSetupContent()
         {
-            SwapAssets();
+            AssetHelper.SwapAssets();
 
             Main.versionNumber = "Terrexpansion v1.0.0.0";
+            SetupContent = true;
         }
 
         public override void Unload()
@@ -93,7 +93,7 @@ namespace Terrexpansion
             Unloading = true;
 
             UnloadMethodSwaps();
-            UnloadAssets();
+            AssetHelper.UnloadAssets();
 
             UICharacterSelect uiCharacterSelect = (UICharacterSelect)TerrariaAssembly.GetType("Terraria.Main").GetField("_characterSelectMenu", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
             uiCharacterSelect.RemoveAllChildren();
@@ -117,6 +117,10 @@ namespace Terrexpansion
             CanAutosize = false;
             Unloading = false;
         }
+
+        public override void AddRecipeGroups() => RecipeHelper.AddRecipeGroups();
+
+        public override void AddRecipes() => RecipeHelper.AddRecipes(this);
 
         public override void PostAddRecipes() => CanAutosize = true;
 
