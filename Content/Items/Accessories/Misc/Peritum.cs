@@ -49,7 +49,7 @@ namespace Terrexpansion.Content.Items.Accessories.Misc
             player.strongBees = true;
             player.boneGlove = true;
             player.brainOfConfusion = true;
-            player.endurance += 20f;
+            player.endurance += 0.2f;
             player.dashType = 2;
             player.gravControl2 = true;
             player.npcTypeNoAggro[1] = true;
