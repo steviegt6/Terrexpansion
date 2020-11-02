@@ -22,7 +22,7 @@ namespace Terrexpansion.Content.Items.Accessories.Misc
         {
             item.accessory = true;
             item.rare = ItemRarityID.Lime;
-            item.value = Item.sellPrice(gold: 27);
+            item.value = Item.sellPrice(gold: 37);
         }
 
         public override void UpdateEquip(Player player)
@@ -35,17 +35,24 @@ namespace Terrexpansion.Content.Items.Accessories.Misc
             player.rocketBoots = 4;
             player.moveSpeed += 0.1f;
             player.iceSkate = true;
+            player.fairyBoots = true;
 
             Terrexpansion.TerrariaAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect").Invoke(player, new object[1] { Delegate.CreateDelegate(typeof(Utils.TileActionAttempt), player, Terrexpansion.TerrariaAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect_PlaceFlamesOnTile")) });
+            Terrexpansion.TerrariaAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect").Invoke(player, new object[1] { Delegate.CreateDelegate(typeof(Utils.TileActionAttempt), player, Terrexpansion.TerrariaAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect_PlaceFlowersOnTile")) });
         }
 
-        public override void UpdateVanity(Player player, EquipType type) => Terrexpansion.TerrariaAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect").Invoke(player, new object[1] { Delegate.CreateDelegate(typeof(Utils.TileActionAttempt), player, Terrexpansion.TerrariaAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect_PlaceFlamesOnTile")) });
+        public override void UpdateVanity(Player player, EquipType type)
+        {
+            Terrexpansion.TerrariaAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect").Invoke(player, new object[1] { Delegate.CreateDelegate(typeof(Utils.TileActionAttempt), player, Terrexpansion.TerrariaAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect_PlaceFlamesOnTile")) });
+            Terrexpansion.TerrariaAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect").Invoke(player, new object[1] { Delegate.CreateDelegate(typeof(Utils.TileActionAttempt), player, Terrexpansion.TerrariaAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect_PlaceFlowersOnTile")) });
+        }
 
         public override void AddRecipes()
         {
             CreateRecipe()
                 .AddIngredient(ItemID.TerrasparkBoots)
                 .AddIngredient(ItemID.FlameWakerBoots)
+                .AddIngredient(ItemID.FairyBoots)
                 .AddTile(TileID.TinkerersWorkbench)
                 .Register();
         }
