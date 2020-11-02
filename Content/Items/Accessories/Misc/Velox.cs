@@ -14,9 +14,10 @@ namespace Terrexpansion.Content.Items.Accessories.Misc
         public override void SetStaticDefaults() => Tooltip.SetDefault("Hold UP to reach higher" +
                 "\nAllows the ability to climb walls" +
                 "\nAllows flight, super fast running, and extra mobility on ice" +
-                "\nGrants the ability to swim" +
+                "\nGrants the ability to swim and greatly extends underwater breathing" +
                 "\nGrants immunity to fire blocks and 7 seconds of immunity to lava" +
                 "\nGrants the ability to float in water" +
+                "\nGenerates a very suble glow which becomes more vibrant underwater" +
                 "\nIncreases jump speed and allows auto-jump" +
                 "\nIncreases jump height" +
                 "\n25% increased movement speed" +
@@ -61,6 +62,17 @@ namespace Terrexpansion.Content.Items.Accessories.Misc
             player.moveSpeed += 0.25f;
             player.iceSkate = true;
             player.fairyBoots = true;
+            player.accDivingHelm = true;
+            player.arcticDivingGear = true;
+
+            if (!player.wet)
+            {
+                Lighting.AddLight((int)player.Center.X / 16, (int)player.Center.Y / 16, 0.05f, 0.15f, 0.225f);
+            }
+            else
+            {
+                Lighting.AddLight((int)player.Center.X / 16, (int)player.Center.Y / 16, 0.4f, 1.2f, 1.8f);
+            }
 
             Terrexpansion.TerrariaAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect").Invoke(player, new object[1] { Delegate.CreateDelegate(typeof(Utils.TileActionAttempt), player, Terrexpansion.TerrariaAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect_PlaceFlamesOnTile")) });
             Terrexpansion.TerrariaAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect").Invoke(player, new object[1] { Delegate.CreateDelegate(typeof(Utils.TileActionAttempt), player, Terrexpansion.TerrariaAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect_PlaceFlowersOnTile")) });
