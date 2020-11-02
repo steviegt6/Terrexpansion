@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terrexpansion.Common.Configs.ClientSide;
 
 namespace Terrexpansion.Common
 {
@@ -56,6 +57,19 @@ namespace Terrexpansion.Common
                     //player.GetModPlayer<TerrePlayer>().cactusSetBonus = true;
                     break;
             }
+        }
+
+        public override bool CanPickup(Item item, Player player)
+        {
+            foreach (int type in ModContent.GetInstance<TerreConfigClientSide>().blacklistItemsList)
+            {
+                if (item.type == type)
+                {
+                    return false;
+                }
+            }
+
+            return base.CanPickup(item, player);
         }
     }
 }

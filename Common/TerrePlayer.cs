@@ -108,9 +108,15 @@ namespace Terrexpansion.Common
             {
                 if (vileVial)
                 {
-                    damage += 3;
+                    flat += 3f;
                 }
             }
+        }
+
+        public override void OnRespawn(Player player)
+        {
+            player.statLife = player.statLifeMax2;
+            player.statMana = player.statManaMax2;
         }
 
         public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
