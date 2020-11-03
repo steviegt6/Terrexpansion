@@ -7,6 +7,6 @@ namespace Terrexpansion.Content.Rarities
 {
     public class ZenithRarity : ModRarity
     {
-        public override Color RarityColor => new AnimatedColor(Color.Black, Colors.RarityDarkPurple, 25f).GetColor();
+        public override Color RarityColor => new AnimatedColor(new Color(0, 255, 255), new Color(60, 60, 60), 20f).GetColor();
     }
 }
