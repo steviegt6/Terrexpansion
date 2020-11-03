@@ -46,7 +46,7 @@ namespace Terrexpansion.Common.UI
             num += PlaySegment_TextRoll(num, new string[] { "Terrexpansion Graphics", "Cloud (Herbert)", "Doodle", "Terra", "RiverOaken" }, vector).totalTime;
             num += num3;
             vector.X *= 0f;
-            num += PlaySegment_TextRoll(num, new string[] { "Special Thanks", "Libvaxy for not including itself", "Dradonhunter11 for 64bit", "The tML devs for 100% not making tML at all", "NuovaPrime for emotional support :sungla:", "pollen__ for pollenating Avalon" }, vector).totalTime;
+            num += PlaySegment_TextRoll(num, new string[] { "Special Thanks to", "Libvaxy for not including itself", "Dradonhunter11 for 64bit", "The tML devs for 100% not making tML at all", "NuovaPrime for emotional support :sungla:", "pollen__ for pollenating Avalon" }, vector).totalTime;
             num += num6;
             _endTime = num + 10;
             endTime = _endTime;
