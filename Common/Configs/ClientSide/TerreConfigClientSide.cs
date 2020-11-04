@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader.Config;
-using Terrexpansion.Common.Utilities;
 
 namespace Terrexpansion.Common.Configs.ClientSide
 {

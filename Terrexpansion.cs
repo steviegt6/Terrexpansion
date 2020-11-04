@@ -27,6 +27,7 @@ namespace Terrexpansion
         public static string DeathSplashText;
         public static LocalizedText CoinSplashText;
         public static Assembly TerrariaAssembly = typeof(Main).Assembly;
+        public static float MapOpacity = 0.5f;
 
         public enum MessageType : byte
         {
@@ -86,14 +87,20 @@ namespace Terrexpansion
 
             UICharacterSelect uiCharacterSelect = (UICharacterSelect)TerrariaAssembly.GetType("Terraria.Main").GetField("_characterSelectMenu", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
             uiCharacterSelect.RemoveAllChildren();
-            uiCharacterSelect.RemoveChild(filterTextBoxPlayer);
+            if (filterTextBoxPlayer != null)
+            {
+                uiCharacterSelect.RemoveChild(filterTextBoxPlayer);
+            }
             uiCharacterSelect.Remove();
             uiCharacterSelect.Deactivate();
             uiCharacterSelect.OnInitialize();
 
             UIWorldSelect uiWorldSelect = (UIWorldSelect)TerrariaAssembly.GetType("Terraria.Main").GetField("_worldSelectMenu", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
             uiWorldSelect.RemoveAllChildren();
-            uiWorldSelect.RemoveChild(filterTextBoxWorld);
+            if (filterTextBoxWorld != null)
+            {
+                uiWorldSelect.RemoveChild(filterTextBoxWorld);
+            }
             uiWorldSelect.Remove();
             uiWorldSelect.Deactivate();
             uiWorldSelect.OnInitialize();

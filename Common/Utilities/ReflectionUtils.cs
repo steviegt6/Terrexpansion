@@ -12,6 +12,7 @@ namespace Terrexpansion.Common.Utilities
 
         public static Dictionary<string, Type> TypeCache = new Dictionary<string, Type>();
         public static Dictionary<string, FieldInfo> FieldInfoCache = new Dictionary<string, FieldInfo>();
+        public static Dictionary<string, PropertyInfo> PropertyInfoCache = new Dictionary<string, PropertyInfo>();
         public static Dictionary<string, MethodInfo> MethodInfoCache = new Dictionary<string, MethodInfo>();
 
         public static FieldInfo GetStaticField(this Type type, string name)
@@ -54,6 +55,48 @@ namespace Terrexpansion.Common.Utilities
             }
 
             return FieldInfoCache[key];
+        }
+
+        public static PropertyInfo GetStaticProperty(this Type type, string name)
+        {
+            string key = $"{type.FullName}.{name}";
+
+            if (!PropertyInfoCache.ContainsKey(key))
+            {
+                PropertyInfo propertyInfo = type.GetProperty(name, AnyAccessibility | BindingFlags.Static);
+
+                CacheProperty(propertyInfo, key);
+            }
+
+            return PropertyInfoCache[key];
+        }
+
+        public static PropertyInfo GetInstanceProperty(this Type type, string name)
+        {
+            string key = $"{type.FullName}.{name}";
+
+            if (!PropertyInfoCache.ContainsKey(key))
+            {
+                PropertyInfo propertyInfo = type.GetProperty(name, AnyAccessibility | BindingFlags.Instance);
+
+                CacheProperty(propertyInfo, key);
+            }
+
+            return PropertyInfoCache[key];
+        }
+
+        public static PropertyInfo GetAnyProperty(this Type type, string name)
+        {
+            string key = $"{type.FullName}.{name}";
+
+            if (!PropertyInfoCache.ContainsKey(key))
+            {
+                PropertyInfo propertyInfo = type.GetProperty(name, AllFlags);
+
+                CacheProperty(propertyInfo, key);
+            }
+
+            return PropertyInfoCache[key];
         }
 
         public static MethodInfo GetStaticMethod(this Type type, string name)
@@ -111,6 +154,8 @@ namespace Terrexpansion.Common.Utilities
         }
 
         public static FieldInfo CacheField(FieldInfo fieldInfo, string key) => FieldInfoCache[key] = fieldInfo;
+
+        public static PropertyInfo CacheProperty(PropertyInfo propertyInfo, string key) => PropertyInfoCache[key] = propertyInfo;
 
         public static MethodInfo CacheMethod(MethodInfo methodInfo, string key) => MethodInfoCache[key] = methodInfo;
 
