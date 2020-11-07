@@ -1,2 +1,2 @@
 # Terrexpansion
- Mod.
+ Mod. (Short for "modification".)
