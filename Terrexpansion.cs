@@ -1,3 +1,6 @@
+using Microsoft.Xna.Framework;
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +14,8 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terrexpansion.Assets;
 using Terrexpansion.Common;
+using Terrexpansion.Common.Configs.ClientSide;
+using Terrexpansion.Common.Utilities;
 using Terrexpansion.Content.Skies;
 
 namespace Terrexpansion
@@ -20,6 +25,8 @@ namespace Terrexpansion
         private static bool _hasInitiailizedPlayerMenu = false;
         private static bool _hasInitializedWorldMenu = false;
 
+        internal static Color MapColorForILBecauseILSucks { get; private set; }
+
         public static bool Unloading = false;
         public static bool SetupContent = false;
         public static bool CanAutosize = false;
@@ -27,7 +34,6 @@ namespace Terrexpansion
         public static string DeathSplashText;
         public static LocalizedText CoinSplashText;
         public static Assembly TerrariaAssembly = typeof(Main).Assembly;
-        public static float MapOpacity = 0.5f;
 
         public enum MessageType : byte
         {
@@ -42,6 +48,15 @@ namespace Terrexpansion
 
         public override void Load()
         {
+            foreach (Type type in typeof(Terrexpansion).Assembly.GetTypes().OrderBy(type => type.FullName, StringComparer.InvariantCulture))
+            {
+                if (type.IsSubclassOf(typeof(Synergy)) && !type.IsAbstract)
+                {
+                    SynergyLoader.Add((Synergy)Activator.CreateInstance(type));
+                }
+            }
+
+
             AssetHelper.LoadAssets();
             LoadMethodSwaps();
 
@@ -104,6 +119,8 @@ namespace Terrexpansion
             uiWorldSelect.Remove();
             uiWorldSelect.Deactivate();
             uiWorldSelect.OnInitialize();
+
+            SynergyLoader.Unload();
 
             (typeof(Main).Assembly.GetType("Terraria.Localization.LanguageManager").GetField("_localizedTexts", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(LanguageManager.Instance) as Dictionary<string, LocalizedText>).Remove("UI.HealthManaStyle_TerrexpansionStyle");
             Main.PlayerResourcesSets.Remove("TerrexpansionStyle");

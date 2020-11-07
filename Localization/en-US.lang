@@ -9,7 +9,7 @@ SplashText.5=Also try Minecraft!
 SplashText.6=Also try Thorium!
 SplashText.7=Main.rand.Next(1, 2);
 SplashText.8=When is tML 1.4 coming out?
-SplashText.09=Watch out for boulders!
+SplashText.9=Watch out for boulders!
 SplashText.10=CACTUS DAMAGE
 SplashText.11=Loli.B
 SplashText.12=BadNoob420
@@ -219,3 +219,6 @@ DeathTextGeneric.Defleshed={0} was defleshed
 DeathTextGeneric.TornApart={0} was torn apart
 
 GameUI.MapOpacity=Map Opacity: {0}%
+GameUI.SynergyButton=Open Synergy Menu
+
+UI.Synergies=Synergies

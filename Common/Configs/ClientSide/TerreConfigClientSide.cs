@@ -15,9 +15,21 @@ namespace Terrexpansion.Common.Configs.ClientSide
         [DefaultValue(false)]
         public bool forceMinionCounter;
 
+        [Label("Map Opacity")]
+        [Tooltip("The opacity for the large map displayed behind the player when in the overlay map mode.")]
+        [Range(0.01f, 1f)]
+        [DefaultValue(0.5f)]
+        [Slider]
+        public float mapOpacity;
+
         [Label("Item Pick-up Blacklist")]
         [Tooltip("Allows you to choose what items you don't want to pick up.")]
         public List<int> blacklistItemsList = new List<int>();
+
+        [Label("Debug Mode")]
+        [Tooltip("Having issues with loading the mod? Certain things not working? Enable this for more comprehensive logging!")]
+        [DefaultValue(false)]
+        public bool debugMode;
 
         [Header("Sonar Potion Changes")]
         [Label("Item Appears Above Sonar Text")]

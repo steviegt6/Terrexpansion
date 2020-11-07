@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using System.Reflection;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -17,6 +18,7 @@ namespace Terrexpansion.Assets
         public static Asset<Texture2D> EndlessQuiver;
         public static Asset<Texture2D> LungExtendedBubble;
         public static Asset<Texture2D> LifeFruit;
+        public static Asset<Texture2D> SynergyButton;
 
         public static void LoadAssets()
         {
@@ -29,16 +31,18 @@ namespace Terrexpansion.Assets
             ClassicMana2Texture = ModContent.GetTexture("Terrexpansion/Assets/Star_StarFruit_Fancy");
             BarManaTexture = ModContent.GetTexture("Terrexpansion/Assets/Star_StarFruit_Bar");
             LungExtendedBubble = ModContent.GetTexture("Terrexpansion/Assets/Bubble_LungExtensionCard");
+            SynergyButton = TextureAssets.EmoteMenuButton;
         }
 
         public static void UnloadAssets()
         {
-            VanillaClassicHeartTexture = null;
-            VanillaClassicHeart2Texture = null;
-            VanillaClassicManaTexture = null;
-            ClassicMana2Texture = null;
-            BarManaTexture = null;
-            EndlessQuiver = null;
+            foreach (FieldInfo fieldInfo in typeof(AssetHelper).GetFields())
+            {
+                if (fieldInfo.IsStatic)
+                {
+                    fieldInfo.SetValue(null, null);
+                }
+            }
         }
 
         public static void SwapAssets()
