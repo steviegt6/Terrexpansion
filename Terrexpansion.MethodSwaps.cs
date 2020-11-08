@@ -43,6 +43,7 @@ namespace Terrexpansion
 
         public static void UnloadMethodSwaps()
         {
+            Hooks.On_FancyClassicPlayerResourcesDisplaySet_PrepareFields -= Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_PrepareFields;
             Hooks.On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer -= Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer;
             Hooks.On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields -= Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields;
             Hooks.On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer -= Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer;
@@ -55,6 +56,7 @@ namespace Terrexpansion
         public static void SwapClassicResources()
         {
             On.Terraria.GameContent.UI.ClassicPlayerResourcesDisplaySet.DrawMana += ClassicPlayerResourcesDisplaySet_DrawMana;
+            Hooks.On_FancyClassicPlayerResourcesDisplaySet_PrepareFields += Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_PrepareFields;
             Hooks.On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer += Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer;
             Hooks.On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields += Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields;
             Hooks.On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer += Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer;
@@ -132,6 +134,22 @@ namespace Terrexpansion
                     }
                 }
             }
+        }
+
+        public static void Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_PrepareFields(Hooks.Orig_FancyClassicPlayerResourcesDisplaySet_PrepareFields orig, FancyClassicPlayerResourcesDisplaySet self, Player player)
+        {
+            orig(self, player);
+
+            Type resourcesDisplaySet = TerrariaAssembly.GetType("Terraria.GameContent.UI.FancyClassicPlayerResourcesDisplaySet");
+            PlayerStatsSnapshot playerStatsSnapshot = new PlayerStatsSnapshot(player);
+
+            resourcesDisplaySet.GetInstanceField("_manaPerStar").SetValue(self, playerStatsSnapshot.ManaMax <= 200 ? playerStatsSnapshot.ManaPerSegment : (Main.LocalPlayer.statManaMax2 / 10)); //changed
+
+            resourcesDisplaySet.GetInstanceField("_starCount").SetValue(self, (int)(playerStatsSnapshot.ManaMax / (float)resourcesDisplaySet.GetField("_manaPerStar", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(self)));
+
+            resourcesDisplaySet.GetInstanceField("_currentPlayerMana").SetValue(self, playerStatsSnapshot.Mana);
+
+            resourcesDisplaySet.GetInstanceField("_lastStarFillingIndex").SetValue(self, (int)((float)resourcesDisplaySet.GetInstanceField("_currentPlayerMana").GetValue(self) / (float)resourcesDisplaySet.GetInstanceField("_manaPerStar").GetValue(self)));
         }
 
         public static void Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer(Hooks.Orig_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer orig, FancyClassicPlayerResourcesDisplaySet self, int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)

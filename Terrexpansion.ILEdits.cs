@@ -11,6 +11,7 @@ namespace Terrexpansion
         public void LoadILEdits()
         {
             IL.Terraria.Main.DrawInterface_35_YouDied += Main_DrawInterface_35_YouDied;
+            IL.Terraria.Player.Update += Player_Update;
         }
 
         public void UnloadILEdits()
@@ -64,6 +65,35 @@ namespace Terrexpansion
 
             c.Emit(OpCodes.Pop);
             c.Emit(OpCodes.Ldsfld, typeof(Terrexpansion).GetStaticField("CoinSplashText"));
+        }
+
+        private void Player_Update(ILContext il)
+        {
+            ILCursor c = new ILCursor(il);
+
+            if (!c.TryGotoNext(i => i.MatchLdcI4(400)))
+            {
+                Logger.Warn("[IL] Could not match LdcI4: 400! (1)");
+
+                return;
+            }
+
+            c.Index++;
+
+            c.Emit(OpCodes.Pop);
+            c.Emit(OpCodes.Ldc_I4, int.MaxValue);
+
+            if (!c.TryGotoNext(i => i.MatchLdcI4(400)))
+            {
+                Logger.Warn("[IL] Could not match LdcI4: 400! (2)");
+
+                return;
+            }
+
+            c.Index++;
+
+            c.Emit(OpCodes.Pop);
+            c.Emit(OpCodes.Ldc_I4, int.MaxValue);
         }
     }
 }
