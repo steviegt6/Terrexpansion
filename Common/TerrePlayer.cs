@@ -12,6 +12,8 @@ namespace Terrexpansion.Common
     public class TerrePlayer : ModPlayer
     {
         public static int MaxStarFruit = 10;
+        public static int ManaPerStar = Main.LocalPlayer.statManaMax2 <= 200 ? 20 : Main.LocalPlayer.statManaMax2 / 10;
+        public static int ManaStarCount = Main.LocalPlayer.statManaMax2 / ManaPerStar;
 
         public bool cactusSetBonus = false;
         public bool vileVial = false;
@@ -123,7 +125,7 @@ namespace Terrexpansion.Common
         {
             player.fullRotation = 0;
             Terrexpansion.DeathSplashText = Language.GetTextValue("Mods.Terrexpansion.DeathSplash." + Main.rand.Next(18), player.name);
-            Terrexpansion.CoinSplashText = Language.GetText("Mods.Terrexpansion.CoinSplash." + Main.rand.Next(6));
+            Terrexpansion.CoinSplashText = "Mods.Terrexpansion.CoinSplash." + Main.rand.Next(6);
         }
 
         public override void ModifyDrawLayers(IReadOnlyDictionary<string, IReadOnlyList<PlayerDrawLayer>> layers, PlayerDrawSet drawInfo)

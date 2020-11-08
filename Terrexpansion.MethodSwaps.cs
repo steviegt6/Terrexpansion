@@ -26,9 +26,6 @@ using Terrexpansion.Common;
 using Terrexpansion.Common.UI.Elements;
 using Terrexpansion.Common.Utilities;
 
-// You won't ever catch me dead using another static using directive.
-using static Terrexpansion.Common.Hooks;
-
 namespace Terrexpansion
 {
     // This partial class contains all of Terrexpansion's method swap (detour) code. I would not advice any new modders to base their method swaps off of this as it's messy and lazy.
@@ -41,33 +38,27 @@ namespace Terrexpansion
             SwapWorldSelect();
 
             On.Terraria.Main.PreDrawMenu += Main_PreDrawMenu;
-            On_Main_DrawInterface_35_YouDied += Terrexpansion_On_Main_DrawInterface_35_YouDied;
             On.Terraria.Lang.CreateDeathMessage += Lang_CreateDeathMessage;
         }
 
         public static void UnloadMethodSwaps()
         {
-            On_FancyClassicPlayerResourcesDisplaySet_PrepareFields -= Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_PrepareFields;
-            On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer -= Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer;
-            On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields -= Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields;
-            On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer -= Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer;
-            On_UICharacterSelect_UpdatePlayersList -= Terrexpansion_On_UICharacterSelect_UpdatePlayersList;
-            On_WorldSelect_UpdateWorldsList -= Terrexpansion_On_WorldSelect_UpdateWorldsList;
-            On_Main_DrawInterface_Resources_Breath -= Terrexpansion_On_Main_DrawInterface_Resources_Breath;
+            Hooks.On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer -= Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer;
+            Hooks.On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields -= Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields;
+            Hooks.On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer -= Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer;
+            Hooks.On_UICharacterSelect_UpdatePlayersList -= Terrexpansion_On_UICharacterSelect_UpdatePlayersList;
+            Hooks.On_WorldSelect_UpdateWorldsList -= Terrexpansion_On_WorldSelect_UpdateWorldsList;
+            Hooks.On_Main_DrawInterface_Resources_Breath -= Terrexpansion_On_Main_DrawInterface_Resources_Breath;
             On.Terraria.Main.PreDrawMenu -= Main_PreDrawMenu;
-            On_Main_DrawInterface_35_YouDied -= Terrexpansion_On_Main_DrawInterface_35_YouDied;
         }
-
-        #region Resource Bars
 
         public static void SwapClassicResources()
         {
             On.Terraria.GameContent.UI.ClassicPlayerResourcesDisplaySet.DrawMana += ClassicPlayerResourcesDisplaySet_DrawMana;
-            On_FancyClassicPlayerResourcesDisplaySet_PrepareFields += Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_PrepareFields;
-            On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer += Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer;
-            On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields += Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields;
-            On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer += Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer;
-            On_Main_DrawInterface_Resources_Breath += Terrexpansion_On_Main_DrawInterface_Resources_Breath;
+            Hooks.On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer += Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer;
+            Hooks.On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields += Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields;
+            Hooks.On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer += Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer;
+            Hooks.On_Main_DrawInterface_Resources_Breath += Terrexpansion_On_Main_DrawInterface_Resources_Breath;
         }
 
         public static void ClassicPlayerResourcesDisplaySet_DrawMana(On.Terraria.GameContent.UI.ClassicPlayerResourcesDisplaySet.orig_DrawMana orig, ClassicPlayerResourcesDisplaySet self)
@@ -143,20 +134,7 @@ namespace Terrexpansion
             }
         }
 
-        public static void Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_PrepareFields(Orig_FancyClassicPlayerResourcesDisplaySet_PrepareFields orig, FancyClassicPlayerResourcesDisplaySet self, Player player)
-        {
-            orig(self, player);
-
-            Type resourcesDisplaySet = TerrariaAssembly.GetType("Terraria.GameContent.UI.FancyClassicPlayerResourcesDisplaySet");
-            PlayerStatsSnapshot playerStatsSnapshot = new PlayerStatsSnapshot(player);
-
-            resourcesDisplaySet.GetInstanceField("_manaPerStar").SetValue(self, playerStatsSnapshot.ManaMax <= 200 ? playerStatsSnapshot.ManaPerSegment : (Main.LocalPlayer.statManaMax2 / 10));
-            resourcesDisplaySet.GetInstanceField("_starCount").SetValue(self, (int)(playerStatsSnapshot.ManaMax / (float)resourcesDisplaySet.GetField("_manaPerStar", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(self)));
-            resourcesDisplaySet.GetInstanceField("_currentPlayerMana").SetValue(self, playerStatsSnapshot.Mana);
-            resourcesDisplaySet.GetInstanceField("_lastStarFillingIndex").SetValue(self, (int)((float)resourcesDisplaySet.GetInstanceField("_currentPlayerMana").GetValue(self) / (float)resourcesDisplaySet.GetInstanceField("_manaPerStar").GetValue(self)));
-        }
-
-        public static void Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer(Orig_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer orig, FancyClassicPlayerResourcesDisplaySet self, int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
+        public static void Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer(Hooks.Orig_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer orig, FancyClassicPlayerResourcesDisplaySet self, int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
         {
             orig(self, elementIndex, firstElementIndex, lastElementIndex, out sprite, out offset, out drawScale, out sourceRect);
 
@@ -166,14 +144,14 @@ namespace Terrexpansion
             }
         }
 
-        public static void Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields(Orig_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields orig, HorizontalBarsPlayerReosurcesDisplaySet self, Player player)
+        public static void Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields(Hooks.Orig_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields orig, HorizontalBarsPlayerReosurcesDisplaySet self, Player player)
         {
             orig(self, player);
 
             TerrariaAssembly.GetCachedType("Terraria.GameContent.UI.HorizontalBarsPlayerReosurcesDisplaySet").GetInstanceField("_mpSegmentsCount").SetValue(self, player.statManaMax2 <= 200 ? (player.statManaMax2 / 20) : (player.statManaMax2 / (player.statManaMax2 / 10)));
         }
 
-        public static void Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer(Orig_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer orig, HorizontalBarsPlayerReosurcesDisplaySet self, int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
+        public static void Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer(Hooks.Orig_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer orig, HorizontalBarsPlayerReosurcesDisplaySet self, int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
         {
             orig(self, elementIndex, firstElementIndex, lastElementIndex, out sprite, out offset, out drawScale, out sourceRect);
 
@@ -186,7 +164,7 @@ namespace Terrexpansion
             resourcesDisplaySet.GetStaticMethod("FillBarByValues").Invoke(null, new object[] { elementIndex, sprite, resourcesDisplaySet.GetInstanceField("_mpSegmentsCount").GetValue(self), resourcesDisplaySet.GetInstanceField("_mpPercent").GetValue(self), offset, drawScale, sourceRect });
         }
 
-        public static void Terrexpansion_On_Main_DrawInterface_Resources_Breath(Orig_Main_DrawInterface_Resources_Breath self)
+        public static void Terrexpansion_On_Main_DrawInterface_Resources_Breath(Hooks.Orig_Main_DrawInterface_Resources_Breath self)
         {
             if (!Main.LocalPlayer.dead)
             {
@@ -312,16 +290,12 @@ namespace Terrexpansion
             }
         }
 
-        #endregion Resource Bars
-
-        #region Player UI
-
         public static UIInputTextField filterTextBoxPlayer;
 
         public static void SwapPlayerSelect()
         {
             On.Terraria.GameContent.UI.States.UICharacterSelect.OnInitialize += UICharacterSelect_OnInitialize;
-            On_UICharacterSelect_UpdatePlayersList += Terrexpansion_On_UICharacterSelect_UpdatePlayersList;
+            Hooks.On_UICharacterSelect_UpdatePlayersList += Terrexpansion_On_UICharacterSelect_UpdatePlayersList;
         }
 
         public static void UICharacterSelect_OnInitialize(On.Terraria.GameContent.UI.States.UICharacterSelect.orig_OnInitialize orig, UICharacterSelect self)
@@ -434,7 +408,7 @@ namespace Terrexpansion
             self.Append(uIElement);
         }
 
-        public static void Terrexpansion_On_UICharacterSelect_UpdatePlayersList(Orig_UICharacterSelect_UpdatePlayersList orig, UICharacterSelect self)
+        public static void Terrexpansion_On_UICharacterSelect_UpdatePlayersList(Hooks.Orig_UICharacterSelect_UpdatePlayersList orig, UICharacterSelect self)
         {
             if (filterTextBoxPlayer == null)
             {
@@ -545,16 +519,12 @@ namespace Terrexpansion
             currentlyMigratingFilesInfo.SetValue(null, currentlyMigratingFiles);
         }
 
-        #endregion Player UI
-
-        #region World UI
-
         public static UIInputTextField filterTextBoxWorld;
 
         public static void SwapWorldSelect()
         {
             On.Terraria.GameContent.UI.States.UIWorldSelect.OnInitialize += UIWorldSelect_OnInitialize;
-            On_WorldSelect_UpdateWorldsList += Terrexpansion_On_WorldSelect_UpdateWorldsList;
+            Hooks.On_WorldSelect_UpdateWorldsList += Terrexpansion_On_WorldSelect_UpdateWorldsList;
         }
 
         public static void UIWorldSelect_OnInitialize(On.Terraria.GameContent.UI.States.UIWorldSelect.orig_OnInitialize orig, UIWorldSelect self)
@@ -660,7 +630,7 @@ namespace Terrexpansion
             self.Append(uIElement);
         }
 
-        public static void Terrexpansion_On_WorldSelect_UpdateWorldsList(Orig_UIWorldSelect_UpdateWorldsList orig, UIWorldSelect self)
+        public static void Terrexpansion_On_WorldSelect_UpdateWorldsList(Hooks.Orig_UIWorldSelect_UpdateWorldsList orig, UIWorldSelect self)
         {
             if (filterTextBoxWorld == null)
             {
@@ -748,8 +718,6 @@ namespace Terrexpansion
         // Frankly I'm just too lazy to use reflection *again*.
         public static bool CanWorldBePlayed(WorldFileData file) => Main.ActivePlayerFileData.Player.difficulty == 3 == (file.GameMode == 3);
 
-        #endregion World UI
-
         public static void Main_PreDrawMenu(On.Terraria.Main.orig_PreDrawMenu orig, Main self, out Point screenSizeCache, out Point screenSizeCacheAfterScaling)
         {
             orig(self, out screenSizeCache, out screenSizeCacheAfterScaling);
@@ -790,32 +758,6 @@ namespace Terrexpansion
             }
 
             Main.spriteBatch.End();
-        }
-
-        public static void Terrexpansion_On_Main_DrawInterface_35_YouDied(Orig_Main_DrawInterface_35_YouDied self)
-        {
-            if (Main.player[Main.myPlayer].dead)
-            {
-                float drawOffset = -60f;
-                string value = DeathSplashText;
-
-                Main.spriteBatch.DrawString(FontAssets.DeathText.Value, value, new Vector2(Main.screenWidth / 2 - FontAssets.DeathText.Value.MeasureString(value).X / 2f, Main.screenHeight / 2 + drawOffset), Main.player[Main.myPlayer].GetDeathAlpha(Color.Transparent), 0f, default, 1f, SpriteEffects.None, 0f);
-
-                if (Main.player[Main.myPlayer].lostCoins > 0)
-                {
-                    drawOffset += 50f;
-                    string textValue = Language.GetTextValue(CoinSplashText.Key, Main.player[Main.myPlayer].lostCoinString);
-
-                    Main.spriteBatch.DrawString(FontAssets.MouseText.Value, textValue, new Vector2(Main.screenWidth / 2 - FontAssets.MouseText.Value.MeasureString(textValue).X / 2f, Main.screenHeight / 2 + drawOffset), Main.player[Main.myPlayer].GetDeathAlpha(Color.Transparent), 0f, default, 1f, SpriteEffects.None, 0f);
-                }
-
-                drawOffset += (Main.player[Main.myPlayer].lostCoins > 0) ? 24 : 50;
-                drawOffset += 20f;
-                float scale = 1f;
-                string textValue2 = Language.GetTextValue("Game.RespawnInSuffix", ((float)(int)(1f + Main.player[Main.myPlayer].respawnTimer / 60f)).ToString());
-
-                Main.spriteBatch.DrawString(FontAssets.DeathText.Value, textValue2, new Vector2(Main.screenWidth / 2 - FontAssets.MouseText.Value.MeasureString(textValue2).X * scale / 2f, Main.screenHeight / 2 + drawOffset), Main.player[Main.myPlayer].GetDeathAlpha(Color.Transparent), 0f, default, scale, SpriteEffects.None, 0f);
-            }
         }
 
         public static NetworkText Lang_CreateDeathMessage(On.Terraria.Lang.orig_CreateDeathMessage orig, string deadPlayerName, int plr, int npc, int proj, int other, int projType, int plrItemType)

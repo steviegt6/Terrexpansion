@@ -3,18 +3,11 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using System.Collections.Generic;
 using Terraria;
-using Terraria.Audio;
 using Terraria.GameContent;
-using Terraria.GameContent.UI.States;
-using Terraria.GameInput;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
-using Terraria.UI.Gamepad;
-using Terrexpansion.Assets;
 using Terrexpansion.Common.Configs.ClientSide;
-using Terrexpansion.Common.UI.States;
 using Terrexpansion.Common.Utilities;
 
 namespace Terrexpansion.Common
@@ -25,7 +18,6 @@ namespace Terrexpansion.Common
         {
             int playerNamesIndex = layers.FindIndex(i => i.Name.Equals("Vanilla: MP Player Names"));
             int hotbarIndex = layers.FindIndex(x => x.Name.Equals("Vanilla: Hotbar"));
-            int inventoryIndex = layers.FindIndex(l => l.Name.Equals("Vanilla: Inventory"));
 
             if (playerNamesIndex != -1)
             {
@@ -81,60 +73,6 @@ namespace Terrexpansion.Common
                         string minionText = $"{Main.LocalPlayer.numMinions}/{Main.LocalPlayer.maxMinions} minions";
 
                         Main.spriteBatch.DrawString(FontAssets.MouseText.Value, minionText, new Vector2(5f, 0f), new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor), 0f, default, 1f, SpriteEffects.None, 0f);
-                    }
-
-                    return true;
-                }, InterfaceScaleType.UI));
-            }
-
-            if (inventoryIndex != -1)
-            {
-                layers.Insert(inventoryIndex, new LegacyGameInterfaceLayer("Terrexpansion: Synergy Menu Button", delegate
-                {
-                    if (Main.playerInventory)
-                    {
-                        Main.inventoryScale = 0.85f;
-
-                        int num = 448 + AssetHelper.SynergyButton.Width() + 10;
-                        int num2 = 258;
-
-                        if ((Main.LocalPlayer.chest != -1 || Main.npcShop > 0) && !Main.recBigList)
-                        {
-                            num2 += 168;
-                            num += 5;
-                            Main.inventoryScale = 0.755f;
-                        }
-
-                        Rectangle rectangle = new Rectangle(num, num2, 30, 30);
-                        bool flag = false;
-
-                        if (rectangle.Contains(new Point(Main.mouseX, Main.mouseY)) && !PlayerInput.IgnoreMouseInterface)
-                        {
-                            Main.LocalPlayer.mouseInterface = true;
-                            flag = true;
-
-                            if (Main.mouseLeft && Main.mouseLeftRelease)
-                            {
-                                Main.LocalPlayer.SetTalkNPC(-1);
-                                Main.npcChatCornerItem = 0;
-                                Main.npcChatText = "";
-                                Main.mouseLeftRelease = false;
-                                SoundEngine.PlaySound(SoundID.MenuTick);
-                                IngameFancyUI.OpenUIState(new UISynergiesMenu());
-                            }
-                        }
-
-                        Vector2 position = rectangle.Center.ToVector2();
-                        Rectangle rectangle2 = AssetHelper.SynergyButton.Frame(2, 1, flag ? 1 : 0);
-                        rectangle.Width -= 2;
-                        rectangle.Height -= 2;
-                        Vector2 origin = rectangle2.Size() / 2f;
-                        Main.spriteBatch.Draw(AssetHelper.SynergyButton.Value, position, rectangle2, Color.White, 0f, origin, 1f, SpriteEffects.None, 0f);
-
-                        if (!Main.mouseText && flag)
-                        {
-                            Main.instance.MouseText(Language.GetTextValue("Mods.Terrexpansion.GameUI.SynergyButton"));
-                        }
                     }
 
                     return true;
