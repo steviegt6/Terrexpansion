@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent.Drawing;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -234,6 +235,56 @@ namespace Terrexpansion.Common
                     lerpingToRotation = false;
                 }
             }
+        }
+
+        public void DoModdedBootsEffect(Utils.TileActionAttempt theEffectMethod)
+        {
+            if (player.miscCounter % 2 == 0 && player.velocity.Y == 0f && player.grappling[0] == -1 && player.velocity.X != 0f)
+            {
+                theEffectMethod((int)player.Center.X / 16, (int)(player.position.Y + player.height - 1f) / 16);
+            }
+        }
+
+        public bool PlaceMoreFlamesOnTiles(int x, int y)
+        {
+            Tile tile = Main.tile[x, y + 1];
+
+            if (tile != null && tile.active() && tile.liquid <= 0 && WorldGen.SolidTileAllowBottomSlope(x, y + 1))
+            {
+                ParticleOrchestrator.RequestParticleSpawn(true, ParticleOrchestraType.FlameWaders, new ParticleOrchestraSettings
+                {
+                    PositionInWorld = new Vector2(x * 16 + 8, y * 16 + 16)
+                }, player.whoAmI);
+                ParticleOrchestrator.RequestParticleSpawn(true, ParticleOrchestraType.FlameWaders, new ParticleOrchestraSettings
+                {
+                    PositionInWorld = new Vector2(x * 16 + 8, y * 16 + 16)
+                }, player.whoAmI);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool PlaceMoreFlowersOnTiles(int x, int y)
+        {
+            Tile tile = Main.tile[x, y + 1];
+
+            if (tile != null && tile.active() && tile.liquid <= 0 && WorldGen.SolidTileAllowBottomSlope(x, y + 1))
+            {
+                ParticleOrchestrator.RequestParticleSpawn(true, ParticleOrchestraType.FlameWaders, new ParticleOrchestraSettings
+                {
+                    PositionInWorld = new Vector2(x * 16 + 8, y * 16 + 16)
+                }, player.whoAmI);
+                ParticleOrchestrator.RequestParticleSpawn(true, ParticleOrchestraType.FlameWaders, new ParticleOrchestraSettings
+                {
+                    PositionInWorld = new Vector2(x * 16 + 8, y * 16 + 16)
+                }, player.whoAmI);
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -50,7 +50,7 @@ namespace Terrexpansion.Content.Items.Accessories.Misc
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.TerrasparkBoots)
+                .AddIngredient(ItemID.TerrasparkBoots) //5000
                 .AddIngredient(ItemID.FlameWakerBoots)
                 .AddIngredient(ItemID.FairyBoots)
                 .AddTile(TileID.TinkerersWorkbench)

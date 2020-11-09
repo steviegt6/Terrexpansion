@@ -17,6 +17,7 @@ namespace Terrexpansion
         public void UnloadILEdits()
         {
             IL.Terraria.Main.DrawInterface_35_YouDied -= Main_DrawInterface_35_YouDied;
+            IL.Terraria.Player.Update -= Player_Update;
         }
 
         private void Main_DrawInterface_35_YouDied(ILContext il)
