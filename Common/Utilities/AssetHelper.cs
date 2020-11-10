@@ -6,19 +6,11 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Terrexpansion.Assets
+namespace Terrexpansion.Common.Utilities
 {
     public static class AssetHelper
     {
-        public static Asset<Texture2D> VanillaClassicHeartTexture;
-        public static Asset<Texture2D> VanillaClassicHeart2Texture;
-        public static Asset<Texture2D> VanillaClassicManaTexture;
-        public static Asset<Texture2D> ClassicMana2Texture;
-        public static Asset<Texture2D> BarManaTexture;
-        public static Asset<Texture2D> EndlessQuiver;
-        public static Asset<Texture2D> LungExtendedBubble;
-        public static Asset<Texture2D> LifeFruit;
-        public static Asset<Texture2D> SynergyButton;
+        public static Asset<Texture2D> VanillaClassicHeartTexture, VanillaClassicHeart2Texture, VanillaClassicManaTexture, ClassicMana2Texture, BarManaTexture, EndlessQuiver, LungExtendedBubble, LifeFruit, SynergyButton;
 
         public static void LoadAssets()
         {

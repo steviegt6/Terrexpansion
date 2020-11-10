@@ -7,6 +7,7 @@ using Terraria.GameContent.Drawing;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using Terrexpansion.Common.Configs.ClientSide;
 
 namespace Terrexpansion.Common
 {
@@ -133,142 +134,95 @@ namespace Terrexpansion.Common
 
         public override void PostUpdate()
         {
-            if (player.fullRotation % MathHelper.ToRadians(-360f) < 1 && player.fullRotation % MathHelper.ToRadians(-360f) > -1 && !lerpingToRotation)
+            if (ModContent.GetInstance<TerreConfigClientSide>().dynamicMovement)
             {
-                player.fullRotation = 0;
-                wasAirborn = false;
-            }
-
-            if (player.mount.Type == -1)
-            {
-                player.fullRotationOrigin = new Vector2(player.width / 2, player.height / 2);
-
-                if (player.fullRotation != 0)
+                if (player.fullRotation % MathHelper.ToRadians(-360f) < 1 && player.fullRotation % MathHelper.ToRadians(-360f) > -1 && !lerpingToRotation)
                 {
-                    currentlyRotated = true;
+                    player.fullRotation = 0;
+                    wasAirborn = false;
                 }
 
-                if (player.velocity.X != 0 && player.velocity.Y != 0)
+                if (player.mount.Type == -1)
                 {
-                    timeAirborne++;
+                    player.fullRotationOrigin = new Vector2(player.width / 2, player.height / 2);
 
-                    if (timeAirborne > 60)
+                    if (player.fullRotation != 0)
                     {
-                        lerpingToRotation = true;
-                        player.fullRotation = player.fullRotation.AngleLerp(player.velocity.ToRotation() + (float)Math.PI / 2f, 0.1f);
-                        wasAirborn = true;
+                        currentlyRotated = true;
+                    }
+
+                    if (player.velocity.X != 0 && player.velocity.Y != 0)
+                    {
+                        timeAirborne++;
+
+                        if (timeAirborne > 60)
+                        {
+                            lerpingToRotation = true;
+                            player.fullRotation = player.fullRotation.AngleLerp(player.velocity.ToRotation() + (float)Math.PI / 2f, 0.1f);
+                            wasAirborn = true;
+                        }
+                        else
+                        {
+                            lerpingToRotation = false;
+                            wasAirborn = false;
+                        }
                     }
                     else
                     {
                         lerpingToRotation = false;
-                        wasAirborn = false;
+
+                        if (player.direction == -1)
+                        {
+                            if (wasAirborn)
+                            {
+                                player.fullRotation = MathHelper.Lerp(player.fullRotation, 0f, -0.1f);
+                            }
+                            else
+                            {
+                                player.fullRotation = 0;
+                                timeAirborne = 0;
+                            }
+                        }
+                        else
+                        {
+                            if (wasAirborn)
+                            {
+                                player.fullRotation = MathHelper.Lerp(player.fullRotation, 0f, -0.1f);
+                            }
+                            else
+                            {
+                                player.fullRotation = 0;
+                                timeAirborne = 0;
+                            }
+                        }
+
+                        if (player.fullRotation == 0)
+                        {
+                            player.fullRotation += player.velocity.X / 7f;
+
+                            if (player.fullRotation > MathHelper.ToRadians(player.velocity.X))
+                            {
+                                player.fullRotation = MathHelper.ToRadians(player.velocity.X);
+                            }
+
+                            if (player.fullRotation < MathHelper.ToRadians(-player.velocity.X))
+                            {
+                                player.fullRotation = -MathHelper.ToRadians(-player.velocity.X);
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    lerpingToRotation = false;
-
-                    if (player.direction == -1)
+                    if (currentlyRotated)
                     {
-                        if (wasAirborn)
-                        {
-                            player.fullRotation = MathHelper.Lerp(player.fullRotation, 0f, -0.1f);
-                        }
-                        else
-                        {
-                            player.fullRotation = 0;
-                            timeAirborne = 0;
-                        }
-                    }
-                    else
-                    {
-                        if (wasAirborn)
-                        {
-                            player.fullRotation = MathHelper.Lerp(player.fullRotation, 0f, -0.1f);
-                        }
-                        else
-                        {
-                            player.fullRotation = 0;
-                            timeAirborne = 0;
-                        }
-                    }
-
-                    if (player.fullRotation == 0)
-                    {
-                        player.fullRotation += player.velocity.X / 7f;
-
-                        if (player.fullRotation > MathHelper.ToRadians(player.velocity.X))
-                        {
-                            player.fullRotation = MathHelper.ToRadians(player.velocity.X);
-                        }
-
-                        if (player.fullRotation < MathHelper.ToRadians(-player.velocity.X))
-                        {
-                            player.fullRotation = -MathHelper.ToRadians(-player.velocity.X);
-                        }
+                        player.fullRotation = 0f;
+                        currentlyRotated = false;
+                        wasAirborn = false;
+                        lerpingToRotation = false;
                     }
                 }
             }
-            else
-            {
-                if (currentlyRotated)
-                {
-                    player.fullRotation = 0f;
-                    currentlyRotated = false;
-                    wasAirborn = false;
-                    lerpingToRotation = false;
-                }
-            }
-        }
-
-        public void DoModdedBootsEffect(Utils.TileActionAttempt theEffectMethod)
-        {
-            if (player.miscCounter % 2 == 0 && player.velocity.Y == 0f && player.grappling[0] == -1 && player.velocity.X != 0f)
-            {
-                theEffectMethod((int)player.Center.X / 16, (int)(player.position.Y + player.height - 1f) / 16);
-            }
-        }
-
-        public bool PlaceMoreFlamesOnTiles(int x, int y)
-        {
-            Tile tile = Main.tile[x, y + 1];
-
-            if (tile != null && tile.active() && tile.liquid <= 0 && WorldGen.SolidTileAllowBottomSlope(x, y + 1))
-            {
-                ParticleOrchestrator.RequestParticleSpawn(true, ParticleOrchestraType.FlameWaders, new ParticleOrchestraSettings
-                {
-                    PositionInWorld = new Vector2(x * 16 + 8, y * 16 + 16)
-                }, player.whoAmI);
-                ParticleOrchestrator.RequestParticleSpawn(true, ParticleOrchestraType.FlameWaders, new ParticleOrchestraSettings
-                {
-                    PositionInWorld = new Vector2(x * 16 + 8, y * 16 + 16)
-                }, player.whoAmI);
-
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool PlaceMoreFlowersOnTiles(int x, int y)
-        {
-            Tile tile = Main.tile[x, y + 1];
-
-            if (tile != null && tile.active() && tile.liquid <= 0 && WorldGen.SolidTileAllowBottomSlope(x, y + 1))
-            {
-                ParticleOrchestrator.RequestParticleSpawn(true, ParticleOrchestraType.FlameWaders, new ParticleOrchestraSettings
-                {
-                    PositionInWorld = new Vector2(x * 16 + 8, y * 16 + 16)
-                }, player.whoAmI);
-                ParticleOrchestrator.RequestParticleSpawn(true, ParticleOrchestraType.FlameWaders, new ParticleOrchestraSettings
-                {
-                    PositionInWorld = new Vector2(x * 16 + 8, y * 16 + 16)
-                }, player.whoAmI);
-
-                return true;
-            }
-
-            return false;
         }
     }
 }
