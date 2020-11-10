@@ -34,27 +34,13 @@ namespace Terrexpansion.Common
         {
             _origBreath = player.breathMax - (extendedLungs ? 100 : 0);
 
-            #region Set Bonuses
-
             cactusSetBonus = false;
-
-            #endregion Set Bonuses
-
-            #region Accessories
 
             vileVial = false;
 
-            #endregion Accessories
-
-            #region Others
-
             player.statManaMax2 += starFruit * 10;
             player.breathMax = _origBreath + (extendedLungs ? 100 : 0);
-
-            #endregion Others
         }
-
-        #region Multiplayer, Saving & Other Syncing
 
         public override void clientClone(ModPlayer clientClone)
         {
@@ -94,8 +80,6 @@ namespace Terrexpansion.Common
             starFruit = tag.GetInt("starFruit");
             extendedLungs = tag.GetBool("extendedLungs");
         }
-
-        #endregion Multiplayer, Saving & Other Syncing
 
         public override void OnHitByNPC(NPC npc, int damage, bool crit)
         {
@@ -168,7 +152,7 @@ namespace Terrexpansion.Common
                 {
                     timeAirborne++;
 
-                    if (timeAirborne > 45)
+                    if (timeAirborne > 60)
                     {
                         lerpingToRotation = true;
                         player.fullRotation = player.fullRotation.AngleLerp(player.velocity.ToRotation() + (float)Math.PI / 2f, 0.1f);

@@ -78,73 +78,350 @@ namespace Terrexpansion.Common
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            TooltipLine damage = tooltips.GetVanillaTooltip("Damage");
-            TooltipLine critChance = tooltips.GetVanillaTooltip("CritChance");
-            TooltipLine favorite = tooltips.GetVanillaTooltip("Favorite");
-            TooltipLine favoriteDesc = tooltips.GetVanillaTooltip("FavoriteDesc");
-            TooltipLine speed = tooltips.GetVanillaTooltip("Speed");
-            TooltipLine knockback = tooltips.GetVanillaTooltip("Knockback");
+            TerreConfigTooltips config = ModContent.GetInstance<TerreConfigTooltips>();
 
-            if (ModContent.GetInstance<TerreConfigTooltips>().showTooltipDamageMods && damage != null)
+            if (!config.showItemName && tooltips.TryGetVanillaTooltip("ItemName", out TooltipLine itemName))
             {
-                Item dummyItem = new Item(item.type);
-
-                int damageDifference = Main.LocalPlayer.GetWeaponDamage(item) - dummyItem.damage;
-
-                if (damageDifference != 0)
-                {
-                    string damageModificationText = $" ({dummyItem.damage} {(damageDifference > 0 ? "+" : "-")} {(damageDifference < 0 ? -damageDifference : damageDifference)})";
-
-                    if (ModContent.GetInstance<TerreConfigTooltips>().colorTooltipDamageMods)
-                    {
-                        damageModificationText = $"[c/{(damageDifference > 0 ? Colors.RarityGreen.Hex3() : Colors.RarityRed.Hex3())}:{damageModificationText}]";
-                    }
-
-                    damage.text += damageModificationText;
-                }
+                tooltips.Remove(itemName);
             }
 
-            if (ModContent.GetInstance<TerreConfigTooltips>().showTooltipCritMods && critChance != null)
+            if (tooltips.TryGetVanillaTooltip("Favorite", out TooltipLine favorite))
             {
-                Item dummyItem = new Item(item.type);
-
-                int critDifference = Main.LocalPlayer.GetWeaponCrit(item) - (dummyItem.crit + 4);
-
-                if (critDifference != 0)
-                {
-                    string critModificationText = $" ({dummyItem.crit + 4}% {(critDifference > 0 ? "+" : "-")} {(critDifference < 0 ? -critDifference : critDifference)}%)";
-
-                    if (ModContent.GetInstance<TerreConfigTooltips>().colorTooltipCritMods)
-                    {
-                        critModificationText = $"[c/{(critDifference > 0 ? Colors.RarityGreen.Hex3() : Colors.RarityRed.Hex3())}:{critModificationText}]";
-                    }
-
-                    critChance.text += critModificationText;
-                }
-            }
-
-            if (ModContent.GetInstance<TerreConfigTooltips>().colorTooltipFavorites)
-            {
-                if (favorite != null)
+                if (config.colorTooltipFavorites)
                 {
                     favorite.overrideColor = Main.OurFavoriteColor;
                 }
 
-                if (favoriteDesc != null)
+                if (!config.showFavoriteText)
                 {
-                    favoriteDesc.overrideColor = Main.OurFavoriteColor;
+                    tooltips.Remove(favorite);
                 }
             }
 
-            if (ModContent.GetInstance<TerreConfigTooltips>().showTooltipUseTime && speed != null)
+            if (tooltips.TryGetVanillaTooltip("FavoriteDesc", out TooltipLine favoriteDesc))
             {
-                speed.text += $" ({item.useTime})";
+                if (config.colorTooltipFavorites)
+                {
+                    favoriteDesc.overrideColor = Main.OurFavoriteColor;
+                }
+
+                if (!config.showFavoriteDesc)
+                {
+                    tooltips.Remove(favoriteDesc);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("NoTransfer", out TooltipLine noTransfer))
+            {
+                if (!config.showPlacementBlock)
+                {
+                    tooltips.Remove(noTransfer);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("Social", out TooltipLine social))
+            {
+                if (!config.showSocialText)
+                {
+                    tooltips.Remove(social);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("SocialDesc", out TooltipLine socialDesc))
+            {
+                if (!config.showSocialDesc)
+                {
+                    tooltips.Remove(socialDesc);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("Damage", out TooltipLine damage))
+            {
+                if (config.showTooltipDamageMods)
+                {
+                    Item dummyItem = new Item(item.type);
+
+                    int damageDifference = Main.LocalPlayer.GetWeaponDamage(item) - dummyItem.damage;
+
+                    if (damageDifference != 0)
+                    {
+                        string damageModificationText = $" ({dummyItem.damage} {(damageDifference > 0 ? "+" : "-")} {(damageDifference < 0 ? -damageDifference : damageDifference)})";
+
+                        if (config.colorTooltipDamageMods)
+                        {
+                            damageModificationText = $"[c/{(damageDifference > 0 ? Colors.RarityGreen.Hex3() : Colors.RarityRed.Hex3())}:{damageModificationText}]";
+                        }
+
+                        damage.text += damageModificationText;
+                    }
+                }
+
+                if (!config.showDamage)
+                {
+                    tooltips.Remove(damage);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("CritChance", out TooltipLine critChance))
+            {
+                if (config.showTooltipCritMods)
+                {
+                    Item dummyItem = new Item(item.type);
+
+                    int critDifference = Main.LocalPlayer.GetWeaponCrit(item) - (dummyItem.crit + 4);
+
+                    if (critDifference != 0)
+                    {
+                        string critModificationText = $" ({dummyItem.crit + 4}% {(critDifference > 0 ? "+" : "-")} {(critDifference < 0 ? -critDifference : critDifference)}%)";
+
+                        if (config.colorTooltipCritMods)
+                        {
+                            critModificationText = $"[c/{(critDifference > 0 ? Colors.RarityGreen.Hex3() : Colors.RarityRed.Hex3())}:{critModificationText}]";
+                        }
+
+                        critChance.text += critModificationText;
+                    }
+                }
+
+                if (!config.showItemCritChance)
+                {
+                    tooltips.Remove(critChance);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("Speed", out TooltipLine speed))
+            {
+                if (config.showTooltipUseAnimation)
+                {
+                    speed.text += $" ({item.useTime})";
+                }
+
+                if (!config.showUseAnimation)
+                {
+                    tooltips.Remove(speed);
+                }
             }
 
 
-            if (ModContent.GetInstance<TerreConfigTooltips>().showTooltipKnockback && knockback != null)
+            if (tooltips.TryGetVanillaTooltip("Knockback", out TooltipLine knockback))
             {
-                knockback.text += $" ({Main.LocalPlayer.GetWeaponKnockback(item, item.knockBack)})";
+                if (config.showTooltipKnockback)
+                {
+                    knockback.text += $" ({Main.LocalPlayer.GetWeaponKnockback(item, item.knockBack)})";
+                }
+
+                if (!config.showKnockback)
+                {
+                    tooltips.Remove(knockback);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("FishingPower", out TooltipLine fishingPower))
+            {
+                if (!config.showFishingPower)
+                {
+                    tooltips.Remove(fishingPower);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("NeedsBait", out TooltipLine needsBait))
+            {
+                if (!config.showNeedsBait)
+                {
+                    tooltips.Remove(needsBait);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("BaitPower", out TooltipLine baitPower))
+            {
+                if (!config.showBaitPower)
+                {
+                    tooltips.Remove(baitPower);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("Equipable", out TooltipLine equipable))
+            {
+                if (!config.showEquip)
+                {
+                    tooltips.Remove(equipable);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("WandConsumes", out TooltipLine wandConsumes))
+            {
+                if (!config.showWandConsumes)
+                {
+                    tooltips.Remove(wandConsumes);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("Quest", out TooltipLine quest))
+            {
+                if (!config.showQuest)
+                {
+                    tooltips.Remove(quest);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("Vanity", out TooltipLine vanity))
+            {
+                if (!config.showVanity)
+                {
+                    tooltips.Remove(vanity);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("Defense", out TooltipLine defense))
+            {
+                if (!config.showDefense)
+                {
+                    tooltips.Remove(defense);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("PickPower", out TooltipLine pickPower))
+            {
+                if (!config.showPickPower)
+                {
+                    tooltips.Remove(pickPower);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("AxePower", out TooltipLine axePower))
+            {
+                if (!config.showAxePower)
+                {
+                    tooltips.Remove(axePower);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("HammerPower", out TooltipLine hammerPower))
+            {
+                if (!config.showHammerPower)
+                {
+                    tooltips.Remove(hammerPower);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("TileBoost", out TooltipLine tileBoost))
+            {
+                if (!config.showTileBoost)
+                {
+                    tooltips.Remove(tileBoost);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("HealLife", out TooltipLine healLife))
+            {
+                if (!config.showHealLife)
+                {
+                    tooltips.Remove(healLife);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("HealMana", out TooltipLine healMana))
+            {
+                if (!config.showHealMana)
+                {
+                    tooltips.Remove(healMana);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("UseMana", out TooltipLine useMana))
+            {
+                if (!config.showUseMana)
+                {
+                    tooltips.Remove(useMana);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("Placeable", out TooltipLine placeable))
+            {
+                if (!config.showPlaceable)
+                {
+                    tooltips.Remove(placeable);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("Ammo", out TooltipLine ammo))
+            {
+                if (!config.showAmmo)
+                {
+                    tooltips.Remove(ammo);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("Consumable", out TooltipLine consumable))
+            {
+                if (!config.showConsumable)
+                {
+                    tooltips.Remove(consumable);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("Material", out TooltipLine material))
+            {
+                if (!config.showMaterial)
+                {
+                    tooltips.Remove(material);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("EtherianManaWarning", out TooltipLine etherianManaWarning))
+            {
+                if (!config.showEtherianManaWarning)
+                {
+                    tooltips.Remove(etherianManaWarning);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("WellFedExpert", out TooltipLine wellFedExpert))
+            {
+                if (!config.showWellFedExpert)
+                {
+                    tooltips.Remove(wellFedExpert);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("BuffTime", out TooltipLine buffTime))
+            {
+                if (!config.showBuffTime)
+                {
+                    tooltips.Remove(buffTime);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("OneDropLogo", out TooltipLine oneDropLogo))
+            {
+                if (!config.showOneDropLogo)
+                {
+                    tooltips.Remove(oneDropLogo);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("Expert", out TooltipLine expert))
+            {
+                if (!config.showExpert)
+                {
+                    tooltips.Remove(expert);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("Master", out TooltipLine master))
+            {
+                if (!config.showMaster)
+                {
+                    tooltips.Remove(master);
+                }
+            }
+
+            if (tooltips.TryGetVanillaTooltip("JourneyResearch", out TooltipLine journeyResearch))
+            {
+                if (!config.showJourneyResearch)
+                {
+                    tooltips.Remove(journeyResearch);
+                }
             }
         }
     }

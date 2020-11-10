@@ -222,3 +222,30 @@ GameUI.MapOpacity=Map Opacity: {0}%
 GameUI.SynergyButton=Open Synergy Menu
 
 UI.Synergies=Synergies
+
+Credits_Creator.1=Terrexpansion Creator
+Credits_Creator.2=convicted tomatophile (Stevie)
+
+Credits_Designers.1=Terrexpansion Designers
+Credits_Designers.2=convicted tomatophile (Stevie)
+Credits_Designers.3=Cloud (Herbert)
+Credits_Designers.4=Doodle
+Credits_Designers.5=Terra
+
+Credits_Programmers.1=Terrexpansion Programmers
+Credits_Programmers.2=convicted tomatophile (Stevie)
+Credits_Programmers.3=pbone
+
+Credits_Graphics.1=Terrexpansion Graphics
+Credits_Graphics.2=Cloud (Herbert)
+Credits_Graphics.3=Doodle
+Credits_Graphics.4=Terra
+Credits_Graphics.5=RiverOaken
+
+Credits_Special.1=Special Thanks to
+Credits_Special.2=Libvaxy for not including itself
+Credits_Special.3=Dradonhunter11 for help with standalone mods & 64bit
+Credits_Special.4=The tML devs for 100% not making tML at all
+Credits_Special.5=NuovaPrime for being my alter and emotional support :sungla:
+Credits_Special.6=pollen__ for pollenating Avalon's 1.4 port
+Credits_Special.7=absoluteAquarian for being chad
