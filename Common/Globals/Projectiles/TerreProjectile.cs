@@ -3,7 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terrexpansion.Content.Items.Materials;
 
-namespace Terrexpansion.Common
+namespace Terrexpansion.Common.Globals.Projectiles
 {
     public class TerreProjectile : GlobalProjectile
     {

@@ -4,14 +4,13 @@ using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terrexpansion.Common.Players;
 using Terrexpansion.Content.Items.Consumables.Upgrades;
 
-namespace Terrexpansion.Common
+namespace Terrexpansion.Common.Globals.NPCs
 {
     public class TerreNPC : GlobalNPC
     {
-        //todo change medusa head drop chance to 10% in hardmode
-
         public override void GetChat(NPC npc, ref string chat)
         {
             Player player = Main.player[npc.FindClosestPlayer()];

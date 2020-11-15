@@ -75,9 +75,7 @@ namespace Terrexpansion.Content.Items.Accessories.Misc
             player.npcTypeNoAggro[537] = true;
         }
 
-        public override void AddRecipes()
-        {
-            CreateRecipe()
+        public override void AddRecipes() => CreateRecipe()
                 .AddIngredient(ItemID.RoyalGel)
                 .AddIngredient(ItemID.EoCShield)
                 .AddIngredient(ItemID.WormScarf)
@@ -91,6 +89,5 @@ namespace Terrexpansion.Content.Items.Accessories.Misc
                 .AddIngredient(ItemID.GravityGlobe)
                 .AddTile(TileID.LunarCraftingStation)
                 .Register();
-        }
     }
 }

@@ -5,8 +5,10 @@ using Terraria.ModLoader.Config;
 namespace Terrexpansion.Common.Configs.ClientSide
 {
     [Label("General Client-Side")]
-    public class TerreConfigClientSide : ModConfig
+    public class TerreConfigGenericClient : ModConfig
     {
+        public static TerreConfigGenericClient Instance;
+
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
         [Header("Misc. Client-Side")]

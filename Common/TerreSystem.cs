@@ -10,9 +10,9 @@ using Terraria.UI;
 using Terrexpansion.Common.Configs.ClientSide;
 using Terrexpansion.Common.Utilities;
 
-namespace Terrexpansion.Common
+namespace Terrexpansion
 {
-    public class TerreSystem : ModSystem
+    /*public*/ partial class Terrexpansion //TerreSystem : ModSystem
     {
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
@@ -44,9 +44,9 @@ namespace Terrexpansion.Common
                                 }
                             }
 
-                            if (ModContent.GetInstance<TerreConfigClientSide>().sonarPotionItem)
+                            if (ModContent.GetInstance<TerreConfigGenericClient>().sonarPotionItem)
                             {
-                                if (ModContent.GetInstance<TerreConfigClientSide>().sonarPotionItemOutline)
+                                if (ModContent.GetInstance<TerreConfigGenericClient>().sonarPotionItemOutline)
                                 {
                                     for (int k = 0; k < 4; k++)
                                     {
@@ -68,7 +68,7 @@ namespace Terrexpansion.Common
             {
                 layers.Insert(hotbarIndex, new LegacyGameInterfaceLayer("Terrexpansion: Minion Count", delegate
                 {
-                    if (!Main.playerInventory && !Main.LocalPlayer.ghost && (Main.LocalPlayer.HeldItem.DamageType == DamageClass.Summon || ModContent.GetInstance<TerreConfigClientSide>().forceMinionCounter))
+                    if (!Main.playerInventory && !Main.LocalPlayer.ghost && (Main.LocalPlayer.HeldItem.DamageType == DamageClass.Summon || ModContent.GetInstance<TerreConfigGenericClient>().forceMinionCounter))
                     {
                         string minionText = $"{Main.LocalPlayer.numMinions}/{Main.LocalPlayer.maxMinions} minions";
 

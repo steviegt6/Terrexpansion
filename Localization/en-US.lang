@@ -1,4 +1,74 @@
-﻿First 5 splashtexts are empty because they're changed on Load()
+﻿CoinSplash.0=dropped {0}
+CoinSplash.1=that'll be {0}
+CoinSplash.2=congrats! you just lost {0}!
+CoinSplash.3={0} is no longer...
+CoinSplash.4=impressive! now give me {0}
+CoinSplash.5=this life'll cost 'ya {0}
+
+
+DeathSplash.0=You were slain...
+DeathSplash.1=You are kil...
+DeathSplash.2=You are dead. Not big surprise.
+DeathSplash.3=R.I.P.
+DeathSplash.4=Oof!
+DeathSplash.5=F
+DeathSplash.6=YOU *SLAM* WERE *SLAM* SLAIN *SLAM*
+DeathSplash.7="Okay, I'm calling BS on that one."
+DeathSplash.8=Your free trial of living has ended
+DeathSplash.9=https://www.youtube.com/watch?v=dQw4w9WgXcQ
+DeathSplash.10="No no no, that death was to save time!"
+DeathSplash.11=git gud
+DeathSplash.12=lol you lost
+DeathSplash.13=Oh dear, you are dead.
+DeathSplash.14=My professional opinion? Haha, you're dead!
+DeathSplash.15={0} after not surviving
+DeathSplash.16=You were slain. I can't believe you're this bad.
+DeathSplash.17=Ouch, that's gotta hurt...
+
+
+DeathText.FlowerPower={0} witnessed flower power!
+DeathText.FTW={0} wasn't worthy!
+DeathText.Possessed={0} was possessed by {1}
+DeathText.KOd={0} was KO'd by {1}
+DeathText.Zombified={0} was zombified
+DeathText.EmpressBitch={0} was shown the light
+DeathText.Mask={0} didn't wear a mask
+
+
+DeathTextGeneric.Defleshed={0} was defleshed
+DeathTextGeneric.TornApart={0} was torn apart
+
+Credits_Creator.1=Terrexpansion Creator
+Credits_Creator.2=convicted tomatophile (Stevie)
+
+
+Credits_Designers.1=Terrexpansion Designers
+Credits_Designers.2=convicted tomatophile (Stevie)
+Credits_Designers.3=Cloud (Herbert)
+Credits_Designers.4=Doodle
+Credits_Designers.5=Terra
+
+Credits_Graphics.1=Terrexpansion Graphics
+Credits_Graphics.2=Cloud (Herbert)
+Credits_Graphics.3=Doodle
+Credits_Graphics.4=Terra
+Credits_Graphics.5=RiverOaken
+
+Credits_Programmers.1=Terrexpansion Programmers
+Credits_Programmers.2=convicted tomatophile (Stevie)
+Credits_Programmers.3=pbone
+
+Credits_Special.1=Special Thanks to
+Credits_Special.2=Libvaxy for not including itself
+Credits_Special.3=Dradonhunter11 for help with standalone mods & 64bit
+Credits_Special.4=The tML devs for 100% not making tML at all
+Credits_Special.5=NuovaPrime for being my alter and emotional support :sungla:
+Credits_Special.6=pollen__ for pollenating Avalon's 1.4 port
+Credits_Special.7=absoluteAquarian for being chad
+
+
+NotServerHostError=You aren't the server host!
+
 
 SplashText.0=""
 SplashText.1=""
@@ -175,77 +245,3 @@ SplashText.171=Well, off to visit your mother!
 SplashText.172=Mission failed, we'll get 'em next time.
 SplashText.173=Pyramid\n yramid \n  ramid  \n   amid   \n    mid    \n     id     \n      d         
 SplashText.174=We have our own credits!
-
-DeathSplash.0=You were slain...
-DeathSplash.1=You are kil...
-DeathSplash.2=You are dead. Not big surprise.
-DeathSplash.3=R.I.P.
-DeathSplash.4=Oof!
-DeathSplash.5=F
-DeathSplash.6=YOU *SLAM* WERE *SLAM* SLAIN *SLAM*
-DeathSplash.7="Okay, I'm calling BS on that one."
-DeathSplash.8=Your free trial of living has ended
-DeathSplash.9=https://www.youtube.com/watch?v=dQw4w9WgXcQ
-DeathSplash.10="No no no, that death was to save time!"
-DeathSplash.11=git gud
-DeathSplash.12=lol you lost
-DeathSplash.13=Oh dear, you are dead.
-DeathSplash.14=My professional opinion? Haha, you're dead!
-DeathSplash.15={0} after not surviving
-DeathSplash.16=You were slain. I can't believe you're this bad.
-DeathSplash.17=Ouch, that's gotta hurt...
-
-CoinSplash.0=dropped {0}
-CoinSplash.1=that'll be {0}
-CoinSplash.2=congrats! you just lost {0}!
-CoinSplash.3={0} is no longer...
-CoinSplash.4=impressive! now give me {0}
-CoinSplash.5=this life'll cost 'ya {0}
-
-NotServerHostError=You aren't the server host!
-
-CheatPowers.PowersMenuOpen=Open Cheat Menu
-CheatPowers.PowersCloseMenu=Close Cheat menu
-
-DeathText.FlowerPower={0} witnessed flower power!
-DeathText.FTW={0} wasn't worthy!
-DeathText.Possessed={0} was possessed by {1}
-DeathText.KOd={0} was KO'd by {1}
-DeathText.Zombified={0} was zombified
-DeathText.EmpressBitch={0} was shown the light
-DeathText.Mask={0} didn't wear a mask
-
-DeathTextGeneric.Defleshed={0} was defleshed
-DeathTextGeneric.TornApart={0} was torn apart
-
-GameUI.MapOpacity=Map Opacity: {0}%
-GameUI.SynergyButton=Open Synergy Menu
-
-UI.Synergies=Synergies
-
-Credits_Creator.1=Terrexpansion Creator
-Credits_Creator.2=convicted tomatophile (Stevie)
-
-Credits_Designers.1=Terrexpansion Designers
-Credits_Designers.2=convicted tomatophile (Stevie)
-Credits_Designers.3=Cloud (Herbert)
-Credits_Designers.4=Doodle
-Credits_Designers.5=Terra
-
-Credits_Programmers.1=Terrexpansion Programmers
-Credits_Programmers.2=convicted tomatophile (Stevie)
-Credits_Programmers.3=pbone
-
-Credits_Graphics.1=Terrexpansion Graphics
-Credits_Graphics.2=Cloud (Herbert)
-Credits_Graphics.3=Doodle
-Credits_Graphics.4=Terra
-Credits_Graphics.5=RiverOaken
-
-Credits_Special.1=Special Thanks to
-Credits_Special.2=Libvaxy for not including itself
-Credits_Special.3=Dradonhunter11 for help with standalone mods & 64bit
-Credits_Special.4=The tML devs for 100% not making tML at all
-Credits_Special.5=NuovaPrime for being my alter and emotional support :sungla:
-Credits_Special.6=pollen__ for pollenating Avalon's 1.4 port
-Credits_Special.7=absoluteAquarian for being chad

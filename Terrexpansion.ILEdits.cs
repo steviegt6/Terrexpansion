@@ -1,6 +1,5 @@
 ﻿using MonoMod.Cil;
-using Terraria.ModLoader;
-using Terrexpansion.Common;
+using Terrexpansion.Common.Configs.ClientSide;
 using Terrexpansion.Common.Utilities;
 using OpCodes = Mono.Cecil.Cil.OpCodes;
 
@@ -30,12 +29,20 @@ namespace Terrexpansion
 
                 return;
             }
+            else if (TerreConfigGenericClient.Instance.debugMode)
+            {
+                Logger.Info("[IL] Matched Ldsfld: \"Terraria.Land\", \"inter\"!");
+            }
 
             if (!c.TryGotoNext(i => i.MatchLdloc(1)))
             {
                 Logger.Warn("[IL] Could not match Ldloc: 1 (value)! (1)");
 
                 return;
+            }
+            else if (TerreConfigGenericClient.Instance.debugMode)
+            {
+                Logger.Info("[IL] Matched Ldloc: 1 (value)! (1)");
             }
 
             c.Index++;
@@ -49,6 +56,10 @@ namespace Terrexpansion
 
                 return;
             }
+            else if (TerreConfigGenericClient.Instance.debugMode)
+            {
+                Logger.Info("[IL] Matched Ldloc: 1 (value)! (2)");
+            }
 
             c.Index++;
 
@@ -60,6 +71,10 @@ namespace Terrexpansion
                 Logger.Warn("[IL] Could not match Ldstr: \"Game.DroppedCoins\"!");
 
                 return;
+            }
+            else if (TerreConfigGenericClient.Instance.debugMode)
+            {
+                Logger.Info("[IL] Matched Ldstr: \"Game.DroppedCoins\"!");
             }
 
             c.Index++;
@@ -78,6 +93,10 @@ namespace Terrexpansion
 
                 return;
             }
+            else if (TerreConfigGenericClient.Instance.debugMode)
+            {
+                Logger.Info("[IL] Matched LdcI4: 400! (1)");
+            }
 
             c.Index++;
 
@@ -89,6 +108,10 @@ namespace Terrexpansion
                 Logger.Warn("[IL] Could not match LdcI4: 400! (2)");
 
                 return;
+            }
+            else if (TerreConfigGenericClient.Instance.debugMode)
+            {
+                Logger.Info("[IL] Matched LdcI4: 400! (2)");
             }
 
             c.Index++;

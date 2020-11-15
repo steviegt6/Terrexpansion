@@ -36,9 +36,7 @@ namespace Terrexpansion.Content.Items.Accessories.Misc
             player.noFallDmg = true;
         }
 
-        public override void AddRecipes()
-        {
-            CreateRecipe()
+        public override void AddRecipes() => CreateRecipe()
                 .AddIngredient(ItemID.BundleofBalloons)
                 .AddIngredient(ItemID.BlueHorseshoeBalloon)
                 .AddIngredient(ItemID.BalloonHorseshoeHoney)
@@ -48,6 +46,5 @@ namespace Terrexpansion.Content.Items.Accessories.Misc
                 .AddIngredient(ItemID.WhiteHorseshoeBalloon)
                 .AddTile(TileID.TinkerersWorkbench)
                 .Register();
-        }
     }
 }

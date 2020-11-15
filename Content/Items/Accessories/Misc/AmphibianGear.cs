@@ -34,13 +34,10 @@ namespace Terrexpansion.Content.Items.Accessories.Misc
             player.spikedBoots += 2;
         }
 
-        public override void AddRecipes()
-        {
-            CreateRecipe()
+        public override void AddRecipes() => CreateRecipe()
                 .AddIngredient(ItemID.AmphibianBoots)
                 .AddIngredient(ItemID.FrogGear)
                 .AddTile(TileID.TinkerersWorkbench)
                 .Register();
-        }
     }
 }

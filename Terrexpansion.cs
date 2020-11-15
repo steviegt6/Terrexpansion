@@ -4,69 +4,58 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Terraria;
-using Terraria.GameContent.UI;
-using Terraria.GameContent.UI.States;
 using Terraria.Graphics.Effects;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terrexpansion.Assets;
-using Terrexpansion.Common;
+using Terrexpansion.Common.Configs.ClientSide;
+using Terrexpansion.Common.Configs.ServerSide;
+using Terrexpansion.Common.Players;
+using Terrexpansion.Common.Utilities;
 using Terrexpansion.Content.Skies;
 
 namespace Terrexpansion
 {
     public partial class Terrexpansion : Mod
     {
-        private static bool _hasInitiailizedPlayerMenu = false;
-        private static bool _hasInitializedWorldMenu = false;
-        private string _origVersion;
+        public static Terrexpansion Instance { get; private set; }
 
-        public static bool Unloading = false;
-        public static bool SetupContent = false;
-        public static bool CanAutosize = false;
-        public static List<string> SplashText = new List<string>();
-        public static string DeathSplashText = "";
-        public static string CoinSplashText = "";
-        public static Assembly TerrariaAssembly = typeof(Main).Assembly;
+        public static string DeathSplashText, CoinSplashText;
+
+        private static bool _hasInitializedPlayerMenu, _hasInitializedWorldMenu = false;
+
+        public bool SetupContent, CanAutosize;
+        public List<string> SplashText;
+        public Assembly TMLAssembly;
+
+        private string _origVersion;
 
         public enum MessageType : byte
         {
             SyncModPlayer
         }
 
-        public Terrexpansion()
-        {
-        }
+        public Terrexpansion() => Properties = new ModProperties { Autoload = true, AutoloadBackgrounds = true, AutoloadGores = true, AutoloadSounds = true };
 
         public override void Load()
         {
+            Instance = this;
+            TerreConfigGenericClient.Instance = ModContent.GetInstance<TerreConfigGenericClient>();
+            TerreConfigTooltips.Instance = ModContent.GetInstance<TerreConfigTooltips>();
+            TerreConfigGenericServer.Instance = ModContent.GetInstance<TerreConfigGenericServer>();
+            SetupContent = false;
+            CanAutosize = false;
+            DeathSplashText = "";
+            CoinSplashText = "";
+            SplashText = new List<string>();
+            TMLAssembly = typeof(ModLoader).Assembly;
+            _origVersion = "";
+
             AssetHelper.LoadAssets();
             LoadMethodSwaps();
             LoadILEdits();
 
-            UICharacterSelect uiCharacterSelect = (UICharacterSelect)TerrariaAssembly.GetType("Terraria.Main").GetField("_characterSelectMenu", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
-            uiCharacterSelect.RemoveAllChildren();
-            uiCharacterSelect.Remove();
-            uiCharacterSelect.Deactivate();
-            uiCharacterSelect.OnInitialize();
-
-            UIWorldSelect uiWorldSelect = (UIWorldSelect)TerrariaAssembly.GetType("Terraria.Main").GetField("_worldSelectMenu", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
-            uiWorldSelect.RemoveAllChildren();
-            uiWorldSelect.Remove();
-            uiWorldSelect.Deactivate();
-            uiWorldSelect.OnInitialize();
-
             SkyManager.Instance["Terrexpansion:Credits"] = new TerrexpansionCredits();
-
             _origVersion = Main.versionNumber;
-
-            // Example of adding our own keys into Terraria's localization dict, you should probably never do this.
-            Dictionary<string, LocalizedText> localizedTexts = TerrariaAssembly.GetType("Terraria.Localization.LanguageManager").GetField("_localizedTexts", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(LanguageManager.Instance) as Dictionary<string, LocalizedText>;
-            LocalizedText terrexpansionStyle = (LocalizedText)TerrariaAssembly.GetType("Terraria.Localization.LocalizedText").GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Public, null, new Type[2] { typeof(string), typeof(string) }, null).Invoke(new object[] { "UI.HealthManaStyle_TerrexpansionStyle", "Fancy-Classic" });
-
-            localizedTexts.Add("UI.HealthManaStyle_TerrexpansionStyle", terrexpansionStyle);
-
-            Main.PlayerResourcesSets.Add("TerrexpansionStyle", new FancyClassicPlayerResourcesDisplaySet("FancyClassic", ReLogic.Content.AssetRequestMode.ImmediateLoad));
         }
 
         public override void PostSetupContent()
@@ -79,48 +68,23 @@ namespace Terrexpansion
 
         public override void Unload()
         {
-            Unloading = true;
-
             AssetHelper.UnloadAssets();
             UnloadMethodSwaps();
             UnloadILEdits();
 
-            UICharacterSelect uiCharacterSelect = (UICharacterSelect)TerrariaAssembly.GetType("Terraria.Main").GetField("_characterSelectMenu", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
-            uiCharacterSelect.RemoveAllChildren();
-            if (filterTextBoxPlayer != null)
-            {
-                uiCharacterSelect.RemoveChild(filterTextBoxPlayer);
-            }
-            uiCharacterSelect.Remove();
-            uiCharacterSelect.Deactivate();
-            uiCharacterSelect.OnInitialize();
-
-            UIWorldSelect uiWorldSelect = (UIWorldSelect)TerrariaAssembly.GetType("Terraria.Main").GetField("_worldSelectMenu", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
-            uiWorldSelect.RemoveAllChildren();
-            if (filterTextBoxWorld != null)
-            {
-                uiWorldSelect.RemoveChild(filterTextBoxWorld);
-            }
-            uiWorldSelect.Remove();
-            uiWorldSelect.Deactivate();
-            uiWorldSelect.OnInitialize();
-
-            (typeof(Main).Assembly.GetType("Terraria.Localization.LanguageManager").GetField("_localizedTexts", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(LanguageManager.Instance) as Dictionary<string, LocalizedText>).Remove("UI.HealthManaStyle_TerrexpansionStyle");
-            Main.PlayerResourcesSets.Remove("TerrexpansionStyle");
+            Instance = null;
+            TerreConfigGenericClient.Instance = null;
+            TerreConfigTooltips.Instance = null;
+            TerreConfigGenericServer.Instance = null;
+            DeathSplashText = null;
+            CoinSplashText = null;
 
             Main.versionNumber = _origVersion;
-
-            CanAutosize = false;
-            Unloading = false;
         }
-
-        public override void AddRecipeGroups() => RecipeHelper.AddRecipeGroups();
-
-        public override void AddRecipes() => RecipeHelper.AddRecipes(this);
 
         public override void PostAddRecipes()
         {
-            for (int i = 0; i < 174; i++)
+            for (int i = 0; i < Language.FindAll(Lang.CreateDialogFilter("Mods.Terrexpansion.SplashText" + ".", null)).Length; i++)
             {
                 SplashText.Add(Language.GetTextValue("Mods.Terrexpansion.SplashText." + i));
             }

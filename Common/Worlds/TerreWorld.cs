@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 using Terrexpansion.Content.Items.Weapons.Bows;
 using Terrexpansion.Content.Projectiles.Helpers;
 
-namespace Terrexpansion.Common
+namespace Terrexpansion.Common.Worlds
 {
     public class TerreWorld : ModWorld
     {

@@ -32,16 +32,9 @@ namespace Terrexpansion.Content.Projectiles
         {
             SafeSetDefaults();
 
-            if (AutosizeProjectile && Terrexpansion.CanAutosize)
+            if (AutosizeProjectile && Terrexpansion.Instance.CanAutosize)
             {
-                Vector2 projectileSize = ProjectileTexture.Size();
-
-                if (Main.projFrames[Type] > 1)
-                {
-                    projectileSize = new Vector2(ProjectileTexture.Width() / Main.projFrames[Type], ProjectileTexture.Height());
-                }
-
-                projectile.Size = projectileSize;
+                projectile.Size = new Vector2(ProjectileTexture.Width() / Main.projFrames[Type] == 0 ? 1 : Main.projFrames[Type], ProjectileTexture.Height());
             }
         }
     }

@@ -4,6 +4,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Achievements;
 using Terraria.ID;
 using Terrexpansion.Common;
+using Terrexpansion.Common.Players;
 
 namespace Terrexpansion.Content.Items.Consumables.Upgrades
 {

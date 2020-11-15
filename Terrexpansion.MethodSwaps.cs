@@ -21,27 +21,46 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.UI.Chat;
-using Terrexpansion.Assets;
 using Terrexpansion.Common;
+using Terrexpansion.Common.Players;
 using Terrexpansion.Common.UI.Elements;
 using Terrexpansion.Common.Utilities;
 
 namespace Terrexpansion
 {
-    // This partial class contains all of Terrexpansion's method swap (detour) code. I would not advice any new modders to base their method swaps off of this as it's messy and lazy.
     partial class Terrexpansion
     {
-        public static void LoadMethodSwaps()
-        {
-            SwapClassicResources();
-            SwapPlayerSelect();
-            SwapWorldSelect();
+        public UIInputTextField filterTextBoxPlayer, filterTextBoxWorld;
 
+        public void LoadMethodSwaps()
+        {
+            On.Terraria.GameContent.UI.ClassicPlayerResourcesDisplaySet.DrawMana += ClassicPlayerResourcesDisplaySet_DrawMana;
+            Hooks.On_FancyClassicPlayerResourcesDisplaySet_PrepareFields += Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_PrepareFields;
+            Hooks.On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer += Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer;
+            Hooks.On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields += Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields;
+            Hooks.On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer += Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer;
+            Hooks.On_Main_DrawInterface_Resources_Breath += Terrexpansion_On_Main_DrawInterface_Resources_Breath;
+            On.Terraria.GameContent.UI.States.UICharacterSelect.OnInitialize += UICharacterSelect_OnInitialize;
+            Hooks.On_UICharacterSelect_UpdatePlayersList += Terrexpansion_On_UICharacterSelect_UpdatePlayersList;
+            On.Terraria.GameContent.UI.States.UIWorldSelect.OnInitialize += UIWorldSelect_OnInitialize;
+            Hooks.On_WorldSelect_UpdateWorldsList += Terrexpansion_On_WorldSelect_UpdateWorldsList;
             On.Terraria.Main.PreDrawMenu += Main_PreDrawMenu;
             On.Terraria.Lang.CreateDeathMessage += Lang_CreateDeathMessage;
+
+            UICharacterSelect uiCharacterSelect = (UICharacterSelect)TMLAssembly.GetCachedType("Terraria.Main").GetStaticField("_characterSelectMenu").GetValue(null);
+            uiCharacterSelect.RemoveAllChildren();
+            uiCharacterSelect.Remove();
+            uiCharacterSelect.Deactivate();
+            uiCharacterSelect.OnInitialize();
+
+            UIWorldSelect uiWorldSelect = (UIWorldSelect)TMLAssembly.GetCachedType("Terraria.Main").GetStaticField("_worldSelectMenu").GetValue(null);
+            uiWorldSelect.RemoveAllChildren();
+            uiWorldSelect.Remove();
+            uiWorldSelect.Deactivate();
+            uiWorldSelect.OnInitialize();
         }
 
-        public static void UnloadMethodSwaps()
+        public void UnloadMethodSwaps()
         {
             Hooks.On_FancyClassicPlayerResourcesDisplaySet_PrepareFields -= Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_PrepareFields;
             Hooks.On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer -= Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer;
@@ -51,28 +70,36 @@ namespace Terrexpansion
             Hooks.On_WorldSelect_UpdateWorldsList -= Terrexpansion_On_WorldSelect_UpdateWorldsList;
             Hooks.On_Main_DrawInterface_Resources_Breath -= Terrexpansion_On_Main_DrawInterface_Resources_Breath;
             On.Terraria.Main.PreDrawMenu -= Main_PreDrawMenu;
+
+            UICharacterSelect uiCharacterSelect = (UICharacterSelect)TMLAssembly.GetCachedType("Terraria.Main").GetStaticField("_characterSelectMenu").GetValue(null);
+            uiCharacterSelect.RemoveAllChildren();
+            if (filterTextBoxPlayer != null)
+            {
+                uiCharacterSelect.RemoveChild(filterTextBoxPlayer);
+            }
+            uiCharacterSelect.Remove();
+            uiCharacterSelect.Deactivate();
+            uiCharacterSelect.OnInitialize();
+
+            UIWorldSelect uiWorldSelect = (UIWorldSelect)TMLAssembly.GetCachedType("Terraria.Main").GetStaticField("_worldSelectMenu").GetValue(null);
+            uiWorldSelect.RemoveAllChildren();
+            if (filterTextBoxWorld != null)
+            {
+                uiWorldSelect.RemoveChild(filterTextBoxWorld);
+            }
+            uiWorldSelect.Remove();
+            uiWorldSelect.Deactivate();
+            uiWorldSelect.OnInitialize();
         }
 
-        public static void SwapClassicResources()
-        {
-            On.Terraria.GameContent.UI.ClassicPlayerResourcesDisplaySet.DrawMana += ClassicPlayerResourcesDisplaySet_DrawMana;
-            Hooks.On_FancyClassicPlayerResourcesDisplaySet_PrepareFields += Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_PrepareFields;
-            Hooks.On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer += Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer;
-            Hooks.On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields += Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields;
-            Hooks.On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer += Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer;
-            Hooks.On_Main_DrawInterface_Resources_Breath += Terrexpansion_On_Main_DrawInterface_Resources_Breath;
-        }
-
-        public static void ClassicPlayerResourcesDisplaySet_DrawMana(On.Terraria.GameContent.UI.ClassicPlayerResourcesDisplaySet.orig_DrawMana orig, ClassicPlayerResourcesDisplaySet self)
+        public void ClassicPlayerResourcesDisplaySet_DrawMana(On.Terraria.GameContent.UI.ClassicPlayerResourcesDisplaySet.orig_DrawMana orig, ClassicPlayerResourcesDisplaySet self)
         {
             Player localPlayer = Main.LocalPlayer;
             SpriteBatch spriteBatch = Main.spriteBatch;
             Color mouseTextColor = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
             int UI_ScreenAnchorX = Main.screenWidth - 800;
             int totalStarFruit = localPlayer.GetModPlayer<TerrePlayer>().starFruit;
-            int UIDisplay_ManaPerStar;
-
-            UIDisplay_ManaPerStar = localPlayer.statManaMax2 <= 200 ? 20 : localPlayer.statManaMax2 / 10;
+            int UIDisplay_ManaPerStar = localPlayer.statManaMax2 <= 200 ? 20 : localPlayer.statManaMax2 / 10;
 
             if (!localPlayer.ghost && localPlayer.statManaMax2 > 0)
             {
@@ -136,23 +163,24 @@ namespace Terrexpansion
             }
         }
 
-        public static void Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_PrepareFields(Hooks.Orig_FancyClassicPlayerResourcesDisplaySet_PrepareFields orig, FancyClassicPlayerResourcesDisplaySet self, Player player)
+        public void Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_PrepareFields(Hooks.Orig_FancyClassicPlayerResourcesDisplaySet_PrepareFields orig, FancyClassicPlayerResourcesDisplaySet self, Player player)
         {
             orig(self, player);
 
-            Type resourcesDisplaySet = TerrariaAssembly.GetType("Terraria.GameContent.UI.FancyClassicPlayerResourcesDisplaySet");
+            Type resourcesDisplaySet = TMLAssembly.GetType("Terraria.GameContent.UI.FancyClassicPlayerResourcesDisplaySet");
             PlayerStatsSnapshot playerStatsSnapshot = new PlayerStatsSnapshot(player);
+            FieldInfo manaPerStar = resourcesDisplaySet.GetInstanceField("_manaPerStar");
+            FieldInfo starCount = resourcesDisplaySet.GetInstanceField("_starCount");
+            FieldInfo currentPlayerMana = resourcesDisplaySet.GetInstanceField("_currentPlayerMana");
+            FieldInfo lastStarFillingIndex = resourcesDisplaySet.GetInstanceField("_lastStarFillingIndex");
 
-            resourcesDisplaySet.GetInstanceField("_manaPerStar").SetValue(self, playerStatsSnapshot.ManaMax <= 200 ? playerStatsSnapshot.ManaPerSegment : (Main.LocalPlayer.statManaMax2 / 10)); //changed
-
-            resourcesDisplaySet.GetInstanceField("_starCount").SetValue(self, (int)(playerStatsSnapshot.ManaMax / (float)resourcesDisplaySet.GetField("_manaPerStar", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(self)));
-
-            resourcesDisplaySet.GetInstanceField("_currentPlayerMana").SetValue(self, playerStatsSnapshot.Mana);
-
-            resourcesDisplaySet.GetInstanceField("_lastStarFillingIndex").SetValue(self, (int)((float)resourcesDisplaySet.GetInstanceField("_currentPlayerMana").GetValue(self) / (float)resourcesDisplaySet.GetInstanceField("_manaPerStar").GetValue(self)));
+            manaPerStar.SetValue(self, playerStatsSnapshot.ManaMax <= 200 ? playerStatsSnapshot.ManaPerSegment : (Main.LocalPlayer.statManaMax2 / 10));
+            starCount.SetValue(self, (int)(playerStatsSnapshot.ManaMax / (float)manaPerStar.GetValue(self)));
+            currentPlayerMana.SetValue(self, playerStatsSnapshot.Mana);
+            lastStarFillingIndex.SetValue(self, (int)((float)currentPlayerMana.GetValue(self) / (float)manaPerStar.GetValue(self)));
         }
 
-        public static void Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer(Hooks.Orig_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer orig, FancyClassicPlayerResourcesDisplaySet self, int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
+        public void Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer(Hooks.Orig_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer orig, FancyClassicPlayerResourcesDisplaySet self, int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
         {
             orig(self, elementIndex, firstElementIndex, lastElementIndex, out sprite, out offset, out drawScale, out sourceRect);
 
@@ -162,14 +190,14 @@ namespace Terrexpansion
             }
         }
 
-        public static void Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields(Hooks.Orig_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields orig, HorizontalBarsPlayerReosurcesDisplaySet self, Player player)
+        public void Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields(Hooks.Orig_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields orig, HorizontalBarsPlayerReosurcesDisplaySet self, Player player)
         {
             orig(self, player);
 
-            TerrariaAssembly.GetCachedType("Terraria.GameContent.UI.HorizontalBarsPlayerReosurcesDisplaySet").GetInstanceField("_mpSegmentsCount").SetValue(self, player.statManaMax2 <= 200 ? (player.statManaMax2 / 20) : (player.statManaMax2 / (player.statManaMax2 / 10)));
+            TMLAssembly.GetCachedType("Terraria.GameContent.UI.HorizontalBarsPlayerReosurcesDisplaySet").GetInstanceField("_mpSegmentsCount").SetValue(self, player.statManaMax2 <= 200 ? (player.statManaMax2 / 20) : (player.statManaMax2 / (player.statManaMax2 / 10)));
         }
 
-        public static void Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer(Hooks.Orig_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer orig, HorizontalBarsPlayerReosurcesDisplaySet self, int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
+        public void Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer(Hooks.Orig_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer orig, HorizontalBarsPlayerReosurcesDisplaySet self, int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
         {
             orig(self, elementIndex, firstElementIndex, lastElementIndex, out sprite, out offset, out drawScale, out sourceRect);
 
@@ -178,11 +206,11 @@ namespace Terrexpansion
                 sprite = AssetHelper.BarManaTexture;
             }
 
-            Type resourcesDisplaySet = TerrariaAssembly.GetCachedType("Terraria.GameContent.UI.HorizontalBarsPlayerReosurcesDisplaySet");
+            Type resourcesDisplaySet = TMLAssembly.GetCachedType("Terraria.GameContent.UI.HorizontalBarsPlayerReosurcesDisplaySet");
             resourcesDisplaySet.GetStaticMethod("FillBarByValues").Invoke(null, new object[] { elementIndex, sprite, resourcesDisplaySet.GetInstanceField("_mpSegmentsCount").GetValue(self), resourcesDisplaySet.GetInstanceField("_mpPercent").GetValue(self), offset, drawScale, sourceRect });
         }
 
-        public static void Terrexpansion_On_Main_DrawInterface_Resources_Breath(Hooks.Orig_Main_DrawInterface_Resources_Breath self)
+        public void Terrexpansion_On_Main_DrawInterface_Resources_Breath(Hooks.Orig_Main_DrawInterface_Resources_Breath self)
         {
             if (!Main.LocalPlayer.dead)
             {
@@ -308,24 +336,17 @@ namespace Terrexpansion
             }
         }
 
-        public static UIInputTextField filterTextBoxPlayer;
-
-        public static void SwapPlayerSelect()
+        public void UICharacterSelect_OnInitialize(On.Terraria.GameContent.UI.States.UICharacterSelect.orig_OnInitialize orig, UICharacterSelect self)
         {
-            On.Terraria.GameContent.UI.States.UICharacterSelect.OnInitialize += UICharacterSelect_OnInitialize;
-            Hooks.On_UICharacterSelect_UpdatePlayersList += Terrexpansion_On_UICharacterSelect_UpdatePlayersList;
-        }
-
-        public static void UICharacterSelect_OnInitialize(On.Terraria.GameContent.UI.States.UICharacterSelect.orig_OnInitialize orig, UICharacterSelect self)
-        {
-            if (!_hasInitiailizedPlayerMenu)
+            if (!_hasInitializedPlayerMenu)
             {
-                _hasInitiailizedPlayerMenu = true;
+                _hasInitializedPlayerMenu = true;
                 self.Initialize();
+
                 return;
             }
 
-            Type uiCharacterSelect = TerrariaAssembly.GetCachedType("Terraria.GameContent.UI.States.UICharacterSelect");
+            Type uiCharacterSelect = TMLAssembly.GetCachedType("Terraria.GameContent.UI.States.UICharacterSelect");
             FieldInfo playerList = uiCharacterSelect.GetInstanceField("_playerList");
             FieldInfo scrollbar = uiCharacterSelect.GetInstanceField("_scrollbar");
             MethodInfo fadedMouseOver = uiCharacterSelect.GetInstanceMethod("FadedMouseOver");
@@ -363,37 +384,37 @@ namespace Terrexpansion
             scrollbar.SetValue(self, uiScrollbar);
             playerList.SetValue(self, uiPlayerList);
 
-            UITextPanel<LocalizedText> uITextPanel = new UITextPanel<LocalizedText>(Language.GetText("UI.SelectPlayer"), 0.8f, large: true)
+            UITextPanel<LocalizedText> uISelectPlayerText = new UITextPanel<LocalizedText>(Language.GetText("UI.SelectPlayer"), 0.8f, large: true)
             {
                 HAlign = 0.05f
             };
-            uITextPanel.Width.Set(100f, 0f);
-            uITextPanel.Top.Set(-40f, 0f);
-            uITextPanel.SetPadding(15f);
-            uITextPanel.BackgroundColor = new Color(73, 94, 171);
-            uIElement.Append(uITextPanel);
+            uISelectPlayerText.Width.Set(100f, 0f);
+            uISelectPlayerText.Top.Set(-40f, 0f);
+            uISelectPlayerText.SetPadding(15f);
+            uISelectPlayerText.BackgroundColor = new Color(73, 94, 171);
+            uIElement.Append(uISelectPlayerText);
 
-            UITextPanel<LocalizedText> uITextPanel2 = new UITextPanel<LocalizedText>(Language.GetText("UI.Back"), 0.7f, large: true);
-            uITextPanel2.Width.Set(-10f, 0.5f);
-            uITextPanel2.Height.Set(50f, 0f);
-            uITextPanel2.VAlign = 1f;
-            uITextPanel2.Top.Set(-45f, 0f);
-            uITextPanel2.OnMouseOver += (evt, listeningElement) => { fadedMouseOver.Invoke(self, new object[] { evt, listeningElement }); };
-            uITextPanel2.OnMouseOut += (evt, listeningElement) => { fadedMouseOut.Invoke(self, new object[] { evt, listeningElement }); };
-            uITextPanel2.OnClick += (evt, listeningElement) => { goBackClick.Invoke(self, new object[] { evt, listeningElement }); };
-            uITextPanel2.SetSnapPoint("Back", 0);
-            uIElement.Append(uITextPanel2);
-            uiCharacterSelect.GetField("_backPanel", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(self, uITextPanel2);
+            UITextPanel<LocalizedText> uIBackText = new UITextPanel<LocalizedText>(Language.GetText("UI.Back"), 0.7f, large: true);
+            uIBackText.Width.Set(-10f, 0.5f);
+            uIBackText.Height.Set(50f, 0f);
+            uIBackText.VAlign = 1f;
+            uIBackText.Top.Set(-45f, 0f);
+            uIBackText.OnMouseOver += (evt, listeningElement) => { fadedMouseOver.Invoke(self, new object[] { evt, listeningElement }); };
+            uIBackText.OnMouseOut += (evt, listeningElement) => { fadedMouseOut.Invoke(self, new object[] { evt, listeningElement }); };
+            uIBackText.OnClick += (evt, listeningElement) => { goBackClick.Invoke(self, new object[] { evt, listeningElement }); };
+            uIBackText.SetSnapPoint("Back", 0);
+            uIElement.Append(uIBackText);
+            uiCharacterSelect.GetField("_backPanel", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(self, uIBackText);
 
-            UITextPanel<LocalizedText> uITextPanel3 = new UITextPanel<LocalizedText>(Language.GetText("UI.New"), 0.7f, large: true);
-            uITextPanel3.CopyStyle(uITextPanel2);
-            uITextPanel3.HAlign = 1f;
-            uITextPanel3.OnMouseOver += (evt, listeningElement) => { fadedMouseOver.Invoke(self, new object[] { evt, listeningElement }); };
-            uITextPanel3.OnMouseOut += (evt, listeningElement) => { fadedMouseOut.Invoke(self, new object[] { evt, listeningElement }); };
-            uITextPanel3.OnClick += (evt, listeningElement) => { newCharacterClick.Invoke(self, new object[] { evt, listeningElement }); };
-            uIElement.Append(uITextPanel3);
-            uITextPanel2.SetSnapPoint("New", 0);
-            uiCharacterSelect.GetField("_newPanel", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(self, uITextPanel3);
+            UITextPanel<LocalizedText> uINewText = new UITextPanel<LocalizedText>(Language.GetText("UI.New"), 0.7f, large: true);
+            uINewText.CopyStyle(uIBackText);
+            uINewText.HAlign = 1f;
+            uINewText.OnMouseOver += (evt, listeningElement) => { fadedMouseOver.Invoke(self, new object[] { evt, listeningElement }); };
+            uINewText.OnMouseOut += (evt, listeningElement) => { fadedMouseOut.Invoke(self, new object[] { evt, listeningElement }); };
+            uINewText.OnClick += (evt, listeningElement) => { newCharacterClick.Invoke(self, new object[] { evt, listeningElement }); };
+            uIElement.Append(uINewText);
+            uIBackText.SetSnapPoint("New", 0);
+            uiCharacterSelect.GetField("_newPanel", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(self, uINewText);
 
             UIElement upperMenuContainer = new UIElement
             {
@@ -420,21 +441,23 @@ namespace Terrexpansion
                 Width = { Pixels = 360 },
                 Height = { Pixels = 20 }
             };
-            filterTextBoxPlayer.OnTextChange += (a, b) => TerrariaAssembly.GetCachedType("Terraria.GameContent.UI.States.UICharacterSelect").GetInstanceMethod("UpdatePlayersList").Invoke(self, null);
+
+            filterTextBoxPlayer.OnTextChange += (a, b) => TMLAssembly.GetCachedType("Terraria.GameContent.UI.States.UICharacterSelect").GetInstanceMethod("UpdatePlayersList").Invoke(self, null);
+
             upperMenuContainer.Append(filterTextBoxPlayer);
             uIElement.Append(upperMenuContainer);
             self.Append(uIElement);
         }
 
-        public static void Terrexpansion_On_UICharacterSelect_UpdatePlayersList(Hooks.Orig_UICharacterSelect_UpdatePlayersList orig, UICharacterSelect self)
+        public void Terrexpansion_On_UICharacterSelect_UpdatePlayersList(Hooks.Orig_UICharacterSelect_UpdatePlayersList orig, UICharacterSelect self)
         {
             if (filterTextBoxPlayer == null)
             {
                 filterTextBoxPlayer = new UIInputTextField("");
             }
 
-            FieldInfo playerListInfo = TerrariaAssembly.GetCachedType("Terraria.GameContent.UI.States.UICharacterSelect").GetInstanceField("_playerList");
-            FieldInfo currentlyMigratingFilesInfo = TerrariaAssembly.GetCachedType("Terraria.GameContent.UI.States.UICharacterSelect").GetStaticField("_currentlyMigratingFiles");
+            FieldInfo playerListInfo = TMLAssembly.GetCachedType("Terraria.GameContent.UI.States.UICharacterSelect").GetInstanceField("_playerList");
+            FieldInfo currentlyMigratingFilesInfo = TMLAssembly.GetCachedType("Terraria.GameContent.UI.States.UICharacterSelect").GetStaticField("_currentlyMigratingFiles");
             bool currentlyMigratingFiles = (bool)currentlyMigratingFilesInfo.GetValue(null);
             UIList playerList = (UIList)playerListInfo.GetValue(self);
 
@@ -537,15 +560,7 @@ namespace Terrexpansion
             currentlyMigratingFilesInfo.SetValue(null, currentlyMigratingFiles);
         }
 
-        public static UIInputTextField filterTextBoxWorld;
-
-        public static void SwapWorldSelect()
-        {
-            On.Terraria.GameContent.UI.States.UIWorldSelect.OnInitialize += UIWorldSelect_OnInitialize;
-            Hooks.On_WorldSelect_UpdateWorldsList += Terrexpansion_On_WorldSelect_UpdateWorldsList;
-        }
-
-        public static void UIWorldSelect_OnInitialize(On.Terraria.GameContent.UI.States.UIWorldSelect.orig_OnInitialize orig, UIWorldSelect self)
+        public void UIWorldSelect_OnInitialize(On.Terraria.GameContent.UI.States.UIWorldSelect.orig_OnInitialize orig, UIWorldSelect self)
         {
             if (!_hasInitializedWorldMenu)
             {
@@ -554,7 +569,7 @@ namespace Terrexpansion
                 return;
             }
 
-            Type uiWorldSelect = TerrariaAssembly.GetCachedType("Terraria.GameContent.UI.States.UIWorldSelect");
+            Type uiWorldSelect = TMLAssembly.GetCachedType("Terraria.GameContent.UI.States.UIWorldSelect");
             FieldInfo scrollbarInfo = uiWorldSelect.GetInstanceField("_scrollbar");
             FieldInfo worldListInfo = uiWorldSelect.GetInstanceField("_worldList");
             MethodInfo fadedMouseOverInfo = uiWorldSelect.GetInstanceMethod("FadedMouseOver");
@@ -588,34 +603,34 @@ namespace Terrexpansion
             _worldList.SetScrollbar(scrollbar);
             worldListInfo.SetValue(self, _worldList);
 
-            UITextPanel<LocalizedText> uITextPanel = new UITextPanel<LocalizedText>(Language.GetText("UI.SelectWorld"), 0.8f, large: true)
+            UITextPanel<LocalizedText> uISelectWorldText = new UITextPanel<LocalizedText>(Language.GetText("UI.SelectWorld"), 0.8f, large: true)
             {
                 HAlign = 0.05f
             };
-            uITextPanel.Top.Set(-40f, 0f);
-            uITextPanel.SetPadding(15f);
-            uITextPanel.BackgroundColor = new Color(73, 94, 171);
-            uIElement.Append(uITextPanel);
+            uISelectWorldText.Top.Set(-40f, 0f);
+            uISelectWorldText.SetPadding(15f);
+            uISelectWorldText.BackgroundColor = new Color(73, 94, 171);
+            uIElement.Append(uISelectWorldText);
 
-            UITextPanel<LocalizedText> uITextPanel2 = new UITextPanel<LocalizedText>(Language.GetText("UI.Back"), 0.7f, large: true);
-            uITextPanel2.Width.Set(-10f, 0.5f);
-            uITextPanel2.Height.Set(50f, 0f);
-            uITextPanel2.VAlign = 1f;
-            uITextPanel2.Top.Set(-45f, 0f);
-            uITextPanel2.OnMouseOver += (a, b) => { fadedMouseOverInfo.Invoke(self, new object[] { a, b }); };
-            uITextPanel2.OnMouseOut += (a, b) => { fadedMouseOutInfo.Invoke(self, new object[] { a, b }); };
-            uITextPanel2.OnClick += (a, b) => { uiWorldSelect.GetInstanceMethod("GoBackClick").Invoke(self, new object[] { a, b }); };
-            uIElement.Append(uITextPanel2);
-            uiWorldSelect.GetField("_backPanel", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(self, uITextPanel2);
+            UITextPanel<LocalizedText> uIBackText = new UITextPanel<LocalizedText>(Language.GetText("UI.Back"), 0.7f, large: true);
+            uIBackText.Width.Set(-10f, 0.5f);
+            uIBackText.Height.Set(50f, 0f);
+            uIBackText.VAlign = 1f;
+            uIBackText.Top.Set(-45f, 0f);
+            uIBackText.OnMouseOver += (a, b) => { fadedMouseOverInfo.Invoke(self, new object[] { a, b }); };
+            uIBackText.OnMouseOut += (a, b) => { fadedMouseOutInfo.Invoke(self, new object[] { a, b }); };
+            uIBackText.OnClick += (a, b) => { uiWorldSelect.GetInstanceMethod("GoBackClick").Invoke(self, new object[] { a, b }); };
+            uIElement.Append(uIBackText);
+            uiWorldSelect.GetField("_backPanel", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(self, uIBackText);
 
-            UITextPanel<LocalizedText> uITextPanel3 = new UITextPanel<LocalizedText>(Language.GetText("UI.New"), 0.7f, large: true);
-            uITextPanel3.CopyStyle(uITextPanel2);
-            uITextPanel3.HAlign = 1f;
-            uITextPanel3.OnMouseOver += (a, b) => { fadedMouseOverInfo.Invoke(self, new object[] { a, b }); };
-            uITextPanel3.OnMouseOut += (a, b) => { fadedMouseOutInfo.Invoke(self, new object[] { a, b }); };
-            uITextPanel3.OnClick += (a, b) => { uiWorldSelect.GetInstanceMethod("NewWorldClick").Invoke(self, new object[] { a, b }); };
-            uIElement.Append(uITextPanel3);
-            uiWorldSelect.GetField("_newPanel", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(self, uITextPanel3);
+            UITextPanel<LocalizedText> uINewText = new UITextPanel<LocalizedText>(Language.GetText("UI.New"), 0.7f, large: true);
+            uINewText.CopyStyle(uIBackText);
+            uINewText.HAlign = 1f;
+            uINewText.OnMouseOver += (a, b) => { fadedMouseOverInfo.Invoke(self, new object[] { a, b }); };
+            uINewText.OnMouseOut += (a, b) => { fadedMouseOutInfo.Invoke(self, new object[] { a, b }); };
+            uINewText.OnClick += (a, b) => { uiWorldSelect.GetInstanceMethod("NewWorldClick").Invoke(self, new object[] { a, b }); };
+            uIElement.Append(uINewText);
+            uiWorldSelect.GetField("_newPanel", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(self, uINewText);
 
             UIElement upperMenuContainer = new UIElement
             {
@@ -642,21 +657,23 @@ namespace Terrexpansion
                 Width = { Pixels = 365 },
                 Height = { Pixels = 20 }
             };
-            filterTextBoxWorld.OnTextChange += (a, b) => TerrariaAssembly.GetCachedType("Terraria.GameContent.UI.States.UIWorldSelect").GetInstanceMethod("UpdateWorldsList").Invoke(self, null);
+
+            filterTextBoxWorld.OnTextChange += (a, b) => TMLAssembly.GetCachedType("Terraria.GameContent.UI.States.UIWorldSelect").GetInstanceMethod("UpdateWorldsList").Invoke(self, null);
+
             upperMenuContainer.Append(filterTextBoxWorld);
             uIElement.Append(upperMenuContainer);
             self.Append(uIElement);
         }
 
-        public static void Terrexpansion_On_WorldSelect_UpdateWorldsList(Hooks.Orig_UIWorldSelect_UpdateWorldsList orig, UIWorldSelect self)
+        public void Terrexpansion_On_WorldSelect_UpdateWorldsList(Hooks.Orig_UIWorldSelect_UpdateWorldsList orig, UIWorldSelect self)
         {
             if (filterTextBoxWorld == null)
             {
                 filterTextBoxWorld = new UIInputTextField("");
             }
 
-            FieldInfo worldListInfo = TerrariaAssembly.GetCachedType("Terraria.GameContent.UI.States.UIWorldSelect").GetInstanceField("_worldList");
-            FieldInfo currentlyMigratingFilesInfo = TerrariaAssembly.GetCachedType("Terraria.GameContent.UI.States.UIWorldSelect").GetStaticField("_currentlyMigratingFiles");
+            FieldInfo worldListInfo = TMLAssembly.GetCachedType("Terraria.GameContent.UI.States.UIWorldSelect").GetInstanceField("_worldList");
+            FieldInfo currentlyMigratingFilesInfo = TMLAssembly.GetCachedType("Terraria.GameContent.UI.States.UIWorldSelect").GetStaticField("_currentlyMigratingFiles");
             bool currentlyMigratingFiles = (bool)currentlyMigratingFilesInfo.GetValue(null);
             UIList worldList = (UIList)worldListInfo.GetValue(self);
 
@@ -733,10 +750,9 @@ namespace Terrexpansion
             worldListInfo.SetValue(self, worldList);
         }
 
-        // Frankly I'm just too lazy to use reflection *again*.
-        public static bool CanWorldBePlayed(WorldFileData file) => Main.ActivePlayerFileData.Player.difficulty == 3 == (file.GameMode == 3);
+        public bool CanWorldBePlayed(WorldFileData file) => Main.ActivePlayerFileData.Player.difficulty == 3 == (file.GameMode == 3);
 
-        public static void Main_PreDrawMenu(On.Terraria.Main.orig_PreDrawMenu orig, Main self, out Point screenSizeCache, out Point screenSizeCacheAfterScaling)
+        public void Main_PreDrawMenu(On.Terraria.Main.orig_PreDrawMenu orig, Main self, out Point screenSizeCache, out Point screenSizeCacheAfterScaling)
         {
             orig(self, out screenSizeCache, out screenSizeCacheAfterScaling);
 
@@ -745,9 +761,8 @@ namespace Terrexpansion
             string switchText = SkyManager.Instance["CreditsRoll"].IsActive() ? "View Terrexpansion Credits" : "View Vanilla Credits";
             Vector2 size = FontAssets.MouseText.Value.MeasureString(switchText);
             Rectangle switchTextRect = Main.menuMode == MenuID.CreditsRoll ? new Rectangle((int)(Main.screenWidth / 2 - (size.X / 2)), (int)(Main.screenHeight - 2 - size.Y), (int)size.X, (int)size.Y) : Rectangle.Empty;
-            bool mouseOverSwitchText = switchTextRect.Contains(Main.mouseX, Main.mouseY);
 
-            if (mouseOverSwitchText && Main.mouseLeftRelease && Main.mouseLeft)
+            if (switchTextRect.Contains(Main.mouseX, Main.mouseY) && Main.mouseLeftRelease && Main.mouseLeft)
             {
                 SoundEngine.PlaySound(SoundID.MenuTick);
 
@@ -769,16 +784,10 @@ namespace Terrexpansion
                     switchTextRect.Contains(Main.mouseX, Main.mouseY) ? Main.OurFavoriteColor : new Color(120, 120, 120, 76), 0, Vector2.Zero, Vector2.One);
             }
 
-            if (Main.menuMode == 1000000000)
-            {
-                SkyManager.Instance.Activate("Terrexpansion:Credits");
-                TerrariaAssembly.GetCachedType("Terraria.ModLoader.UI.Interface").GetStaticMethod("AddMenuButtons").Invoke(null, new object[] { Main.instance, });
-            }
-
             Main.spriteBatch.End();
         }
 
-        public static NetworkText Lang_CreateDeathMessage(On.Terraria.Lang.orig_CreateDeathMessage orig, string deadPlayerName, int plr, int npc, int proj, int other, int projType, int plrItemType)
+        public NetworkText Lang_CreateDeathMessage(On.Terraria.Lang.orig_CreateDeathMessage orig, string deadPlayerName, int plr, int npc, int proj, int other, int projType, int plrItemType)
         {
             NetworkText projectileName = NetworkText.Empty;
             NetworkText npcName = NetworkText.Empty;

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Terraria.ModLoader.Config;
 
 namespace Terrexpansion.Common.Configs.ClientSide
@@ -7,6 +6,8 @@ namespace Terrexpansion.Common.Configs.ClientSide
     [Label("Tooltip Modifications")]
     public class TerreConfigTooltips : ModConfig
     {
+        public static TerreConfigTooltips Instance;
+
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
         [Header("Tooltip Modifications")]

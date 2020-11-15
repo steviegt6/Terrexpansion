@@ -42,9 +42,7 @@ namespace Terrexpansion.Content.Items.Accessories.Misc
             player.GetDamage(DamageClass.Magic) += 0.25f;
         }
 
-        public override void AddRecipes()
-        {
-            CreateRecipe()
+        public override void AddRecipes() => CreateRecipe()
                 .AddIngredient(ItemID.CelestialCuffs)
                 .AddIngredient(ItemID.ArcaneFlower)
                 .AddIngredient(ItemID.ManaCloak)
@@ -53,6 +51,5 @@ namespace Terrexpansion.Content.Items.Accessories.Misc
                 .AddIngredient(ItemID.CelestialEmblem)
                 .AddTile(TileID.LunarCraftingStation)
                 .Register();
-        }
     }
 }

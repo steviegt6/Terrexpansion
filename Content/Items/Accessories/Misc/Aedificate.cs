@@ -48,9 +48,7 @@ namespace Terrexpansion.Content.Items.Accessories.Misc
             }
         }
 
-        public override void AddRecipes()
-        {
-            CreateRecipe()
+        public override void AddRecipes() => CreateRecipe()
                 .AddIngredient(ItemID.SpectreGoggles)
                 .AddIngredient(ItemID.CordageGuide)
                 .AddIngredient(ItemID.GreedyRing)
@@ -61,6 +59,5 @@ namespace Terrexpansion.Content.Items.Accessories.Misc
                 .AddIngredient(ItemID.Toolbelt)
                 .AddTile(TileID.LunarCraftingStation)
                 .Register();
-        }
     }
 }

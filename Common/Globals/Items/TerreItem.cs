@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -9,7 +7,7 @@ using Terraria.ModLoader;
 using Terrexpansion.Common.Configs.ClientSide;
 using Terrexpansion.Common.Utilities;
 
-namespace Terrexpansion.Common
+namespace Terrexpansion.Common.Globals.Items
 {
     public class TerreItem : GlobalItem
     {
@@ -65,7 +63,7 @@ namespace Terrexpansion.Common
 
         public override bool CanPickup(Item item, Player player)
         {
-            foreach (int type in ModContent.GetInstance<TerreConfigClientSide>().blacklistItemsList)
+            foreach (int type in ModContent.GetInstance<TerreConfigGenericClient>().blacklistItemsList)
             {
                 if (item.type == type)
                 {

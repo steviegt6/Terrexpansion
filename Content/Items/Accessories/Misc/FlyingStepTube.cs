@@ -7,9 +7,13 @@ namespace Terrexpansion.Content.Items.Accessories.Misc
     {
         public override string Texture => "Terrexpansion/Content/Items/MysteryItem";
 
-        public override void SetStaticDefaults() => Tooltip.SetDefault("Hold UP to reach higher" +
-            "\nAllows the owner to float for a few seconds" +
-            "\nGrants the ability to float in water");
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Flying Step-Tube");
+            Tooltip.SetDefault("Hold UP to reach higher" +
+                "\nAllows the owner to float for a few seconds" +
+                "\nGrants the ability to float in water");
+        }
 
         public override void SafeSetDefaults()
         {
