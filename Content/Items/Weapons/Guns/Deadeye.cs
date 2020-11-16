@@ -2,7 +2,6 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terrexpansion.Common;
 using Terrexpansion.Common.Players;
 using Terrexpansion.Content.Projectiles.Friendly.Boomerangs;
 

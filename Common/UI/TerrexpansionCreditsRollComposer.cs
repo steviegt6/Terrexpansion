@@ -28,7 +28,7 @@ namespace Terrexpansion.Common.UI
 
             if (!inGame)
             {
-                vector2 = (vector = Vector2.UnitY * 80f);
+                vector2 = vector = Vector2.UnitY * 80f;
             }
             int num4 = num3 * 3;
             int num5 = num3 * 3;

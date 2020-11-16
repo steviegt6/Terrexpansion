@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 using Terrexpansion.Common.Configs.ClientSide;
@@ -9,19 +8,22 @@ namespace Terrexpansion.Common.Players
 {
     partial class TerrePlayer
     {
-        public override void ModifyDrawLayers(List<PlayerLayer> layers)
+        public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
         {
-            if (!Main.gameMenu && TerreConfigGenericClient.Instance.dynamicMovement)
+            if (!Main.gameMenu)
             {
-                if (player.fullRotation < MathHelper.ToRadians(90) && player.fullRotation > MathHelper.ToRadians(-90))
+                if (TerreConfigGenericClient.Instance.dynamicMovement)
                 {
-                    if (player.direction == 1 && Main.MouseWorld.X > player.position.X)
+                    if (drawInfo.drawPlayer.fullRotation < MathHelper.ToRadians(90) && drawInfo.drawPlayer.fullRotation > MathHelper.ToRadians(-90))
                     {
-                        player.headRotation = Utils.Clamp((Main.MouseWorld - player.Center).ToRotation(), -0.5f, 0.5f);
-                    }
-                    else if (player.direction == -1 && Main.MouseWorld.X < player.position.X)
-                    {
-                        player.headRotation = Utils.Clamp((player.Center - Main.MouseWorld).ToRotation(), -0.5f, 0.5f);
+                        if (drawInfo.drawPlayer.direction == 1 && Main.MouseWorld.X > drawInfo.drawPlayer.position.X)
+                        {
+                            drawInfo.drawPlayer.headRotation = Utils.Clamp((Main.MouseWorld - drawInfo.drawPlayer.Center).ToRotation(), -0.5f, 0.5f);
+                        }
+                        else if (drawInfo.drawPlayer.direction == -1 && Main.MouseWorld.X < drawInfo.drawPlayer.position.X)
+                        {
+                            drawInfo.drawPlayer.headRotation = Utils.Clamp((drawInfo.drawPlayer.Center - Main.MouseWorld).ToRotation(), -0.5f, 0.5f);
+                        }
                     }
                 }
             }

@@ -56,12 +56,14 @@ namespace Terrexpansion.Common.Globals.NPCs
 
                     if (player != null && player.active && player.difficulty == 2)
                     {
-                        return base.CheckDead(npc); ;
+                        goto SkipGraveCode;
                     }
                 }
 
                 npc.DropTombstoneTownNPC(networkText);
             }
+
+            SkipGraveCode:
 
             return base.CheckDead(npc);
         }
