@@ -9,7 +9,7 @@ namespace Terrexpansion.Common.Players
     {
         public static int MaxStarFruit = 10;
 
-        public bool cactusSetBonus, vileVial, extendedLungs, currentlyRotated, currentlyRotatedByToRotation,wasAirborn, lerpingToRotation = false;
+        public bool cactusSetBonus, vileVial, extendedLungs, currentlyRotated, currentlyRotatedByToRotation, wasAirborn, lerpingToRotation = false;
         public float correctToRotation = 0f;
         public int starFruit, timeAirborne = 0;
         public int remainingDeadeyeBullets = 6;
