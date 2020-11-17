@@ -5,12 +5,15 @@ using System.Linq;
 using System.Reflection;
 using Terraria;
 using Terraria.Graphics.Effects;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terrexpansion.Common.Configs.ClientSide;
 using Terrexpansion.Common.Configs.ServerSide;
+using Terrexpansion.Common.Globals.NPCs;
 using Terrexpansion.Common.Players;
 using Terrexpansion.Common.Utilities;
+using Terrexpansion.Content.Dusts;
 using Terrexpansion.Content.Skies;
 
 namespace Terrexpansion
@@ -88,6 +91,8 @@ namespace Terrexpansion
             {
                 SplashText.Add(Language.GetTextValue("Mods.Terrexpansion.SplashText." + i));
             }
+
+            TerreNPC.InitializeBloodTypes();
 
             SplashText[0] = $"Home to {SplashText.Count} splash texts!";
             SplashText[1] = $"Splash Text Entry #{Main.rand.Next(1, SplashText.Count)}";
