@@ -9,8 +9,6 @@ namespace Terrexpansion.Content.Items.Accessories.Misc
 {
     public class Velox : BaseItem
     {
-        public override string Texture => "Terrexpansion/Content/Items/MysteryItem";
-
         public override void SetStaticDefaults() => Tooltip.SetDefault("Hold UP to reach higher" +
                 "\nAllows the ability to climb walls" +
                 "\nAllows flight, super fast running, and extra mobility on ice" +
