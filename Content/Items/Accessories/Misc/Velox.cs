@@ -72,14 +72,14 @@ namespace Terrexpansion.Content.Items.Accessories.Misc
                 Lighting.AddLight((int)player.Center.X / 16, (int)player.Center.Y / 16, 0.4f, 1.2f, 1.8f);
             }
 
-            Terrexpansion.Instance.TMLAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect").Invoke(player, new object[1] { Delegate.CreateDelegate(typeof(Utils.TileActionAttempt), player, Terrexpansion.Instance.TMLAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect_PlaceFlamesOnTile")) });
-            Terrexpansion.Instance.TMLAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect").Invoke(player, new object[1] { Delegate.CreateDelegate(typeof(Utils.TileActionAttempt), player, Terrexpansion.Instance.TMLAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect_PlaceFlowersOnTile")) });
+            Terrexpansion.Instance.tmlAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect").Invoke(player, new object[1] { Delegate.CreateDelegate(typeof(Utils.TileActionAttempt), player, Terrexpansion.Instance.tmlAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect_PlaceFlamesOnTile")) });
+            Terrexpansion.Instance.tmlAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect").Invoke(player, new object[1] { Delegate.CreateDelegate(typeof(Utils.TileActionAttempt), player, Terrexpansion.Instance.tmlAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect_PlaceFlowersOnTile")) });
         }
 
         public override void UpdateVanity(Player player)
         {
-            Terrexpansion.Instance.TMLAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect").Invoke(player, new object[1] { Delegate.CreateDelegate(typeof(Utils.TileActionAttempt), player, Terrexpansion.Instance.TMLAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect_PlaceFlamesOnTile")) });
-            Terrexpansion.Instance.TMLAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect").Invoke(player, new object[1] { Delegate.CreateDelegate(typeof(Utils.TileActionAttempt), player, Terrexpansion.Instance.TMLAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect_PlaceFlowersOnTile")) });
+            Terrexpansion.Instance.tmlAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect").Invoke(player, new object[1] { Delegate.CreateDelegate(typeof(Utils.TileActionAttempt), player, Terrexpansion.Instance.tmlAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect_PlaceFlamesOnTile")) });
+            Terrexpansion.Instance.tmlAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect").Invoke(player, new object[1] { Delegate.CreateDelegate(typeof(Utils.TileActionAttempt), player, Terrexpansion.Instance.tmlAssembly.GetCachedType("Terraria.Player").GetInstanceMethod("DoBootsEffect_PlaceFlowersOnTile")) });
         }
 
         public override void AddRecipes() => CreateRecipe()

@@ -6,7 +6,7 @@ using Terrexpansion.Common.Configs.ClientSide;
 
 namespace Terrexpansion.Common.Players
 {
-    partial class TerrePlayer
+    public partial class TerrePlayer
     {
         public override void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
         {

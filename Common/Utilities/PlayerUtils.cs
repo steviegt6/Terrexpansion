@@ -3,7 +3,7 @@ using Terraria.Localization;
 
 namespace Terrexpansion.Common.Utilities
 {
-    public static class PlayerExtensions
+    public static class PlayerUtils
     {
         /// <summary>
         /// This extension method is made specifically for configs. If you're looking for the normal, non-config method, use <c>IsServerHost(this Player player)</c>.

@@ -3,7 +3,7 @@ using Terraria.ModLoader.IO;
 
 namespace Terrexpansion.Common.Players
 {
-    partial class TerrePlayer
+    public partial class TerrePlayer
     {
         public override void clientClone(ModPlayer clientClone)
         {

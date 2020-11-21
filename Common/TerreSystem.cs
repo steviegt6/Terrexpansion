@@ -12,7 +12,9 @@ using Terrexpansion.Common.Utilities;
 
 namespace Terrexpansion
 {
-    /*public*/ partial class Terrexpansion //TerreSystem : ModSystem
+    /*public*/
+
+    public partial class Terrexpansion //TerreSystem : ModSystem
     {
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {

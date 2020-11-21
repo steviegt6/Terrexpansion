@@ -13,7 +13,7 @@ namespace Terrexpansion.Content.Menus
         public float textScale = 1f;
         public bool textDirection = false;
 
-        public override void OnSelected() => drawText = Terrexpansion.Instance.SplashText[Main.rand.Next(Terrexpansion.Instance.SplashText.Count)];
+        public override void OnSelected() => drawText = Terrexpansion.Instance.splashText[Main.rand.Next(Terrexpansion.Instance.splashText.Count)];
 
         public override bool PreDrawLogo(SpriteBatch spriteBatch, ref Vector2 logoDrawCenter, ref float logoRotation, ref float logoScale, ref Color drawColor) => false;
 
@@ -42,7 +42,7 @@ namespace Terrexpansion.Content.Menus
         {
             spriteBatch.Draw(Logo.Value, new Vector2(Main.screenWidth / 2, 100f), new Rectangle(0, 0, Logo.Width(), Logo.Height()), drawColor, 0f, new Vector2(Logo.Width() * 0.5f, Logo.Height() * 0.5f), 1f, SpriteEffects.None, 0f);
 
-            if (Terrexpansion.Instance.SetupContent)
+            if (Terrexpansion.Instance.setupContent)
             {
                 spriteBatch.DrawString(FontAssets.DeathText.Value, drawText, new Vector2(logoDrawCenter.X, logoDrawCenter.Y) * 1.45f, Main.OurFavoriteColor, MathHelper.ToRadians(-20f), FontAssets.DeathText.Value.MeasureString(drawText) / 2, 0.5f * textScale, SpriteEffects.None, 0f);
             }

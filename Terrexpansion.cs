@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using Terraria;
 using Terraria.Graphics.Effects;
-using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terrexpansion.Common.Configs.ClientSide;
@@ -13,7 +12,6 @@ using Terrexpansion.Common.Configs.ServerSide;
 using Terrexpansion.Common.Globals.NPCs;
 using Terrexpansion.Common.Players;
 using Terrexpansion.Common.Utilities;
-using Terrexpansion.Content.Dusts;
 using Terrexpansion.Content.Skies;
 
 namespace Terrexpansion
@@ -23,12 +21,11 @@ namespace Terrexpansion
         public static Terrexpansion Instance { get; private set; }
 
         public static string DeathSplashText, CoinSplashText;
-
         private static bool _hasInitializedPlayerMenu, _hasInitializedWorldMenu = false;
 
-        public bool SetupContent, CanAutosize;
-        public List<string> SplashText;
-        public Assembly TMLAssembly;
+        public bool setupContent, canAutosize;
+        public List<string> splashText;
+        public Assembly tmlAssembly;
 
         private string _origVersion;
 
@@ -45,12 +42,12 @@ namespace Terrexpansion
             TerreConfigGenericClient.Instance = ModContent.GetInstance<TerreConfigGenericClient>();
             TerreConfigTooltips.Instance = ModContent.GetInstance<TerreConfigTooltips>();
             TerreConfigGenericServer.Instance = ModContent.GetInstance<TerreConfigGenericServer>();
-            SetupContent = false;
-            CanAutosize = false;
             DeathSplashText = "";
             CoinSplashText = "";
-            SplashText = new List<string>();
-            TMLAssembly = typeof(ModLoader).Assembly;
+            setupContent = false;
+            canAutosize = false;
+            splashText = new List<string>();
+            tmlAssembly = typeof(ModLoader).Assembly;
             _origVersion = "";
 
             AssetHelper.LoadAssets();
@@ -66,7 +63,7 @@ namespace Terrexpansion
             AssetHelper.SwapAssets();
 
             Main.versionNumber = "Terrexpansion v1.0.0.0";
-            SetupContent = true;
+            setupContent = true;
         }
 
         public override void Unload()
@@ -89,18 +86,18 @@ namespace Terrexpansion
         {
             for (int i = 0; i < Language.FindAll(Lang.CreateDialogFilter("Mods.Terrexpansion.SplashText" + ".", null)).Length; i++)
             {
-                SplashText.Add(Language.GetTextValue("Mods.Terrexpansion.SplashText." + i));
+                splashText.Add(Language.GetTextValue("Mods.Terrexpansion.SplashText." + i));
             }
 
             TerreNPC.InitializeBloodTypes();
 
-            SplashText[0] = $"Home to {SplashText.Count} splash texts!";
-            SplashText[1] = $"Splash Text Entry #{Main.rand.Next(1, SplashText.Count)}";
-            SplashText[2] = $"{Environment.UserName.ToUpper()} IS YOU";
-            SplashText[3] = new string($"{Environment.UserName}!".ToCharArray().Reverse().ToArray());
-            SplashText[4] = $"Always watching, {Environment.UserName}, Always watching...";
+            splashText[0] = $"Home to {splashText.Count} splash texts!";
+            splashText[1] = $"Splash Text Entry #{Main.rand.Next(1, splashText.Count)}";
+            splashText[2] = $"{Environment.UserName.ToUpper()} IS YOU";
+            splashText[3] = new string($"{Environment.UserName}!".ToCharArray().Reverse().ToArray());
+            splashText[4] = $"Always watching, {Environment.UserName}, Always watching...";
 
-            CanAutosize = true;
+            canAutosize = true;
         }
 
         public override void HandlePacket(BinaryReader reader, int whoAmI)

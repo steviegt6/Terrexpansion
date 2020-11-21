@@ -26,34 +26,35 @@ using Terrexpansion.Common.Players;
 using Terrexpansion.Common.UI.Elements;
 using Terrexpansion.Common.Utilities;
 
+// This code will remain uncommented.
 namespace Terrexpansion
 {
-    partial class Terrexpansion
+    public partial class Terrexpansion
     {
         public UIInputTextField filterTextBoxPlayer, filterTextBoxWorld;
 
         public void LoadMethodSwaps()
         {
-            On.Terraria.GameContent.UI.ClassicPlayerResourcesDisplaySet.DrawMana += ClassicPlayerResourcesDisplaySet_DrawMana;
             Hooks.On_FancyClassicPlayerResourcesDisplaySet_PrepareFields += Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_PrepareFields;
             Hooks.On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer += Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer;
             Hooks.On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields += Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields;
             Hooks.On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer += Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer;
             Hooks.On_Main_DrawInterface_Resources_Breath += Terrexpansion_On_Main_DrawInterface_Resources_Breath;
-            On.Terraria.GameContent.UI.States.UICharacterSelect.OnInitialize += UICharacterSelect_OnInitialize;
             Hooks.On_UICharacterSelect_UpdatePlayersList += Terrexpansion_On_UICharacterSelect_UpdatePlayersList;
-            On.Terraria.GameContent.UI.States.UIWorldSelect.OnInitialize += UIWorldSelect_OnInitialize;
             Hooks.On_WorldSelect_UpdateWorldsList += Terrexpansion_On_WorldSelect_UpdateWorldsList;
+            On.Terraria.GameContent.UI.ClassicPlayerResourcesDisplaySet.DrawMana += ClassicPlayerResourcesDisplaySet_DrawMana;
+            On.Terraria.GameContent.UI.States.UICharacterSelect.OnInitialize += UICharacterSelect_OnInitialize;
+            On.Terraria.GameContent.UI.States.UIWorldSelect.OnInitialize += UIWorldSelect_OnInitialize;
             On.Terraria.Main.PreDrawMenu += Main_PreDrawMenu;
             On.Terraria.Lang.CreateDeathMessage += Lang_CreateDeathMessage;
 
-            UICharacterSelect uiCharacterSelect = (UICharacterSelect)TMLAssembly.GetCachedType("Terraria.Main").GetStaticField("_characterSelectMenu").GetValue(null);
+            UICharacterSelect uiCharacterSelect = (UICharacterSelect)tmlAssembly.GetCachedType("Terraria.Main").GetStaticField("_characterSelectMenu").GetValue(null);
             uiCharacterSelect.RemoveAllChildren();
             uiCharacterSelect.Remove();
             uiCharacterSelect.Deactivate();
             uiCharacterSelect.OnInitialize();
 
-            UIWorldSelect uiWorldSelect = (UIWorldSelect)TMLAssembly.GetCachedType("Terraria.Main").GetStaticField("_worldSelectMenu").GetValue(null);
+            UIWorldSelect uiWorldSelect = (UIWorldSelect)tmlAssembly.GetCachedType("Terraria.Main").GetStaticField("_worldSelectMenu").GetValue(null);
             uiWorldSelect.RemoveAllChildren();
             uiWorldSelect.Remove();
             uiWorldSelect.Deactivate();
@@ -69,24 +70,23 @@ namespace Terrexpansion
             Hooks.On_UICharacterSelect_UpdatePlayersList -= Terrexpansion_On_UICharacterSelect_UpdatePlayersList;
             Hooks.On_WorldSelect_UpdateWorldsList -= Terrexpansion_On_WorldSelect_UpdateWorldsList;
             Hooks.On_Main_DrawInterface_Resources_Breath -= Terrexpansion_On_Main_DrawInterface_Resources_Breath;
-            On.Terraria.Main.PreDrawMenu -= Main_PreDrawMenu;
 
-            UICharacterSelect uiCharacterSelect = (UICharacterSelect)TMLAssembly.GetCachedType("Terraria.Main").GetStaticField("_characterSelectMenu").GetValue(null);
+            UICharacterSelect uiCharacterSelect = (UICharacterSelect)tmlAssembly.GetCachedType("Terraria.Main").GetStaticField("_characterSelectMenu").GetValue(null);
             uiCharacterSelect.RemoveAllChildren();
+
             if (filterTextBoxPlayer != null)
-            {
                 uiCharacterSelect.RemoveChild(filterTextBoxPlayer);
-            }
+
             uiCharacterSelect.Remove();
             uiCharacterSelect.Deactivate();
             uiCharacterSelect.OnInitialize();
 
-            UIWorldSelect uiWorldSelect = (UIWorldSelect)TMLAssembly.GetCachedType("Terraria.Main").GetStaticField("_worldSelectMenu").GetValue(null);
+            UIWorldSelect uiWorldSelect = (UIWorldSelect)tmlAssembly.GetCachedType("Terraria.Main").GetStaticField("_worldSelectMenu").GetValue(null);
             uiWorldSelect.RemoveAllChildren();
+
             if (filterTextBoxWorld != null)
-            {
                 uiWorldSelect.RemoveChild(filterTextBoxWorld);
-            }
+
             uiWorldSelect.Remove();
             uiWorldSelect.Deactivate();
             uiWorldSelect.OnInitialize();
@@ -119,46 +119,32 @@ namespace Terrexpansion
                         color = 255;
 
                         if (localPlayer.statMana == i * UIDisplay_ManaPerStar)
-                        {
                             isLast = true;
-                        }
                     }
                     else
                     {
-                        float num4 = (localPlayer.statMana - (i - 1) * UIDisplay_ManaPerStar) / (float)UIDisplay_ManaPerStar;
-                        color = (int)(30f + 225f * num4);
+                        float potentiallyLast = (localPlayer.statMana - (i - 1) * UIDisplay_ManaPerStar) / (float)UIDisplay_ManaPerStar;
+                        color = (int)(30f + 225f * potentiallyLast);
 
                         if (color < 30)
-                        {
                             color = 30;
-                        }
 
-                        scale = num4 / 4f + 0.75f;
+                        scale = potentiallyLast / 4f + 0.75f;
 
                         if (scale < 0.75)
-                        {
                             scale = 0.75f;
-                        }
 
-                        if (num4 > 0f)
-                        {
+                        if (potentiallyLast > 0f)
                             isLast = true;
-                        }
                     }
 
                     if (isLast)
-                    {
                         scale += Main.cursorScale - 1f;
-                    }
 
                     if (i <= totalStarFruit && totalStarFruit != 0)
-                    {
                         spriteBatch.Draw(AssetHelper.ClassicMana2Texture.Value, new Vector2(775 + UI_ScreenAnchorX, 30 + AssetHelper.ClassicMana2Texture.Height() / 2 + (AssetHelper.ClassicMana2Texture.Height() - AssetHelper.ClassicMana2Texture.Height() * scale) / 2f + (28 * (i - 1))), new Rectangle(0, 0, AssetHelper.ClassicMana2Texture.Width(), AssetHelper.ClassicMana2Texture.Height()), new Color(color, color, color, (int)(color * 0.9)), 0f, new Vector2(AssetHelper.ClassicMana2Texture.Width() / 2, AssetHelper.ClassicMana2Texture.Height() / 2), scale, SpriteEffects.None, 0f);
-                    }
                     else
-                    {
                         spriteBatch.Draw(TextureAssets.Mana.Value, new Vector2(775 + UI_ScreenAnchorX, 30 + TextureAssets.Mana.Height() / 2 + (TextureAssets.Mana.Height() - TextureAssets.Mana.Height() * scale) / 2f + (28 * (i - 1))), new Rectangle(0, 0, TextureAssets.Mana.Width(), TextureAssets.Mana.Height()), new Color(color, color, color, (int)(color * 0.9)), 0f, new Vector2(TextureAssets.Mana.Width() / 2, TextureAssets.Mana.Height() / 2), scale, SpriteEffects.None, 0f);
-                    }
                 }
             }
         }
@@ -167,7 +153,7 @@ namespace Terrexpansion
         {
             orig(self, player);
 
-            Type resourcesDisplaySet = TMLAssembly.GetType("Terraria.GameContent.UI.FancyClassicPlayerResourcesDisplaySet");
+            Type resourcesDisplaySet = tmlAssembly.GetType("Terraria.GameContent.UI.FancyClassicPlayerResourcesDisplaySet");
             PlayerStatsSnapshot playerStatsSnapshot = new PlayerStatsSnapshot(player);
             FieldInfo manaPerStar = resourcesDisplaySet.GetInstanceField("_manaPerStar");
             FieldInfo starCount = resourcesDisplaySet.GetInstanceField("_starCount");
@@ -180,33 +166,32 @@ namespace Terrexpansion
             lastStarFillingIndex.SetValue(self, (int)((float)currentPlayerMana.GetValue(self) / (float)manaPerStar.GetValue(self)));
         }
 
+        // TODO: IL?
         public void Terrexpansion_On_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer(Hooks.Orig_FancyClassicPlayerResourcesDisplaySet_StarFillingDrawer orig, FancyClassicPlayerResourcesDisplaySet self, int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
         {
             orig(self, elementIndex, firstElementIndex, lastElementIndex, out sprite, out offset, out drawScale, out sourceRect);
 
             if (Main.LocalPlayer.GetModPlayer<TerrePlayer>().starFruit >= elementIndex + 1 && Main.LocalPlayer.GetModPlayer<TerrePlayer>().starFruit != 0)
-            {
                 sprite = AssetHelper.ClassicMana2Texture;
-            }
         }
 
+        // TODO: IL?
         public void Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields(Hooks.Orig_HorizontalBarsPlayerReosurcesDisplaySet_PrepareFields orig, HorizontalBarsPlayerReosurcesDisplaySet self, Player player)
         {
             orig(self, player);
 
-            TMLAssembly.GetCachedType("Terraria.GameContent.UI.HorizontalBarsPlayerReosurcesDisplaySet").GetInstanceField("_mpSegmentsCount").SetValue(self, player.statManaMax2 <= 200 ? (player.statManaMax2 / 20) : (player.statManaMax2 / (player.statManaMax2 / 10)));
+            tmlAssembly.GetCachedType("Terraria.GameContent.UI.HorizontalBarsPlayerReosurcesDisplaySet").GetInstanceField("_mpSegmentsCount").SetValue(self, player.statManaMax2 <= 200 ? (player.statManaMax2 / 20) : (player.statManaMax2 / (player.statManaMax2 / 10)));
         }
 
+        // TODO: IL?
         public void Terrexpansion_On_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer(Hooks.Orig_HorizontalBarsPlayerReosurcesDisplaySet_ManaFillingDrawer orig, HorizontalBarsPlayerReosurcesDisplaySet self, int elementIndex, int firstElementIndex, int lastElementIndex, out Asset<Texture2D> sprite, out Vector2 offset, out float drawScale, out Rectangle? sourceRect)
         {
             orig(self, elementIndex, firstElementIndex, lastElementIndex, out sprite, out offset, out drawScale, out sourceRect);
 
             if (elementIndex + 1 <= Main.LocalPlayer.GetModPlayer<TerrePlayer>().starFruit && Main.LocalPlayer.GetModPlayer<TerrePlayer>().starFruit != 0)
-            {
                 sprite = AssetHelper.BarManaTexture;
-            }
 
-            Type resourcesDisplaySet = TMLAssembly.GetCachedType("Terraria.GameContent.UI.HorizontalBarsPlayerReosurcesDisplaySet");
+            Type resourcesDisplaySet = tmlAssembly.GetCachedType("Terraria.GameContent.UI.HorizontalBarsPlayerReosurcesDisplaySet");
             resourcesDisplaySet.GetStaticMethod("FillBarByValues").Invoke(null, new object[] { elementIndex, sprite, resourcesDisplaySet.GetInstanceField("_mpSegmentsCount").GetValue(self), resourcesDisplaySet.GetInstanceField("_mpPercent").GetValue(self), offset, drawScale, sourceRect });
         }
 
@@ -218,21 +203,15 @@ namespace Terrexpansion
                 Vector2 value = Main.LocalPlayer.Top + new Vector2(0f, Main.LocalPlayer.gfxOffY);
 
                 if ((Main.LocalPlayer.lavaTime < Main.LocalPlayer.lavaMax && Main.LocalPlayer.lavaWet) || Main.LocalPlayer.lavaTime < Main.LocalPlayer.lavaMax && Main.LocalPlayer.breath == Main.LocalPlayer.breathMax)
-                {
                     showLavaBubbles = true;
-                }
 
                 if (Main.playerInventory && Main.screenHeight < 1000)
-                {
                     value.Y += Main.LocalPlayer.height - 20;
-                }
 
                 value = Vector2.Transform(value - Main.screenPosition, Main.GameViewMatrix.ZoomMatrix);
 
                 if (!Main.playerInventory || Main.screenHeight >= 1000)
-                {
                     value.Y -= 100f;
-                }
 
                 value /= Main.UIScale;
 
@@ -241,9 +220,7 @@ namespace Terrexpansion
                     value = new Vector2(Main.screenWidth / 2, Main.screenHeight / 2 + 236);
 
                     if (Main.InGameUI.IsVisible)
-                    {
                         value.Y = Main.screenHeight - 64;
-                    }
                 }
 
                 if (Main.LocalPlayer.breath < Main.LocalPlayer.breathMax && !Main.LocalPlayer.ghost && !showLavaBubbles)
@@ -256,25 +233,19 @@ namespace Terrexpansion
                         float scale = 1f;
 
                         if (Main.LocalPlayer.breath >= i * divisor)
-                        {
                             color = 255;
-                        }
                         else
                         {
                             float castedBreath = (Main.LocalPlayer.breath - (i - 1) * divisor) / (float)divisor;
                             color = (int)(30f + 225f * castedBreath);
 
                             if (color < 30)
-                            {
                                 color = 30;
-                            }
 
                             scale = castedBreath / 4f + 0.75f;
 
                             if (scale < 0.75)
-                            {
                                 scale = 0.75f;
-                            }
                         }
 
                         int offsetX = 0;
@@ -300,25 +271,19 @@ namespace Terrexpansion
                         float scale = 1f;
 
                         if (Main.LocalPlayer.lavaTime >= j * divisor)
-                        {
                             color = 255;
-                        }
                         else
                         {
                             float num10 = (Main.LocalPlayer.lavaTime - (j - 1) * divisor) / (float)divisor;
                             color = (int)(30f + 225f * num10);
 
                             if (color < 30)
-                            {
                                 color = 30;
-                            }
 
                             scale = num10 / 4f + 0.75f;
 
                             if (scale < 0.75)
-                            {
                                 scale = 0.75f;
-                            }
                         }
 
                         int offsetX = 0;
@@ -346,7 +311,7 @@ namespace Terrexpansion
                 return;
             }
 
-            Type uiCharacterSelect = TMLAssembly.GetCachedType("Terraria.GameContent.UI.States.UICharacterSelect");
+            Type uiCharacterSelect = tmlAssembly.GetCachedType("Terraria.GameContent.UI.States.UICharacterSelect");
             FieldInfo playerList = uiCharacterSelect.GetInstanceField("_playerList");
             FieldInfo scrollbar = uiCharacterSelect.GetInstanceField("_scrollbar");
             MethodInfo fadedMouseOver = uiCharacterSelect.GetInstanceMethod("FadedMouseOver");
@@ -384,10 +349,7 @@ namespace Terrexpansion
             scrollbar.SetValue(self, uiScrollbar);
             playerList.SetValue(self, uiPlayerList);
 
-            UITextPanel<LocalizedText> uISelectPlayerText = new UITextPanel<LocalizedText>(Language.GetText("UI.SelectPlayer"), 0.8f, large: true)
-            {
-                HAlign = 0.05f
-            };
+            UITextPanel<LocalizedText> uISelectPlayerText = new UITextPanel<LocalizedText>(Language.GetText("UI.SelectPlayer"), 0.8f, large: true) { HAlign = 0.05f };
             uISelectPlayerText.Width.Set(100f, 0f);
             uISelectPlayerText.Top.Set(-40f, 0f);
             uISelectPlayerText.SetPadding(15f);
@@ -442,7 +404,7 @@ namespace Terrexpansion
                 Height = { Pixels = 20 }
             };
 
-            filterTextBoxPlayer.OnTextChange += (a, b) => TMLAssembly.GetCachedType("Terraria.GameContent.UI.States.UICharacterSelect").GetInstanceMethod("UpdatePlayersList").Invoke(self, null);
+            filterTextBoxPlayer.OnTextChange += (a, b) => tmlAssembly.GetCachedType("Terraria.GameContent.UI.States.UICharacterSelect").GetInstanceMethod("UpdatePlayersList").Invoke(self, null);
 
             upperMenuContainer.Append(filterTextBoxPlayer);
             uIElement.Append(upperMenuContainer);
@@ -452,14 +414,14 @@ namespace Terrexpansion
         public void Terrexpansion_On_UICharacterSelect_UpdatePlayersList(Hooks.Orig_UICharacterSelect_UpdatePlayersList orig, UICharacterSelect self)
         {
             if (filterTextBoxPlayer == null)
-            {
                 filterTextBoxPlayer = new UIInputTextField("");
-            }
 
-            FieldInfo playerListInfo = TMLAssembly.GetCachedType("Terraria.GameContent.UI.States.UICharacterSelect").GetInstanceField("_playerList");
-            FieldInfo currentlyMigratingFilesInfo = TMLAssembly.GetCachedType("Terraria.GameContent.UI.States.UICharacterSelect").GetStaticField("_currentlyMigratingFiles");
+            FieldInfo playerListInfo = tmlAssembly.GetCachedType("Terraria.GameContent.UI.States.UICharacterSelect").GetInstanceField("_playerList");
+            FieldInfo currentlyMigratingFilesInfo = tmlAssembly.GetCachedType("Terraria.GameContent.UI.States.UICharacterSelect").GetStaticField("_currentlyMigratingFiles");
             bool currentlyMigratingFiles = (bool)currentlyMigratingFilesInfo.GetValue(null);
             UIList playerList = (UIList)playerListInfo.GetValue(self);
+            int snapPointIndex = 0;
+            string filter = filterTextBoxPlayer.Text;
 
             playerList.Clear();
 
@@ -470,19 +432,12 @@ namespace Terrexpansion
                 return (x.IsFavorite && !y.IsFavorite || !x.IsFavorite && y.IsFavorite) ? -1 : (x.Name.CompareTo(y.Name) != 0) ? x.Name.CompareTo(y.Name) : x.GetFileName().CompareTo(y.GetFileName());
             });
 
-            int snapPointIndex = 0;
-            string filter = filterTextBoxPlayer.Text;
-
             foreach (PlayerFileData item in list)
             {
                 if (item.Player.name.IndexOf(filter, StringComparison.OrdinalIgnoreCase) != -1 && filter.Length > 0)
-                {
                     playerList.Add(new UICharacterListItem(item, snapPointIndex++));
-                }
                 else if (filter.Length <= 0)
-                {
                     playerList.Add(new UICharacterListItem(item, snapPointIndex++));
-                }
             }
 
             if (list.Count == 0)
@@ -494,7 +449,6 @@ namespace Terrexpansion
                     UIPanel autoMigrateButton = new UIPanel();
                     autoMigrateButton.Width.Set(0, 1);
                     autoMigrateButton.Height.Set(50, 0);
-
                     UIText migrateText = new UIText(!currentlyMigratingFiles ? Language.GetText("tModLoader.MigratePlayersText") : Language.GetText("tModLoader.MigratingWorldsText"));
 
                     autoMigrateButton.OnClick += (a, b) =>
@@ -509,9 +463,7 @@ namespace Terrexpansion
                                 IEnumerable<string> vanillaPlayerFiles = Directory.GetFiles(vanillaPlayersPath, "*.*").Where(s => s.EndsWith(".plr") || s.EndsWith(".tplr") || s.EndsWith(".bak"));
 
                                 foreach (string file in vanillaPlayerFiles)
-                                {
                                     File.Copy(file, Path.Combine(Main.PlayerPath, Path.GetFileName(file)), true);
-                                }
 
                                 foreach (string mapDir in Directory.GetDirectories(vanillaPlayersPath))
                                 {
@@ -566,10 +518,11 @@ namespace Terrexpansion
             {
                 _hasInitializedWorldMenu = true;
                 self.Initialize();
+
                 return;
             }
 
-            Type uiWorldSelect = TMLAssembly.GetCachedType("Terraria.GameContent.UI.States.UIWorldSelect");
+            Type uiWorldSelect = tmlAssembly.GetCachedType("Terraria.GameContent.UI.States.UIWorldSelect");
             FieldInfo scrollbarInfo = uiWorldSelect.GetInstanceField("_scrollbar");
             FieldInfo worldListInfo = uiWorldSelect.GetInstanceField("_worldList");
             MethodInfo fadedMouseOverInfo = uiWorldSelect.GetInstanceMethod("FadedMouseOver");
@@ -603,10 +556,7 @@ namespace Terrexpansion
             _worldList.SetScrollbar(scrollbar);
             worldListInfo.SetValue(self, _worldList);
 
-            UITextPanel<LocalizedText> uISelectWorldText = new UITextPanel<LocalizedText>(Language.GetText("UI.SelectWorld"), 0.8f, large: true)
-            {
-                HAlign = 0.05f
-            };
+            UITextPanel<LocalizedText> uISelectWorldText = new UITextPanel<LocalizedText>(Language.GetText("UI.SelectWorld"), 0.8f, large: true) { HAlign = 0.05f };
             uISelectWorldText.Top.Set(-40f, 0f);
             uISelectWorldText.SetPadding(15f);
             uISelectWorldText.BackgroundColor = new Color(73, 94, 171);
@@ -658,7 +608,7 @@ namespace Terrexpansion
                 Height = { Pixels = 20 }
             };
 
-            filterTextBoxWorld.OnTextChange += (a, b) => TMLAssembly.GetCachedType("Terraria.GameContent.UI.States.UIWorldSelect").GetInstanceMethod("UpdateWorldsList").Invoke(self, null);
+            filterTextBoxWorld.OnTextChange += (a, b) => tmlAssembly.GetCachedType("Terraria.GameContent.UI.States.UIWorldSelect").GetInstanceMethod("UpdateWorldsList").Invoke(self, null);
 
             upperMenuContainer.Append(filterTextBoxWorld);
             uIElement.Append(upperMenuContainer);
@@ -668,12 +618,10 @@ namespace Terrexpansion
         public void Terrexpansion_On_WorldSelect_UpdateWorldsList(Hooks.Orig_UIWorldSelect_UpdateWorldsList orig, UIWorldSelect self)
         {
             if (filterTextBoxWorld == null)
-            {
                 filterTextBoxWorld = new UIInputTextField("");
-            }
 
-            FieldInfo worldListInfo = TMLAssembly.GetCachedType("Terraria.GameContent.UI.States.UIWorldSelect").GetInstanceField("_worldList");
-            FieldInfo currentlyMigratingFilesInfo = TMLAssembly.GetCachedType("Terraria.GameContent.UI.States.UIWorldSelect").GetStaticField("_currentlyMigratingFiles");
+            FieldInfo worldListInfo = tmlAssembly.GetCachedType("Terraria.GameContent.UI.States.UIWorldSelect").GetInstanceField("_worldList");
+            FieldInfo currentlyMigratingFilesInfo = tmlAssembly.GetCachedType("Terraria.GameContent.UI.States.UIWorldSelect").GetStaticField("_currentlyMigratingFiles");
             bool currentlyMigratingFiles = (bool)currentlyMigratingFilesInfo.GetValue(null);
             UIList worldList = (UIList)worldListInfo.GetValue(self);
 
@@ -687,13 +635,9 @@ namespace Terrexpansion
             foreach (WorldFileData item in orderedEnumerable)
             {
                 if (item.Name.IndexOf(filter, StringComparison.OrdinalIgnoreCase) != -1 && filter.Length > 0)
-                {
                     worldList.Add(new UIWorldListItem(item, snapPointIndex++, CanWorldBePlayed(item)));
-                }
                 else if (filter.Length <= 0)
-                {
                     worldList.Add(new UIWorldListItem(item, snapPointIndex++, CanWorldBePlayed(item)));
-                }
             }
 
             if (!orderedEnumerable.Any())
@@ -779,10 +723,8 @@ namespace Terrexpansion
             }
 
             if (Main.menuMode == MenuID.CreditsRoll)
-            {
                 ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value, switchText, new Vector2(switchTextRect.X, switchTextRect.Y),
                     switchTextRect.Contains(Main.mouseX, Main.mouseY) ? Main.OurFavoriteColor : new Color(120, 120, 120, 76), 0, Vector2.Zero, Vector2.One);
-            }
 
             Main.spriteBatch.End();
         }
@@ -845,46 +787,32 @@ namespace Terrexpansion
                 result = NetworkText.FromKey("DeathSource.Player", empty, pvpPlayerName, slainByProjectile ? projectileName : pvpPlayerItemName);
 
                 if (pvpPlayer.HeldItem.type == ItemID.KOCannon)
-                {
                     result = NetworkText.FromKey("Mods.Terrexpansion.DeathText.KOd", deadPlayerName, pvpPlayerName);
-                }
             }
             else if (Main.getGoodWorld && Main.rand.NextBool(30))
-            {
                 result = NetworkText.FromKey("Mods.Terrexpansion.DeathText.FTW", deadPlayerName);
-            }
             else if (slainByNPC)
             {
                 result = NetworkText.FromKey("DeathSource.NPC", empty, npcName);
 
                 if (Main.rand.NextBool(2) && killerNPC.type == NPCID.Plantera || killerNPC.type == NPCID.Dandelion)
-                {
                     result = NetworkText.FromKey("Mods.Terrexpansion.DeathText.FlowerPower", deadPlayerName);
-                }
 
                 if (killerNPC.type == NPCID.Ghost || killerNPC.type == NPCID.Wraith)
-                {
                     result = NetworkText.FromKey("Mods.Terrexpansion.DeathText.Possessed", deadPlayerName, npcName);
-                }
 
                 if (Main.rand.NextBool(3) && NPCID.Sets.Zombies[killerNPC.type])
-                {
                     result = NetworkText.FromKey("Mods.Terrexpansion.DeathText.Zombified", deadPlayerName);
-                }
 
                 if (killerNPC.type == NPCID.HallowBoss && Main.dayTime)
-                {
                     result = NetworkText.FromKey("Mods.Terrexpansion.DeathText.EmpressBitch", deadPlayerName);
-                }
             }
             else if (slainByProjectile)
             {
                 result = NetworkText.FromKey("DeathSource.Projectile", empty, projectileName);
 
                 if (Main.dayTime && killerProj.type == ProjectileID.HallowBossSplitShotCore || killerProj.type == ProjectileID.HallowBossRainbowStreak || killerProj.type == ProjectileID.HallowBossLastingRainbow || killerProj.type == ProjectileID.HallowBossDeathAurora || killerProj.type == ProjectileID.FairyQueenSunDance || killerProj.type == ProjectileID.FairyQueenLance)
-                {
                     result = NetworkText.FromKey("Mods.Terrexpansion.DeathText.EmpressBitch", deadPlayerName);
-                }
             }
             else
             {

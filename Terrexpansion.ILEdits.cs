@@ -3,9 +3,10 @@ using Terrexpansion.Common.Configs.ClientSide;
 using Terrexpansion.Common.Utilities;
 using OpCodes = Mono.Cecil.Cil.OpCodes;
 
+// This code will remain more or less uncommented.
 namespace Terrexpansion
 {
-    partial class Terrexpansion
+    public partial class Terrexpansion
     {
         public void LoadILEdits()
         {

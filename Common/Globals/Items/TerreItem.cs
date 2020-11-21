@@ -200,7 +200,6 @@ namespace Terrexpansion.Common.Globals.Items
                 }
             }
 
-
             if (tooltips.TryGetVanillaTooltip("Knockback", out TooltipLine knockback))
             {
                 if (config.showTooltipKnockback)

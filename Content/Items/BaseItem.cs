@@ -39,7 +39,7 @@ namespace Terrexpansion.Content.Items
         {
             SafeSetDefaults();
 
-            if (AutosizeItem && Terrexpansion.Instance.CanAutosize)
+            if (AutosizeItem && Terrexpansion.Instance.canAutosize)
             {
                 Vector2 itemSize = ItemTexture.Size();
 
