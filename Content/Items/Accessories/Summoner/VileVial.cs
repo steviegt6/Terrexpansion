@@ -1,6 +1,6 @@
 ﻿using Terraria;
 using Terraria.ID;
-using Terrexpansion.Common.Players;
+using Terrexpansion.Common.Systems.Players;
 
 namespace Terrexpansion.Content.Items.Accessories.Summoner
 {

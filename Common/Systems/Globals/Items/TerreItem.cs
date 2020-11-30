@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 using Terrexpansion.Common.Configs.ClientSide;
 using Terrexpansion.Common.Utilities;
 
-namespace Terrexpansion.Common.Globals.Items
+namespace Terrexpansion.Common.Systems.Globals.Items
 {
     public class TerreItem : GlobalItem
     {

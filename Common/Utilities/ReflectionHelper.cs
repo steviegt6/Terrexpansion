@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Terrexpansion.Common.Utilities
 {
-    public static class ReflectionUtils
+    public static class ReflectionHelper
     {
         public const BindingFlags AllFlags = AnyAccessibility | AnyInstantiation;
         public const BindingFlags AnyAccessibility = BindingFlags.Public | BindingFlags.NonPublic;

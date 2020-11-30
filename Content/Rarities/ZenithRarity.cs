@@ -12,11 +12,9 @@ namespace Terrexpansion.Content.Rarities
         public override int GetPrefixedRarity(int offset, float valueMult)
         {
             if (offset < 0)
-            {
                 return ItemRarityID.Purple;
-            }
 
-            return base.GetPrefixedRarity(offset, valueMult);
+            return Type;
         }
     }
 }

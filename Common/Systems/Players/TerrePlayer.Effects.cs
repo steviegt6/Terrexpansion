@@ -1,7 +1,7 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
 
-namespace Terrexpansion.Common.Players
+namespace Terrexpansion.Common.Systems.Players
 {
     public partial class TerrePlayer
     {

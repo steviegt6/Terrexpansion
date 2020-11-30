@@ -1,9 +1,10 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terrexpansion.Content.Items.Materials;
 
-namespace Terrexpansion.Common.Globals.Projectiles
+namespace Terrexpansion.Common.Systems.Globals.Projectiles
 {
     public class TerreProjectile : GlobalProjectile
     {
@@ -18,11 +19,10 @@ namespace Terrexpansion.Common.Globals.Projectiles
 
                         if (spawnAmount > 0)
                         {
-                            int spawnedFragment = Item.NewItem((int)projectile.position.X, (int)projectile.position.Y, projectile.width, projectile.height, ModContent.ItemType<StarFragment>(), spawnAmount);
-                            Main.item[spawnedFragment].velocity.X += Main.rand.Next(-5, 5);
-                            Main.item[spawnedFragment].velocity.Y -= Main.rand.Next(1, 3);
+                            int spawnedFragmentItem = Item.NewItem((int)projectile.position.X, (int)projectile.position.Y, projectile.width, projectile.height, ModContent.ItemType<StarFragment>(), spawnAmount);
+                            Main.item[spawnedFragmentItem].velocity += new Vector2(Main.rand.Next(-5, 5), Main.rand.Next(-3, -1));
 
-                            NetMessage.SendData(MessageID.SyncItem, number: spawnedFragment, number2: 1f);
+                            NetMessage.SendData(MessageID.SyncItem, number: spawnedFragmentItem, number2: 1f);
                         }
                     }
                     break;

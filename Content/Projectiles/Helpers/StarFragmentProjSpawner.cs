@@ -24,33 +24,26 @@ namespace Terrexpansion.Content.Projectiles.Helpers
             if (Main.dayTime)
             {
                 projectile.Kill();
-
                 return;
             }
 
             projectile.ai[0] += Main.dayRate;
 
-            if (projectile.owner != Main.myPlayer || projectile.ai[0] < 180f)
+            if (projectile.owner == Main.myPlayer && projectile.ai[0] >= 180f)
             {
-                return;
-            }
-
-            if (projectile.ai[1] > -1f)
-            {
-                projectile.velocity.X *= 0.35f;
-
-                if (projectile.Center.X < Main.player[(int)projectile.ai[1]].Center.X)
+                if (projectile.ai[1] > -1f)
                 {
-                    projectile.velocity.X = Math.Abs(projectile.velocity.X);
-                }
-                else
-                {
-                    projectile.velocity.X = 0f - Math.Abs(projectile.velocity.X);
-                }
-            }
+                    projectile.velocity.X *= 0.35f;
 
-            Projectile.NewProjectile(projectile.position.X, projectile.position.Y, projectile.velocity.X, projectile.velocity.Y, ModContent.ProjectileType<StarFragmentProj>(), 100, 5f, Main.myPlayer);
-            projectile.Kill();
+                    if (projectile.Center.X < Main.player[(int)projectile.ai[1]].Center.X)
+                        projectile.velocity.X = Math.Abs(projectile.velocity.X);
+                    else
+                        projectile.velocity.X = 0f - Math.Abs(projectile.velocity.X);
+                }
+
+                Projectile.NewProjectile(projectile.position.X, projectile.position.Y, projectile.velocity.X, projectile.velocity.Y, ModContent.ProjectileType<StarFragmentProj>(), 100, 5f, Main.myPlayer);
+                projectile.Kill();
+            }
         }
     }
 }

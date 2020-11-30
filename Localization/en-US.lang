@@ -1,4 +1,4 @@
-﻿CoinSplash.1=dropped {0}
+﻿CoinSplash.0=dropped {0}
 CoinSplash.1=that'll be {0}
 CoinSplash.2=congrats! you just lost {0}!
 CoinSplash.3={0} is no longer...
@@ -38,6 +38,7 @@ DeathText.Mask={0} didn't wear a mask
 DeathTextGeneric.Defleshed={0} was defleshed
 DeathTextGeneric.TornApart={0} was torn apart
 
+
 Credits_Creator.1=Terrexpansion Creator
 Credits_Creator.2=convicted tomatophile (Stevie)
 
@@ -70,11 +71,11 @@ Credits_Special.7=absoluteAquarian for being chad
 NotServerHostError=You aren't the server host!
 
 
-SplashText.0=""
-SplashText.1=""
-SplashText.2=""
-SplashText.3=""
-SplashText.4=""
+SplashText.0="Home to {0} splash texts!"
+SplashText.1="Splash Text Entry #{1}"
+SplashText.2="{2} IS YOU"
+SplashText.3="{3}"
+SplashText.4="Always watching, {4}, always watching..."
 SplashText.5=Also try Minecraft!
 SplashText.6=Also try Thorium!
 SplashText.7=Main.rand.Next(1, 2);

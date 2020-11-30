@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace Terrexpansion.Content.Dusts
 {
-    public class GoreBase : ModDust
+    public class BaseBloodDust : BaseDust
     {
         public virtual float Speed => 0.5f;
 

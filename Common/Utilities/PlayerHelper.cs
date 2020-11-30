@@ -1,9 +1,10 @@
 ﻿using Terraria;
 using Terraria.Localization;
+using Terrexpansion.Common.Systems.Players;
 
 namespace Terrexpansion.Common.Utilities
 {
-    public static class PlayerUtils
+    public static partial class ExtensionMethods
     {
         /// <summary>
         /// This extension method is made specifically for configs. If you're looking for the normal, non-config method, use <c>IsServerHost(this Player player)</c>.
@@ -42,5 +43,12 @@ namespace Terrexpansion.Common.Utilities
 
             return true;
         }
+
+        /// <summary>
+        /// Offhand for <c>player.GetModPlayer<Terre</c>
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public static TerrePlayer GetTerrePlayer(this Player player) => player.GetModPlayer<TerrePlayer>();
     }
 }

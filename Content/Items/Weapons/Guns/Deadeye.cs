@@ -2,7 +2,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terrexpansion.Common.Players;
+using Terrexpansion.Common.Systems.Players;
 using Terrexpansion.Content.Projectiles.Friendly.Boomerangs;
 
 namespace Terrexpansion.Content.Items.Weapons.Guns
@@ -26,7 +26,7 @@ namespace Terrexpansion.Content.Items.Weapons.Guns
             item.knockBack = 5f;
             item.UseSound = SoundID.Item40;
             item.damage = 20;
-            item.shootSpeed = 11f;
+            item.shootSpeed = 20f;
             item.noMelee = true;
             item.value = 1;
             item.scale = 0.9f;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
 namespace Terrexpansion.Common.Configs.ClientSide
@@ -7,7 +8,7 @@ namespace Terrexpansion.Common.Configs.ClientSide
     [Label("General Client-Side")]
     public class TerreConfigGenericClient : ModConfig
     {
-        public static TerreConfigGenericClient Instance;
+        public static TerreConfigGenericClient Instance => ModContent.GetInstance<TerreConfigGenericClient>();
 
         public override ConfigScope Mode => ConfigScope.ServerSide;
 

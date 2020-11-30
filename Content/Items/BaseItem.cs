@@ -14,19 +14,19 @@ namespace Terrexpansion.Content.Items
     public abstract class BaseItem : ModItem
     {
         /// <summary>
-        /// Whether or not this item's size should be set automatically.
-        /// <para>Defaults to true.</para>
+        /// Whether or not this item's size should be set automatically. <br />
+        /// Defaults to true.
         /// </summary>
         public virtual bool AutosizeItem => true;
 
         /// <summary>
-        /// Where or not this item's <c>axe</c> power in <c>SafeSetDefaults()</c> should make sense readability-wise.
-        /// <para>Returns false by default.</para>
+        /// Where or not this item's <c>axe</c> power in <c>SafeSetDefaults()</c> should make sense readability-wise. <br />
+        /// Returns false by default.
         /// </summary>
         public virtual bool UseImprovedAxePower => false;
 
         /// <summary>
-        /// The item's <c>Texture2D</c> (wrapped in an <c>Asset</c>).
+        /// The item's <c>Texture2D</c> (wrapped in an <c>Asset&lt;&gt;</c>).
         /// </summary>
         public Asset<Texture2D> ItemTexture => TextureAssets.Item[Type];
 
@@ -40,21 +40,10 @@ namespace Terrexpansion.Content.Items
             SafeSetDefaults();
 
             if (AutosizeItem && Terrexpansion.Instance.canAutosize)
-            {
-                Vector2 itemSize = ItemTexture.Size();
-
-                if (Main.itemAnimationsRegistered.Contains(Type))
-                {
-                    itemSize = new Vector2(ItemTexture.Width(), ItemTexture.Height() / ((DrawAnimationVertical)Main.itemAnimations[Type]).FrameCount);
-                }
-
-                item.Size = itemSize;
-            }
+                item.Size = Main.itemAnimationsRegistered.Contains(Type) ? new Vector2(ItemTexture.Width(), ItemTexture.Height() / ((DrawAnimationVertical)Main.itemAnimations[Type]).FrameCount) : ItemTexture.Size();
 
             if (UseImprovedAxePower && item.axe != 0)
-            {
                 item.axe /= 5;
-            }
         }
     }
 }

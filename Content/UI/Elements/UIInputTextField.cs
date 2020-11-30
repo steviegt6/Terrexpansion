@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.GameInput;
 using Terraria.UI;
 
-namespace Terrexpansion.Common.UI.Elements
+namespace Terrexpansion.Content.UI.Elements
 {
     public class UIInputTextField : UIElement
     {
@@ -16,14 +16,24 @@ namespace Terrexpansion.Common.UI.Elements
         public string Text
         {
             get => _currentString;
-            set { if (_currentString != value) { _currentString = value; OnTextChange?.Invoke(this, EventArgs.Empty); } }
+            set
+            {
+                if (_currentString != value)
+                {
+                    _currentString = value;
+                    OnTextChange?.Invoke(this, EventArgs.Empty);
+                }
+            }
         }
 
         public delegate void EventHandler(object sender, EventArgs e);
 
         public event EventHandler OnTextChange;
 
-        public UIInputTextField(string hintText) => _hintText = hintText;
+        public UIInputTextField(string hintText)
+        {
+            _hintText = hintText;
+        }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
@@ -40,23 +50,9 @@ namespace Terrexpansion.Common.UI.Elements
                 OnTextChange?.Invoke(this, EventArgs.Empty);
             }
 
-            string displayString = _currentString;
-
-            if (++_textBlinkerCount / 20 % 2 == 0)
-            {
-                displayString += "|";
-            }
-
             CalculatedStyle space = GetDimensions();
 
-            if (_currentString.Length == 0)
-            {
-                Utils.DrawBorderString(spriteBatch, _hintText, new Vector2(space.X, space.Y), Color.Gray);
-            }
-            else
-            {
-                Utils.DrawBorderString(spriteBatch, displayString, new Vector2(space.X, space.Y), Color.White);
-            }
+            Utils.DrawBorderString(spriteBatch, _currentString.Length == 0 ? _hintText : _currentString + (++_textBlinkerCount / 20 % 2 == 0 ? "|" : ""), new Vector2(GetDimensions().X, GetDimensions().Y), _currentString.Length == 0 ? Color.Gray : Color.White);
         }
     }
 }

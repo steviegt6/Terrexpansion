@@ -1,6 +1,6 @@
 ﻿namespace Terrexpansion.Content.Dusts
 {
-    public class BoneGore : GoreBase
+    public class BoneBloodDust : BaseBloodDust
     {
         public override bool Sticky => false;
     }

@@ -7,7 +7,7 @@ namespace Terrexpansion
 {
     public partial class Terrexpansion
     {
-        public void EditRecipes()
+        private void EditRecipes()
         {
             // Loop through all recipes so we can find what to edit.
             for (int i = 0; i < Recipe.numRecipes; i++)
@@ -15,7 +15,7 @@ namespace Terrexpansion
                 Recipe recipe = Main.recipe[i];
 
                 // Check if the recipe crafts a Zenith.
-                // If so, attempt to remove the Moewmere, Star Wrath, and Terra Blade. If it suceeds, add the First Fractal.
+                // If so, attempt to remove the Moewmere, Star Wrath, and Terra Blade. If it succeeds, add the First Fractal.
                 if (recipe.HasResult(ItemID.Zenith))
                     if (recipe.TryRemoveIngredient(ItemID.Meowmere) && recipe.TryRemoveIngredient(ItemID.StarWrath) && recipe.TryRemoveIngredient(ItemID.TerraBlade))
                         recipe.AddIngredient<FirstFractal>();

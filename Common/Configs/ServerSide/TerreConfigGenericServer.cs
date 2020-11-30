@@ -1,4 +1,5 @@
 ﻿using Terraria;
+using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 using Terrexpansion.Common.Utilities;
 
@@ -7,7 +8,7 @@ namespace Terrexpansion.Common.Configs.ServerSide
     [Label("General Server-Side")]
     public class TerreConfigGenericServer : ModConfig
     {
-        public static TerreConfigGenericServer Instance;
+        public static TerreConfigGenericServer Instance => ModContent.GetInstance<TerreConfigGenericServer>();
 
         public override ConfigScope Mode => ConfigScope.ServerSide;
 

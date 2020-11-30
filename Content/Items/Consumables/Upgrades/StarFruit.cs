@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Achievements;
 using Terraria.ID;
-using Terrexpansion.Common.Players;
+using Terrexpansion.Common.Systems.Players;
 
 namespace Terrexpansion.Content.Items.Consumables.Upgrades
 {
@@ -37,7 +37,7 @@ namespace Terrexpansion.Content.Items.Consumables.Upgrades
             item.useTurn = true;
         }
 
-        public override bool CanUseItem(Player player) => player.statManaMax >= 200 && player.GetModPlayer<TerrePlayer>().starFruit < TerrePlayer.MaxStarFruit;
+        public override bool CanUseItem(Player player) => player.statManaMax >= 200 && player.GetModPlayer<TerrePlayer>().starFruit < TerrePlayer.MAX_STAR_FRUIT;
 
         public override bool UseItem(Player player)
         {

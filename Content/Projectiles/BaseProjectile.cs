@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 namespace Terrexpansion.Content.Projectiles
 {
     /// <summary>
-    /// This serves as a base class for all items in the mod.
+    /// This serves as a base class for all projectiles in the mod.
     /// </summary>
     public abstract class BaseProjectile : ModProjectile
     {
@@ -33,9 +33,7 @@ namespace Terrexpansion.Content.Projectiles
             SafeSetDefaults();
 
             if (AutosizeProjectile && Terrexpansion.Instance.canAutosize)
-            {
-                projectile.Size = new Vector2(ProjectileTexture.Width() / Main.projFrames[Type] == 0 ? 1 : Main.projFrames[Type], ProjectileTexture.Height());
-            }
+                projectile.Size = new Vector2(ProjectileTexture.Width() / (Main.projFrames[Type] == 0 ? 1 : Main.projFrames[Type]), ProjectileTexture.Height());
         }
     }
 }

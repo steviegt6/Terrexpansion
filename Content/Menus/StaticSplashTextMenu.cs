@@ -20,22 +20,14 @@ namespace Terrexpansion.Content.Menus
         public override void Update(bool isOnTitleScreen)
         {
             if (textScale >= 1.10f)
-            {
                 textDirection = true;
-            }
             else if (textScale <= 0.90f)
-            {
                 textDirection = false;
-            }
 
             if (textDirection)
-            {
                 textScale -= 0.0075f;
-            }
             else
-            {
                 textScale += 0.0075f;
-            }
         }
 
         public override void PostDrawLogo(SpriteBatch spriteBatch, Vector2 logoDrawCenter, float logoRotation, float logoScale, Color drawColor)
@@ -44,7 +36,10 @@ namespace Terrexpansion.Content.Menus
 
             if (Terrexpansion.Instance.setupContent)
             {
-                spriteBatch.DrawString(FontAssets.DeathText.Value, drawText, new Vector2(logoDrawCenter.X, logoDrawCenter.Y) * 1.45f, Main.OurFavoriteColor, MathHelper.ToRadians(-20f), FontAssets.DeathText.Value.MeasureString(drawText) / 2, 0.5f * textScale, SpriteEffects.None, 0f);
+                for (int i = 0; i < 4; i++)
+                    spriteBatch.DrawString(FontAssets.DeathText.Value, drawText, new Vector2(Main.screenWidth / 2 + (Logo.Width() / 2), logoDrawCenter.Y * 1.5f) + new Vector2(i == 0 ? 2f : i == 1 ? -2f : 0f, i == 2 ? 2f : i == 3 ? -2f : 0f), new Color(0, 0, 0, 200), MathHelper.ToRadians(-20f), FontAssets.DeathText.Value.MeasureString(drawText) / 2, 0.5f * textScale, SpriteEffects.None, 0f);
+
+                spriteBatch.DrawString(FontAssets.DeathText.Value, drawText, new Vector2(Main.screenWidth / 2 + (Logo.Width() / 2), logoDrawCenter.Y * 1.5f), Main.OurFavoriteColor, MathHelper.ToRadians(-20f), FontAssets.DeathText.Value.MeasureString(drawText) / 2, 0.5f * textScale, SpriteEffects.None, 0f);
             }
         }
     }

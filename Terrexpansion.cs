@@ -1,16 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terrexpansion.Common.Configs.ClientSide;
-using Terrexpansion.Common.Configs.ServerSide;
-using Terrexpansion.Common.Globals.NPCs;
-using Terrexpansion.Common.Players;
+using Terrexpansion.Common.Data;
+using Terrexpansion.Common.Systems.Globals.NPCs;
 using Terrexpansion.Common.Utilities;
 using Terrexpansion.Content.Skies;
 
@@ -27,42 +24,41 @@ namespace Terrexpansion
         public List<string> splashText;
         public Assembly tmlAssembly;
 
-        private string _origVersion;
-
-        public enum MessageType : byte
+        public Terrexpansion()
         {
-            SyncModPlayer
-        }
+            Properties = new ModProperties
+            {
+                Autoload = true,
+                AutoloadBackgrounds = true,
+                AutoloadGores = true,
+                AutoloadSounds = true
+            };
 
-        public Terrexpansion() => Properties = new ModProperties { Autoload = true, AutoloadBackgrounds = true, AutoloadGores = true, AutoloadSounds = true };
+            Instance = this;
+        }
 
         public override void Load()
         {
-            Instance = this;
-            TerreConfigGenericClient.Instance = ModContent.GetInstance<TerreConfigGenericClient>();
-            TerreConfigTooltips.Instance = ModContent.GetInstance<TerreConfigTooltips>();
-            TerreConfigGenericServer.Instance = ModContent.GetInstance<TerreConfigGenericServer>();
             DeathSplashText = "";
             CoinSplashText = "";
             setupContent = false;
             canAutosize = false;
             splashText = new List<string>();
             tmlAssembly = typeof(ModLoader).Assembly;
-            _origVersion = "";
 
             AssetHelper.LoadAssets();
             LoadMethodSwaps();
             LoadILEdits();
 
             SkyManager.Instance["Terrexpansion:Credits"] = new TerrexpansionCredits();
-            _origVersion = Main.versionNumber;
+            Main.SettingDontScaleMainMenuUp = false;
         }
 
         public override void PostSetupContent()
         {
             AssetHelper.SwapAssets();
 
-            Main.versionNumber = "Terrexpansion v1.0.0.0";
+            Main.versionNumber = $"Terrexpansion v{Version}";
             setupContent = true;
         }
 
@@ -73,46 +69,22 @@ namespace Terrexpansion
             UnloadILEdits();
 
             Instance = null;
-            TerreConfigGenericClient.Instance = null;
-            TerreConfigTooltips.Instance = null;
-            TerreConfigGenericServer.Instance = null;
             DeathSplashText = null;
             CoinSplashText = null;
 
-            Main.versionNumber = _origVersion;
+            Main.versionNumber = "1.4.1.2";
         }
 
         public override void PostAddRecipes()
         {
+            EditRecipes();
+
             for (int i = 0; i < Language.FindAll(Lang.CreateDialogFilter("Mods.Terrexpansion.SplashText" + ".", null)).Length; i++)
-            {
-                splashText.Add(Language.GetTextValue("Mods.Terrexpansion.SplashText." + i));
-            }
+                splashText.Add(Language.GetTextValue("Mods.Terrexpansion.SplashText." + i, splashText.Count, Main.rand.Next(splashText.Count), Environment.UserName.ToUpper(), new string($"{Environment.UserName}!".ToCharArray().Reverse().ToArray()), Environment.UserName));
 
-            TerreNPC.InitializeBloodTypes();
-
-            splashText[0] = $"Home to {splashText.Count} splash texts!";
-            splashText[1] = $"Splash Text Entry #{Main.rand.Next(1, splashText.Count)}";
-            splashText[2] = $"{Environment.UserName.ToUpper()} IS YOU";
-            splashText[3] = new string($"{Environment.UserName}!".ToCharArray().Reverse().ToArray());
-            splashText[4] = $"Always watching, {Environment.UserName}, Always watching...";
+            NPCBloodData.InitializeBloodData();
 
             canAutosize = true;
-        }
-
-        public override void HandlePacket(BinaryReader reader, int whoAmI)
-        {
-            MessageType msgType = (MessageType)reader.ReadByte();
-
-            switch (msgType)
-            {
-                case MessageType.SyncModPlayer:
-                    byte player = reader.ReadByte();
-                    TerrePlayer terrePlayer = Main.player[player].GetModPlayer<TerrePlayer>();
-                    terrePlayer.starFruit = reader.ReadInt32();
-                    terrePlayer.extendedLungs = reader.ReadBoolean();
-                    break;
-            }
         }
     }
 }

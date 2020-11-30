@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using System;
 using System.Reflection;
 using Terraria;
 using Terraria.GameContent;
@@ -10,7 +11,7 @@ namespace Terrexpansion.Common.Utilities
 {
     public static class AssetHelper
     {
-        public static Asset<Texture2D> VanillaClassicHeartTexture, VanillaClassicHeart2Texture, VanillaClassicManaTexture, ClassicMana2Texture, BarManaTexture, EndlessQuiver, LungExtendedBubble, LifeFruit, SynergyButton;
+        public static Asset<Texture2D> VanillaClassicHeartTexture, VanillaClassicHeart2Texture, VanillaClassicManaTexture, ClassicMana2Texture, BarManaTexture, EndlessQuiver, LungExtendedBubble, LifeFruit;
 
         public static void LoadAssets()
         {
@@ -23,18 +24,19 @@ namespace Terrexpansion.Common.Utilities
             ClassicMana2Texture = ModContent.GetTexture("Terrexpansion/Assets/Star_StarFruit_Fancy");
             BarManaTexture = ModContent.GetTexture("Terrexpansion/Assets/Star_StarFruit_Bar");
             LungExtendedBubble = ModContent.GetTexture("Terrexpansion/Assets/Bubble_LungExtensionCard");
-            SynergyButton = TextureAssets.EmoteMenuButton;
         }
 
         public static void UnloadAssets()
         {
+            TextureAssets.Heart = VanillaClassicHeartTexture;
+            TextureAssets.Heart2 = VanillaClassicHeart2Texture;
+            TextureAssets.Mana = VanillaClassicManaTexture;
+            TextureAssets.Item[ItemID.EndlessQuiver] = EndlessQuiver;
+            TextureAssets.Item[ItemID.LifeFruit] = LifeFruit;
+
             foreach (FieldInfo fieldInfo in typeof(AssetHelper).GetFields())
-            {
                 if (fieldInfo.IsStatic)
-                {
                     fieldInfo.SetValue(null, null);
-                }
-            }
         }
 
         public static void SwapAssets()
@@ -44,15 +46,6 @@ namespace Terrexpansion.Common.Utilities
             TextureAssets.Mana = Main.Assets.Request<Texture2D>("Images\\UI\\PlayerResourceSets\\FancyClassic\\Star_Fill");
             TextureAssets.Item[ItemID.EndlessQuiver] = ModContent.GetTexture("Terrexpansion/Assets/Items/EndlessQuiver");
             TextureAssets.Item[ItemID.LifeFruit] = ModContent.GetTexture("Terrexpansion/Assets/Items/LifeFruit");
-        }
-
-        public static void LoadVanillaAssets()
-        {
-            TextureAssets.Heart = VanillaClassicHeartTexture;
-            TextureAssets.Heart2 = VanillaClassicHeart2Texture;
-            TextureAssets.Mana = VanillaClassicManaTexture;
-            TextureAssets.Item[ItemID.EndlessQuiver] = EndlessQuiver;
-            TextureAssets.Item[ItemID.LifeFruit] = LifeFruit;
         }
     }
 }

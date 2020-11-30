@@ -22,16 +22,17 @@ using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.UI.Chat;
 using Terrexpansion.Common;
-using Terrexpansion.Common.Players;
-using Terrexpansion.Common.UI.Elements;
+using Terrexpansion.Common.Systems.Players;
 using Terrexpansion.Common.Utilities;
+using Terrexpansion.Content.UI.Elements;
 
 // This code will remain uncommented.
+// I will be making an effort to convert most of these to IL edits later.
 namespace Terrexpansion
 {
     public partial class Terrexpansion
     {
-        public UIInputTextField filterTextBoxPlayer, filterTextBoxWorld;
+        internal UIInputTextField filterTextBoxPlayer, filterTextBoxWorld;
 
         public void LoadMethodSwaps()
         {

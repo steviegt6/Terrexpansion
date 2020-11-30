@@ -7,18 +7,20 @@ namespace Terrexpansion
     public partial class Terrexpansion
     {
         // Compile-time constant strings so we can make sure we actually type the correct string.
-        public const string IRON_LEAD_BAR = "Terrexpansion:IronLeadBar";
 
+        public const string COPPER_TIN_BAR = "Terrexpansion:CopperTinBar";
+        public const string IRON_LEAD_BAR = "Terrexpansion:IronLeadBar";
         public const string SILVER_TUNGSTEN_BAR = "Terrexpansion:SilverTungstenBar";
         public const string GOLD_PLATINUM_BAR = "Terrexpansion:GoldPlatinumBar";
+        public const string COBALT_PALLADIUM_BAR = "Terrexpansion:CobaltPalladiumBar";
         public const string MYTHRIL_ORICHALCUM_BAR = "Terrexpansion:MythrilOrichalcumBar";
         public const string ADAMANTITE_TITANIUM_BAR = "Terrexpansion:AdamantiteTitaniumBar";
+        public const string ROTTEN_CHUNK_VERTEBRAE = "Terrexpansion:RottenChunkVertebrae";
         public const string WOOD = "Wood";
 
         public override void AddRecipes()
         {
             // Split recipes up into smaller, collapsible methods.
-            EditRecipes();
             HandRecipes();
             WorkbenchRecipes();
             LoomRecipes();
@@ -27,7 +29,7 @@ namespace Terrexpansion
             LivingLoomRecipes();
         }
 
-        public void HandRecipes()
+        private void HandRecipes()
         {
             CreateRecipe(ItemID.BladedGlove)
                 .AddIngredient(ItemID.ThrowingKnife, 5)
@@ -39,7 +41,7 @@ namespace Terrexpansion
                 .Register();
         }
 
-        public void WorkbenchRecipes()
+        private void WorkbenchRecipes()
         {
             CreateRecipe(ItemID.Ruler)
                 .AddRecipeGroup(WOOD, 35)
@@ -52,7 +54,7 @@ namespace Terrexpansion
                 .Register();
         }
 
-        public void LoomRecipes()
+        private void LoomRecipes()
         {
             CreateRecipe(ItemID.Umbrella)
                 .AddRecipeGroup(WOOD, 10)
@@ -61,7 +63,7 @@ namespace Terrexpansion
                 .Register();
         }
 
-        public void AnvilRecipes()
+        private void AnvilRecipes()
         {
             CreateRecipe(ItemID.Gladius)
                 .AddRecipeGroup(SILVER_TUNGSTEN_BAR, 9)
@@ -170,7 +172,7 @@ namespace Terrexpansion
                 .Register();
         }
 
-        public void MythrilAnvilRecipes()
+        private void MythrilAnvilRecipes()
         {
             CreateRecipe(ItemID.Frostbrand)
                 .AddRecipeGroup(MYTHRIL_ORICHALCUM_BAR, 8)
@@ -185,7 +187,7 @@ namespace Terrexpansion
                 .Register();
         }
 
-        public void LivingLoomRecipes()
+        private void LivingLoomRecipes()
         {
             CreateRecipe(ItemID.WandofSparking)
                 .AddRecipeGroup(WOOD, 10)
